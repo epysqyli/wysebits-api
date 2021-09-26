@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_secure_password
 
   has_many :book_tiles
+  has_many :comments
 
   validates :name, presence: true, length: { minimum: 3 }
   validates :email_address, presence: true, length: { minimum: 4, maximum: 125 },
