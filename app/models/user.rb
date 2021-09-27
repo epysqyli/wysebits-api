@@ -14,4 +14,16 @@ class User < ApplicationRecord
   validates :email_address, presence: true, length: { minimum: 4, maximum: 125 },
                             format: { with: /^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/, multiline: true, message: 'Invalid format' }
   validates :password_confirmation, presence: true
+
+  def follow(other_user)
+    return if following.include?(other_user)
+
+    following << other_user
+  end
+
+  def unfollow(other_user)
+    return unless following.include?(other_user)
+
+    following.delete(other_user)
+  end
 end
