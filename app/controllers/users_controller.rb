@@ -22,8 +22,12 @@ class UsersController < ApplicationController
 
   # users should only be able to destroy themselves
   def destroy
-    user.destroy
-    render json: { message: 'User destroyed' }
+    if user == current_user
+      user.destroy 
+      render json: { message: 'User destroyed' }
+    else
+      render json: { message: 'Unauthorized'}, status: 401
+    end
   end
 
   private
