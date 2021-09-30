@@ -18,7 +18,7 @@ class BookTilesController < ApplicationController
   end
 
   def create
-    @book_tile = BookTile.new({ book_title: book_tile_params[:book_title], user_id: user_id })
+    @book_tile = BookTile.new({ book_id: book_tile_params[:book_id], user_id: user_id })
     if @book_tile.save
       user.book_tiles << @book_tile
       render json: @book_tile
@@ -36,6 +36,6 @@ class BookTilesController < ApplicationController
   end
 
   def book_tile_params
-    params.permit(:book_title, :user_id)
+    params.permit(:book_id, :user_id)
   end
 end
