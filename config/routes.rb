@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     resources :book_tiles
   end
 
-  resources :book_tiles do
+  resources :book_tiles, only: :nil do
     resources :tile_entries
   end
 
