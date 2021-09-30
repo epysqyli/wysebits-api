@@ -1,7 +1,7 @@
 class BookTilesController < ApplicationController
   before_action :user, only: %i[index create]
   before_action :book, only: %i[index create]
-  skip_before_action :authenticate_request, except: %i[create destroy]
+  skip_before_action :authenticate_request, only: %i[index show]
 
   def tiles_index
     @book_tiles = BookTile.all
@@ -19,7 +19,7 @@ class BookTilesController < ApplicationController
   end
 
   def create
-    @book_tile = BookTile.new({ book_id: book_tile_params[:book_id], user_id: book_tile_params[:user_id] })
+    @book_tile = BookTile.new({ book_id: book_tile_params[:book_id], user_id: params[:user_id] })
     if @book_tile.save
       # check the following two lines
       user.book_tiles << @book_tile
@@ -29,6 +29,8 @@ class BookTilesController < ApplicationController
       render json: { message: @book_tile.errors.messages }
     end
   end
+
+  def update; end
 
   def destroy; end
 

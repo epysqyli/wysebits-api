@@ -12,7 +12,14 @@ class TileEntriesController < ApplicationController
     render json: { data: tile_entry } if tile_entry
   end
 
-  def create; end
+  def create
+    @tile_entry = TileEntry.new book_id: params[:book_id], content: tile_entry_params[:content]
+    if @tile_entry.save
+      render json: { data: @tile_entry, status: 'created' }
+    else
+      render json: { message: 'Tile entry was not created', error_message: @tile_entry.errors.messages }
+    end
+  end
 
   def update; end
 
