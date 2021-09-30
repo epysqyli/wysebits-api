@@ -17,7 +17,6 @@ gem 'puma', '~> 5.0'
 gem 'bcrypt', '~> 3.1.7'
 gem 'jwt', '~> 2.2', '>= 2.2.3'
 gem 'simple_command', '~> 0.1.0'
-
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 

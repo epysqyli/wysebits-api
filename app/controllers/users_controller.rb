@@ -8,7 +8,11 @@ class UsersController < ApplicationController
   end
 
   def show
-    render json: { user: { user_id: user.id, email_address: user.email_address } } if user
+    if user
+      render json: { user: { user_id: user.id, email_address: user.email_address } } 
+    else
+      render json: { message: 'User not found' }, status: 404
+    end
   end
 
   def create
