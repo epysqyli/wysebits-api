@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+  before_save :downcase_email
+  before_create :generate_confirmation_instructions
+
   has_secure_password
 
   # associations
@@ -29,5 +32,15 @@ class User < ApplicationRecord
     return unless following.include?(other_user)
 
     following.delete(other_user)
+  end
+
+  # callbacks
+  def downcase_email
+    self.email_address = email_address.delete(' ').downcase
+  end
+
+  def generate_confirmation_instructions
+    self.confirmation_token = SecureRandom.hex(10)
+    self.confirmation_sent_at = Time.now.utc
   end
 end
