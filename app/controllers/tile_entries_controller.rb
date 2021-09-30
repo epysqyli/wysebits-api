@@ -5,8 +5,7 @@ class TileEntriesController < ApplicationController
 
   def index
     @tile_entries = book_tile.tile_entries
-    # use uniform 'data' key instead of tile_entries
-    render json: { tile_entries: @tile_entries }
+    render json: { data: @tile_entries }
   end
 
   def show

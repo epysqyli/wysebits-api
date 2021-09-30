@@ -19,7 +19,7 @@ class BookTilesController < ApplicationController
   end
 
   def create
-    @book_tile = BookTile.new({ book_id: book_tile_params[:book_id], user_id: user_id })
+    @book_tile = BookTile.new({ book_id: book_tile_params[:book_id], user_id: book_tile_params[:user_id] })
     if @book_tile.save
       # check the following two lines
       user.book_tiles << @book_tile
@@ -49,3 +49,4 @@ class BookTilesController < ApplicationController
 end
 
 # think properly about which resources should be rendered accessible and how
+# based on the desired front-end experience
