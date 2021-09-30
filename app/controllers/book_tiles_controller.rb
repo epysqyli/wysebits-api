@@ -1,5 +1,6 @@
 class BookTilesController < ApplicationController
   before_action :user, only: %i[index create]
+  before_action :book, only: %i[index create]
   skip_before_action :authenticate_request, except: %i[create destroy]
 
   def tiles_index
@@ -20,7 +21,9 @@ class BookTilesController < ApplicationController
   def create
     @book_tile = BookTile.new({ book_id: book_tile_params[:book_id], user_id: user_id })
     if @book_tile.save
+      # check the following two lines
       user.book_tiles << @book_tile
+      book.book_tiles << @book_tile
       render json: @book_tile
     else
       render json: { message: @book_tile.errors.messages }
@@ -35,7 +38,14 @@ class BookTilesController < ApplicationController
     User.find(params[:user_id])
   end
 
+  def book
+    # find the book to which the tile belongs via front-end logic
+    Book.find(book_tile_params[:book_id])
+  end
+
   def book_tile_params
     params.permit(:book_id, :user_id)
   end
 end
+
+# think properly about which resources should be rendered accessible and how

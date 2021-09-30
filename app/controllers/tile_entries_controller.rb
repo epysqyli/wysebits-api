@@ -1,5 +1,11 @@
 class TileEntriesController < ApplicationController
-  def index; end
+  before_action :book_tile, only: %i[index create]
+  skip_before_action :authenticate_request, only: %i[index show]
+
+  def index
+    @tile_entries = book_tile.tile_entries
+    render json: { tile_entries: @tile_entries }
+  end
 
   def show; end
 
