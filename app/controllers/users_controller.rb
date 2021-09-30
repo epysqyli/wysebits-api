@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
   def show
     if user
-      render json: { user: { user_id: user.id, email_address: user.email_address } } 
+      render json: { user: { user_id: user.id, email_address: user.email_address } }
     else
       render json: { message: 'User not found' }, status: 404
     end
@@ -24,13 +24,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def update; end
+
   # users should only be able to destroy themselves
   def destroy
     if user == current_user
-      user.destroy 
+      user.destroy
       render json: { message: 'User destroyed' }
     else
-      render json: { message: 'Unauthorized'}, status: 401
+      render json: { message: 'Unauthorized' }, status: 401
     end
   end
 
