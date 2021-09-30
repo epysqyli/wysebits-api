@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   post 'authenticate', to: 'authentication#authenticate'
 
   get '/all_book_tiles', to: 'book_tiles#tiles_index'
+  get '/all_tiles_from_book/:id', to: 'books#tiles'
 
   # limit routes accordingly with only: :actions
   resources :users do
