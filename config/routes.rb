@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     resources :tile_entries
   end
 
-  resources :tile_entries do
+  resources :tile_entries, only: %i[show] do
     resources :comments
   end
 
