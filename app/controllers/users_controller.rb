@@ -26,7 +26,7 @@ class UsersController < ApplicationController
 
   def update; end
 
-  # users should only be able to destroy themselves
+  # users should only be able to destroy themselves and their own resources
   def destroy
     if user == current_user
       user.destroy

@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     resources :comments
   end
 
-  resources :comments do
+  resources :comments, only: :nil do
     resources :comments
   end
 end

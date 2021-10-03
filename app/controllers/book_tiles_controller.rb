@@ -21,7 +21,7 @@ class BookTilesController < ApplicationController
   def create
     @book_tile = BookTile.new({ book_id: book_tile_params[:book_id], user_id: params[:user_id] })
     if @book_tile.save
-      # check the following two lines
+      # integrate front-end flow for book_tile creation
       user.book_tiles << @book_tile
       book.book_tiles << @book_tile
       render json: @book_tile
