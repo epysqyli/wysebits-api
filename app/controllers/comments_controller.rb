@@ -12,7 +12,7 @@ class CommentsController < ApplicationController
   end
 
   def show
-    render json: { data: comment }
+    render json: { data: comment.to_json(include: :to_what) }
   end
 
   def create
@@ -26,9 +26,9 @@ class CommentsController < ApplicationController
     end
 
     if @comment.save
-      render json: { message: 'Comment posted', comment: @comment.to_json(include: :to_what) }
+      render json: { message: 'Comment posted', comment: @comment }
     else
-      render json: { message: @comment.errors.messages}
+      render json: { message: @comment.errors.messages }
     end
   end
 
