@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index show]
-  before_action :find_commentable, only: %i[index]
+  before_action :find_commentable, only: %i[index create]
   before_action :comment, only: %i[show]
 
   def index
