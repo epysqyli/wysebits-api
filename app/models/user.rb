@@ -28,7 +28,7 @@ class User < ApplicationRecord
     following << other_user
   end
 
-  # # apparently working method
+  # # alternative method?
   # def self.follow(user, other_user)
   #   return if user.following.include?(other_user)
 
