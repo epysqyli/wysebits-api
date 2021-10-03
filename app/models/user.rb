@@ -22,10 +22,10 @@ class User < ApplicationRecord
   validates :password_confirmation, presence: true
 
   # model methods
-  def follow(other_user)
-    return if following.include?(other_user)
+  def self.follow(user, other_user)
+    return if user.following.include?(other_user)
 
-    following << other_user
+    user.following << other_user
   end
 
   def unfollow(other_user)
