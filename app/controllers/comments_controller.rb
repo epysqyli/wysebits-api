@@ -1,5 +1,7 @@
 class CommentsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index show]
+  before_action :find_commentable, only: %i[index]
+  before_action :comment, only: %i[show]
 
   def index
     if @commentable.instance_of?(TileEntry)
@@ -9,9 +11,26 @@ class CommentsController < ApplicationController
     end
   end
 
-  def show; end
+  def show
+    render json: { data: comment }
+  end
 
-  def create; end
+  def create
+    @comment = Comment.new(comment_params)
+    @current_user.comments << @comment
+
+    if params[:tile_entry_id]
+      @commentable.comments << @comment
+    elsif params[:comment_id]
+      @commentable.replies << @comment
+    end
+
+    if @comment.save
+      render json: { message: 'Comment posted', comment: @comment.to_json(include: :to_what) }
+    else
+      render json: { message: @comment.errors.messages}
+    end
+  end
 
   def update; end
 
