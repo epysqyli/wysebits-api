@@ -1,6 +1,6 @@
 class BookTilesController < ApplicationController
   before_action :user, only: %i[index create]
-  before_action :book, only: %i[index create]
+  before_action :book, only: :create
   skip_before_action :authenticate_request, only: %i[index show]
 
   def tiles_index
