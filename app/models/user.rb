@@ -32,6 +32,7 @@ class User < ApplicationRecord
     return unless following.include?(other_user)
 
     following.delete(other_user)
+    other_user.followers.delete(self)
   end
 
   # callbacks
