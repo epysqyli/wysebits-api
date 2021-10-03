@@ -36,10 +36,11 @@ class UsersController < ApplicationController
     end
   end
 
-  # follow and unfollow endpoints
+  # follow and unfollow actions
   def add_following
     user_to_follow = User.find(follow_params[:other_user_id])
-    User.follow(@current_user, user_to_follow)
+    # User.follow(@current_user, user_to_follow)
+    @current_user.follow(user_to_follow)
     render json: { message: "You now follow #{user_to_follow.name}", current_user: @current_user.name }
   end
 
