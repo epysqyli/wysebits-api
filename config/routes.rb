@@ -7,8 +7,11 @@ Rails.application.routes.draw do
   post '/follow', to: 'users#add_following'
   post '/unfollow', to: 'users#remove_following'
 
-  # limit routes accordingly with only: :actions
-  resources :users do
+  # # user login and signup to be defined later
+  # post '/login', to: 'authentication#authenticate'
+  # post '/signup', to: 'users#create'
+
+  resources :users, only: :nil do
     resources :book_tiles
   end
 
