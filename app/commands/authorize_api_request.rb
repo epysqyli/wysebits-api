@@ -1,8 +1,8 @@
 class AuthorizeApiRequest
   prepend SimpleCommand
 
-  def initialize(headers = {})
-    @headers = headers
+  def initialize(cookies = {})
+    @cookies = cookies
   end
 
   def call
@@ -19,12 +19,12 @@ class AuthorizeApiRequest
   end
 
   def decoded_auth_token
-    @decoded_auth_token ||= JsonWebToken.decode(http_auth_header)
+    @decoded_auth_token ||= JsonWebToken.decode(http_auth_cookie)
   end
 
-  def http_auth_header
-    if headers['Authorization'].present?
-      return headers['Authorization'].split(' ').last
+  def http_auth_cookie
+    if @cookies['jwt'].present?
+      return @cookies['jwt']
     else
       errors.add(:token, 'Missing token')
     end
