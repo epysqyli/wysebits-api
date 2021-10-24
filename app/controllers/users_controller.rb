@@ -36,7 +36,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # follow and unfollow actions
   def add_following
     user_to_follow = User.find(follow_params[:other_user_id])
     @current_user.follow(user_to_follow)

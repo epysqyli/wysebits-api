@@ -3,11 +3,11 @@ Rails.application.routes.draw do
     post '/login', to: 'authentication#authenticate'
     post '/signup', to: 'users#create'
 
-    get '/all_book_tiles', to: 'book_tiles#tiles_index'
-    get '/all_tiles_from_book/:id', to: 'books#tiles'
-
     post '/follow', to: 'users#add_following'
     post '/unfollow', to: 'users#remove_following'
+
+    get '/all_book_tiles', to: 'book_tiles#tiles_index'
+    get '/all_tiles_from_book/:id', to: 'books#tiles'
 
     resources :users, only: :nil do
       resources :book_tiles

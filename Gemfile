@@ -19,6 +19,7 @@ gem 'jwt', '~> 2.2', '>= 2.2.3'
 gem 'simple_command', '~> 0.1.0'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
+gem 'faker', '~> 2.19'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
