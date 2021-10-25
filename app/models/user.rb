@@ -19,6 +19,7 @@ class User < ApplicationRecord
                             format: { with: /^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/, multiline: true, message: 'Invalid format' }
 
   validates :password, presence: true
+  validates :password_confirmation, presence: true
 
   # model methods
   def follow(other_user)
