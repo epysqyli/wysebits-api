@@ -5,7 +5,7 @@ class TileEntriesController < ApplicationController
 
   def top_three
     @top_three = TileEntry.all.order('upvotes DESC').first(3)
-    render json: { data: @top_three.as_json(include: { book_tile: { include: %i[book user] } }) }
+    render json: { data: @top_three.as_json(include: { book_tile: { include: [{ book: { include: :category } }, :user] } }) }
   end
 
   def index
