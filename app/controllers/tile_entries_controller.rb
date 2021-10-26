@@ -1,10 +1,10 @@
 class TileEntriesController < ApplicationController
   before_action :book_tile, only: %i[index create]
   before_action :tile_entry, only: :show
-  skip_before_action :authenticate_request, only: %i[top_three index show]
+  skip_before_action :authenticate_request, only: %i[top_tiles index show]
 
-  def top_three
-    @top_three = TileEntry.all.order('upvotes DESC').first(3)
+  def top_tiles
+    @top_three = TileEntry.all.order('upvotes DESC').first(10)
     render json: { data: @top_three.as_json(include: { book_tile: { include: [{ book: { include: :category } }, :user] } }) }
   end
 
