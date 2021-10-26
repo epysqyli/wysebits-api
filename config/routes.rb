@@ -25,5 +25,7 @@ Rails.application.routes.draw do
     resources :comments, only: :nil do
       resources :comments
     end
+
+    resources :categories, only: :index
   end
 end

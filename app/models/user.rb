@@ -18,6 +18,7 @@ class User < ApplicationRecord
   validates :email_address, presence: true, uniqueness: true, length: { minimum: 4, maximum: 125 },
                             format: { with: /^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/, multiline: true, message: 'Invalid format' }
 
+  validates :username, presence: true
   validates :password, presence: true
   validates :password_confirmation, presence: true
 
