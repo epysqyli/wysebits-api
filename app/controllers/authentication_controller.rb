@@ -1,5 +1,5 @@
 class AuthenticationController < ApplicationController
-  skip_before_action :authenticate_request
+  skip_before_action :authenticate_request, only: :authenticate
 
   def authenticate
     command = AuthenticateUser.call(params[:email_address], params[:password])
@@ -24,7 +24,7 @@ class AuthenticationController < ApplicationController
     if current_user
       render json: { logged_in: true, username: current_user.username, email: current_user.email_address }
     else
-      render json: { message: 'No user is logged in', status: 'failure' }
+      render json: { message: 'No user is logged in' }
     end
   end
 end
