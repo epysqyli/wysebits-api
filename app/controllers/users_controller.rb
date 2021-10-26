@@ -18,7 +18,8 @@ class UsersController < ApplicationController
   def create
     @user = User.create!(user_params)
     if @user
-      render json: { message: 'User succesfully created', user: { name: @user.name, email: @user.email_address } }
+      render json: { message: 'User succesfully created', status: 'success',
+                     user: { username: @user.username, email: @user.email_address } }
     else
       render json: { error: 'User not created' }, status: 403
     end

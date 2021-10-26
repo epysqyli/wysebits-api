@@ -7,14 +7,14 @@ class AuthenticationController < ApplicationController
     if command.success?
       response.set_cookie(
         :jwt, {
-          value: command.result,
+          value: command.result[:token],
           expires: 7.days.from_now,
           path: '/',
           httponly: true
         }
       )
 
-      render json: { auth_token: command.result }
+      render json: { user: command.result[:user] }
     else
       render json: { error: command.errors }, status: :unauthorized
     end
