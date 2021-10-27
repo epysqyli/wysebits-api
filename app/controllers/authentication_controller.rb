@@ -40,6 +40,6 @@ class AuthenticationController < ApplicationController
       }
     )
 
-    render json: { message: 'User logged out' }
+    render json: { message: 'User logged out', status: 'success' }
   end
 end
