@@ -27,4 +27,17 @@ class AuthenticationController < ApplicationController
       render json: { message: 'No user is logged in' }
     end
   end
+
+  def logout
+    return unless current_user
+
+    response.set_cookie(
+      :jwt, {
+        value: nil,
+        expires: Time.now,
+        path: '/',
+        httponly: true
+      }
+    )
+  end
 end
