@@ -39,5 +39,7 @@ class AuthenticationController < ApplicationController
         httponly: true
       }
     )
+
+    render json: { message: 'User logged out' }
   end
 end

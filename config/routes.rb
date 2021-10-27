@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   scope path: '/api' do
     post '/login', to: 'authentication#authenticate'
-    get '/logout', to: 'authenticate#logout'
+    get '/logout', to: 'authentication#logout'
     get '/logged_in', to: 'authentication#logged_in'
     post '/signup', to: 'users#create'
 
