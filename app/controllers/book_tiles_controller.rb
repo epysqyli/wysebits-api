@@ -1,6 +1,7 @@
 class BookTilesController < ApplicationController
   before_action :user, only: %i[index create]
   before_action :book, only: :create
+  before_action :book_tile, only: %i[show destroy]
   skip_before_action :authenticate_request, only: %i[index show]
 
   def tiles_index
@@ -14,7 +15,6 @@ class BookTilesController < ApplicationController
   end
 
   def show
-    book_tile = BookTile.find(params[:id])
     render json: book_tile
   end
 
@@ -32,7 +32,13 @@ class BookTilesController < ApplicationController
 
   def update; end
 
-  def destroy; end
+  def destroy
+    if book_tile.destroy
+      render json: { message: 'Book_tile deleted from database', status: 'success' }
+    else
+      render json: { message: 'Not possible to process the request' }
+    end
+  end
 
   private
 
@@ -41,8 +47,11 @@ class BookTilesController < ApplicationController
   end
 
   def book
-    # find the book to which the tile belongs via front-end logic
     Book.find(book_tile_params[:book_id])
+  end
+
+  def book_tile
+    BookTile.find(params[:id])
   end
 
   def book_tile_params
