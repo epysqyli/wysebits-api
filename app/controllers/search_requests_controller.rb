@@ -5,14 +5,14 @@ class SearchRequestsController < ApplicationController
     search_terms = JSON.parse(search_params[:keywords])
     res = Book.search(search_terms)
 
-    # integrate results with openlibrary api
-    # check if selected book is present in db - if not, create
-    # if no book matches the results, user creates a new one
+    # integrate results with openlibrar's data dump instead of slow/unscaleable OL api
 
-    # assigning author to a book should follow a similar logic
+    # check if selected book is present in the wysebits db - if not, create it
+
+    # to every book must be assigned at least one author and the category
 
     if res.empty?
-      render json: { message: 'No book results matching these search terms' }
+      render json: { message: 'No book results. Do you want to manually create this book record?' }
     else
       render json: { data: res.as_json(include: %i[authors category]) }
     end
