@@ -12,7 +12,10 @@ Rails.application.routes.draw do
     get '/top_tiles', to: 'tile_entries#top_tiles'
     get '/all_tiles_from_book/:id', to: 'books#tiles'
 
+    resources :categories, only: :index
+
     resources :books
+    post '/search/books', to: 'search_requests#search_books'
 
     resources :users, only: :nil do
       resources :book_tiles
@@ -29,7 +32,5 @@ Rails.application.routes.draw do
     resources :comments, only: :nil do
       resources :comments
     end
-
-    resources :categories, only: :index
   end
 end

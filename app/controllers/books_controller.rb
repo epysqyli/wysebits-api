@@ -6,15 +6,6 @@ class BooksController < ApplicationController
     render json: { data: book.book_tiles }
   end
 
-  def search(keywords)
-    res = Book.search(keywords)
-    if res.empty
-      render json: { message: 'No book results matching these search terms' }
-    else
-      render json: { data: res }
-    end
-  end
-
   def show
     render json: { data: book }
   end
