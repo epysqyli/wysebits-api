@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     get '/top_tiles', to: 'tile_entries#top_tiles'
     get '/all_tiles_from_book/:id', to: 'books#tiles'
 
+    resources :books
+
     resources :users, only: :nil do
       resources :book_tiles
     end

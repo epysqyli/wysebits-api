@@ -49,6 +49,3 @@ class BookTilesController < ApplicationController
     params.permit(:book_id, :user_id)
   end
 end
-
-# think properly about which resources should be rendered accessible and how
-# based on the desired front-end experience
