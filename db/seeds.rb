@@ -1,25 +1,33 @@
 # # User seeder
 # 10.times do
+#   psw = Faker::Internet.password
+
 #   User.create!(
 #     name: Faker::Name.unique.first_name,
 #     surname: Faker::Name.unique.last_name,
+#     username: Faker::Internet.unique.username,
 #     email_address: Faker::Internet.unique.email,
-#     password: Faker::Internet.password
+#     password: psw,
+#     password_confirmation: psw
 #   )
 # end
 
 # # Category seeder
-# 10.times { Category.create! name: Faker::Book.unique.genre }
+# categories = ['History', 'Philosophy', 'Religion and Spirituality', 'Science', 'Popular Science',
+#               'Politics and Social Sciences', 'Essay', 'Self-Help', 'Business and Economics', 'Health and Wellness', 'Crafts and Hobbies', 'Travel Guides
+#               ', 'Cookbooks', 'Parenting and Family', 'Children’s Nonfiction', 'Educational Guides', 'Textbooks', 'Language Books', 'Humor', 'Arts Books', 'Memoirs and autobiographies', 'Biographies', 'Travel Literature', 'Journalism']
 
-## Subject seeder
+# categories.each { |cat_name| Category.create! name: cat_name }
+
+# # Subject seeder
 # 20.times { Subject.create! name: Faker::Lorem.unique.sentence(word_count: 1) }
 
 # # Book seeder
 # categories = Category.all
-# 10.times do
+# 20.times do
 #   Book.create!(
 #     title: Faker::Book.unique.title,
-#     category_id: categories[rand(1..12)].id
+#     category_id: categories.sample.id
 #   )
 # end
 
@@ -28,8 +36,8 @@
 # books = Book.all
 
 # books.each do |book|
-#   book.add_subject subjects[rand(1..20)]
-#   book.add_subject subjects[rand(1..20)]
+#   book.add_subject subjects.sample
+#   book.add_subject subjects.sample
 # end
 
 # # Author seeder
@@ -44,7 +52,7 @@
 # books = Book.all
 # authors = Author.all
 
-# books.each { |book| book.add_author(authors[rand(1..20)]) }
+# books.each { |book| book.add_author(authors.sample) }
 
 # # Create book_tiles
 # books = Book.all
