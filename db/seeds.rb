@@ -27,33 +27,37 @@ categories.each { |cat_name| Category.create! name: cat_name }
 # Book seeder
 last_category_id = Category.last.id
 
-books = []
+# iterate until csv file eof
+works = CSV.open(Rails.root.join('lib', 'seeds', 'works.csv'))
 
-CSV.foreach(Rails.root.join('lib', 'seeds', 'works.csv'), headers: true) do |row|
-  work = JSON.parse(row['json'])
-  # p work
-  # puts "\n"
+until works.eof?
+  books = []
 
-  book = Book.new
+  CSV.foreach(works, headers: true) do |row|
+    work = JSON.parse(row['json'])
 
-  book.title = work['title'] || 'empty'
-  book.category_id = last_category_id
-  book.ol_key = work['authors'].nil? ? 'empty' : work['key']&.split('/')&.last
+    book = Book.new
 
-  book.ol_author_key = if work['authors'].nil?
-                         'empty'
-                       elsif work['authors'][0]['author'].nil?
-                         'empty'
-                       elsif work['authors'][0]['author']['key'].nil?
-                         'empty'
-                       else
-                         work['authors'][0]['author']['key']&.split('/')&.last
-                       end
+    book.title = work['title'] || 'empty'
+    book.category_id = last_category_id
+    book.ol_key = work['authors'].nil? ? 'empty' : work['key']&.split('/')&.last
 
-  books << book
+    book.ol_author_key = if work['authors'].nil?
+                           'empty'
+                         elsif work['authors'][0]['author'].nil?
+                           'empty'
+                         elsif work['authors'][0]['author']['key'].nil?
+                           'empty'
+                         else
+                           work['authors'][0]['author']['key']&.split('/')&.last
+                         end
+
+    books << book
+    break if books.length == 10_000
+  end
+
+  Book.import books, batch_size: 5000
 end
-
-Book.import books, batch_size: 200000
 
 # # Assign subjects to books
 # subjects = Subject.all
