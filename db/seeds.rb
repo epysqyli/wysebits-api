@@ -27,22 +27,20 @@ categories.each { |cat_name| Category.create! name: cat_name }
 # Book seeder
 last_category_id = Category.last.id
 
+books = []
+
 CSV.foreach(Rails.root.join('lib', 'seeds', 'works.csv'), headers: true) do |row|
   work = JSON.parse(row['json'])
 
-  book = Book.new
-
-  book.title = work['title'] || 'empty'
-  book.category_id = last_category_id
-  book.ol_key = work['key']&.split('/')&.last || 'empty'
-  book.ol_author_key = if work['authors'].nil?
-                         'empty'
-                       else
-                         work['authors'][0]['author']['key']&.split('/')&.last
-                       end
-
-  book.save
+  books << Book.new(
+    title: work['title'] || 'empty',
+    category_id: last_category_id,
+    ol_key: work['key']&.split('/')&.last || 'empty',
+    ol_author_key: work['authors'].nil? ? 'empty' : work['authors'][0]['author']['key']&.split('/')&.last
+  )
 end
+
+Book.import books
 
 # # Assign subjects to books
 # subjects = Subject.all
