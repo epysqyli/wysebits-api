@@ -1,18 +1,18 @@
 require 'csv'
 
-# User seeder
-10.times do
-  psw = Faker::Internet.password
+# # User seeder
+# 10.times do
+#   psw = Faker::Internet.password
 
-  User.create!(
-    name: Faker::Name.unique.first_name,
-    surname: Faker::Name.unique.last_name,
-    username: Faker::Internet.unique.username,
-    email_address: Faker::Internet.unique.email,
-    password: psw,
-    password_confirmation: psw
-  )
-end
+#   User.create!(
+#     name: Faker::Name.unique.first_name,
+#     surname: Faker::Name.unique.last_name,
+#     username: Faker::Internet.unique.username,
+#     email_address: Faker::Internet.unique.email,
+#     password: psw,
+#     password_confirmation: psw
+#   )
+# end
 
 # Category seeder
 categories = ['History', 'Philosophy', 'Religion and Spirituality', 'Science', 'Popular Science',
@@ -34,8 +34,12 @@ CSV.foreach(Rails.root.join('lib', 'seeds', 'works.csv'), headers: true) do |row
 
   book.title = work['title'] || 'empty'
   book.category_id = last_category_id
-  book.ol_key = work['key'].split('/').last || 'empty'
-  book.ol_author_key = work['authors'][0]['author']['key'].split('/').last || 'empty'
+  book.ol_key = work['key']&.split('/')&.last || 'empty'
+  unless work['authors'].nil?
+    book.ol_author_key = work['authors'][0]['author']['key']&.split('/')&.last
+  else
+    book.ol_author_key = 'empty'
+  end
 
   book.save
 end
