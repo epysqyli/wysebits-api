@@ -35,11 +35,11 @@ CSV.foreach(Rails.root.join('lib', 'seeds', 'works.csv'), headers: true) do |row
   book.title = work['title'] || 'empty'
   book.category_id = last_category_id
   book.ol_key = work['key']&.split('/')&.last || 'empty'
-  unless work['authors'].nil?
-    book.ol_author_key = work['authors'][0]['author']['key']&.split('/')&.last
-  else
-    book.ol_author_key = 'empty'
-  end
+  book.ol_author_key = if work['authors'].nil?
+                         'empty'
+                       else
+                         work['authors'][0]['author']['key']&.split('/')&.last
+                       end
 
   book.save
 end
