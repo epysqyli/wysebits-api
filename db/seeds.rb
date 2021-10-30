@@ -24,40 +24,41 @@ categories.each { |cat_name| Category.create! name: cat_name }
 # # Subject seeder
 # 20.times { Subject.create! name: Faker::Lorem.unique.sentence(word_count: 1) }
 
-# Book seeder
-last_category_id = Category.last.id
+# # Book seeder
+# last_category_id = Category.last.id
 
-# iterate until csv file eof
-works = CSV.open(Rails.root.join('lib', 'seeds', 'works.csv'))
+# works = Rails.root.join('lib', 'seeds', 'works.csv')
+# books = []
 
-until works.eof?
-  books = []
+# CSV.foreach(works, headers: true) do |row|
+#   work = JSON.parse(row['json'])
 
-  CSV.foreach(works, headers: true) do |row|
-    work = JSON.parse(row['json'])
+#   book = Book.new
 
-    book = Book.new
+#   book.title = work['title'] || 'empty'
+#   book.category_id = last_category_id
+#   book.ol_key = work['authors'].nil? ? 'empty' : work['key']&.split('/')&.last
 
-    book.title = work['title'] || 'empty'
-    book.category_id = last_category_id
-    book.ol_key = work['authors'].nil? ? 'empty' : work['key']&.split('/')&.last
+#   book.ol_author_key = if work['authors'].nil?
+#                          'empty'
+#                        elsif work['authors'][0]['author'].nil?
+#                          'empty'
+#                        elsif work['authors'][0]['author']['key'].nil?
+#                          'empty'
+#                        else
+#                          work['authors'][0]['author']['key']&.split('/')&.last
+#                        end
 
-    book.ol_author_key = if work['authors'].nil?
-                           'empty'
-                         elsif work['authors'][0]['author'].nil?
-                           'empty'
-                         elsif work['authors'][0]['author']['key'].nil?
-                           'empty'
-                         else
-                           work['authors'][0]['author']['key']&.split('/')&.last
-                         end
+#   books << book
 
-    books << book
-    break if books.length == 10_000
-  end
+#   if books.length == 20_000
+#     Book.import books, batch_size: 5000
+#     books = []
+#   end
+# end
 
-  Book.import books, batch_size: 5000
-end
+# # import last batch
+# Books.import books
 
 # # Assign subjects to books
 # subjects = Subject.all
