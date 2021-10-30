@@ -1,6 +1,5 @@
 require 'csv'
 
-
 # # User seeder
 # 10.times do
 #   psw = Faker::Internet.password
@@ -97,13 +96,13 @@ require 'csv'
 #   )
 # end
 
-# test addition of ol works to wysebits db
+# Test addition of ol works to wysebits db
 last_category_id = Category.last.id
 count = 0
 
-CSV.foreach('works.csv', headers: true) do |row|
+CSV.foreach(Rails.root.join('lib', 'seeds', 'works.csv'), headers: true) do |row|
   work = JSON.parse(row['json'])
-  Book.create! name: work['title'], category: last_category_id
-  count + 1
+  Book.create! title: work['title'], category_id: last_category_id
+  count += 1
   break if count == 5
 end
