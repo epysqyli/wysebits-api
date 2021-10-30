@@ -29,7 +29,15 @@ last_category_id = Category.last.id
 
 CSV.foreach(Rails.root.join('lib', 'seeds', 'works.csv'), headers: true) do |row|
   work = JSON.parse(row['json'])
-  Book.create! title: work['title'], category_id: last_category_id
+
+  book = Book.new
+
+  book.title = work['title'] || 'empty'
+  book.category_id = last_category_id
+  book.ol_key = work['key'].split('/').last || 'empty'
+  book.ol_author_key = work['authors'][0]['author']['key'].split('/').last || 'empty'
+
+  book.save
 end
 
 # # Assign subjects to books
@@ -55,42 +63,42 @@ end
 
 # books.each { |book| book.add_author(authors.sample) }
 
-# Create book_tiles
-books = Book.all
-users = User.all
+# # Create book_tiles
+# books = Book.all
+# users = User.all
 
-10.times do
-  BookTile.create! book_id: books.sample.id, user_id: users.sample.id
-end
+# 10.times do
+#   BookTile.create! book_id: books.sample.id, user_id: users.sample.id
+# end
 
-# Create tile_entries
-BookTile.all.each do |book_tile|
-  3.times do
-    TileEntry.create!(
-      content: Faker::Lorem.sentence(word_count: 25),
-      upvotes: rand(1..10),
-      downvotes: rand(1..10),
-      book_tile_id: book_tile.id
-    )
-  end
-end
+# # Create tile_entries
+# BookTile.all.each do |book_tile|
+#   3.times do
+#     TileEntry.create!(
+#       content: Faker::Lorem.sentence(word_count: 25),
+#       upvotes: rand(1..10),
+#       downvotes: rand(1..10),
+#       book_tile_id: book_tile.id
+#     )
+#   end
+# end
 
-# Create comments to tile_entries
-TileEntry.all.each do |entry|
-  Comment.create!(
-    content: Faker::Lorem.sentence(word_count: 15),
-    user_id: User.all.sample.id,
-    commentable_id: entry.id,
-    commentable_type: entry.class.to_s
-  )
-end
+# # Create comments to tile_entries
+# TileEntry.all.each do |entry|
+#   Comment.create!(
+#     content: Faker::Lorem.sentence(word_count: 15),
+#     user_id: User.all.sample.id,
+#     commentable_id: entry.id,
+#     commentable_type: entry.class.to_s
+#   )
+# end
 
-# Create comments as replies to other comments
-Comment.all.each do |comment|
-  Comment.create(
-    content: Faker::Lorem.sentence(word_count: 15),
-    user_id: User.all.sample.id,
-    commentable_id: comment.id,
-    commentable_type: comment.class.to_s
-  )
-end
+# # Create comments as replies to other comments
+# Comment.all.each do |comment|
+#   Comment.create(
+#     content: Faker::Lorem.sentence(word_count: 15),
+#     user_id: User.all.sample.id,
+#     commentable_id: comment.id,
+#     commentable_type: comment.class.to_s
+#   )
+# end
