@@ -24,38 +24,40 @@ categories.each { |cat_name| Category.create! name: cat_name }
 # # Subject seeder
 # 20.times { Subject.create! name: Faker::Lorem.unique.sentence(word_count: 1) }
 
-# # Book seeder
-# last_category_id = Category.last.id
+# Book seeder
+last_category_id = Category.last.id
 
-# works = Rails.root.join('lib', 'seeds', 'works.csv')
-# books = []
+works = Rails.root.join('lib', 'seeds', 'works.csv')
+books = []
 
-# CSV.foreach(works, headers: true) do |row|
-#   work = JSON.parse(row['json'])
+CSV.foreach(works, headers: true) do |row|
+  work = JSON.parse(row['json'])
 
-#   book = Book.new
+  book = Book.new
 
-#   book.title = work['title'] || 'empty'
-#   book.category_id = last_category_id
-#   book.ol_key = work['authors'].nil? ? 'empty' : work['key']&.split('/')&.last
+  next if Book.where(title: work['title']).first
 
-#   book.ol_author_key = if work['authors'].nil?
-#                          'empty'
-#                        elsif work['authors'][0]['author'].nil?
-#                          'empty'
-#                        elsif work['authors'][0]['author']['key'].nil?
-#                          'empty'
-#                        else
-#                          work['authors'][0]['author']['key']&.split('/')&.last
-#                        end
+  book.title = work['title'] || 'empty'
+  book.category_id = last_category_id
+  book.ol_key = work['authors'].nil? ? 'empty' : work['key']&.split('/')&.last
 
-#   books << book
+  book.ol_author_key = if work['authors'].nil?
+                         'empty'
+                       elsif work['authors'][0]['author'].nil?
+                         'empty'
+                       elsif work['authors'][0]['author']['key'].nil?
+                         'empty'
+                       else
+                         work['authors'][0]['author']['key']&.split('/')&.last
+                       end
 
-#   if books.length == 20_000
-#     Book.import books, batch_size: 5000
-#     books = []
-#   end
-# end
+  books << book
+
+  if books.length == 100_000
+    Book.import books, batch_size: 25_000
+    books = []
+  end
+end
 
 # # import last batch
 # Books.import books
