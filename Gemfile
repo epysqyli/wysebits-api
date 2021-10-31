@@ -23,6 +23,8 @@ group :development, :test do
   gem 'better_errors', '~> 2.9', '>= 2.9.1'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'faker', '~> 2.19'
+  gem 'parallel'
+  gem 'smarter_csv'
 end
 
 group :development do
