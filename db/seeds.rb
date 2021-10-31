@@ -1,7 +1,3 @@
-require 'csv'
-require 'smarter_csv'
-require 'parallel'
-
 # # User seeder
 # 10.times do
 #   psw = Faker::Internet.password
@@ -28,46 +24,48 @@ categories.each { |cat_name| Category.create! name: cat_name }
 
 # # Book seeder
 last_category_id = Category.last.id
+columns = %w[title category_id ol_author_key ol_key]
 
 works = Rails.root.join('lib', 'seeds', 'works.csv')
 
-SmarterCSV.process(works, chunk_size: 1_000) do |_chunk|
-  # books = []
-  ActiveRecord::Base.connection.reconnect!
+SmarterCSV.process(works, chunk_size: 2060) do |chunk|
+  books = Parallel.map(chunk) do |row|
+    next if row.nil?
 
-  Parallel.each(_chunk) do |row|
     work = JSON.parse(row[:json])
 
-    book = Book.new
+    book = []
 
     next if Book.where(title: work['title']).first
 
-    book.title = work['title'] || 'empty'
-    book.category_id = last_category_id
-    book.ol_key = work['authors'].nil? ? 'empty' : work['key']&.split('/')&.last
+    book << work['title'] || 'empty'
+    book << last_category_id
 
-    book.ol_author_key = if work['authors'].nil?
-                           'empty'
-                         elsif work['authors'][0]['author'].nil?
-                           'empty'
-                         elsif work['authors'][0]['author']['key'].nil?
-                           'empty'
-                         else
-                           work['authors'][0]['author']['key']&.split('/')&.last
-                         end
+    ol_author_key = if work['authors'].nil?
+                      'empty'
+                    elsif work['authors'][0]['author'].nil?
+                      'empty'
+                    elsif work['authors'][0]['author']['key'].nil?
+                      'empty'
+                    else
+                      work['authors'][0]['author']['key']&.split('/')&.last
+                    end
 
-    book.save
+    book << ol_author_key
 
-    # books << book
-    # if books.length == 1_000
-    #   Book.import books, batch_size: 200
-    #   books = []
-    # end
+    ol_key = work['key'].nil? ? 'empty' : work['key']&.split('/')&.last
+    book << ol_key
+
+    book
   end
+
+  books.compact!
+
+  Book.import columns, books
 end
 
-# # import last batch
-# Book.import books
+# import last batch
+Book.import books
 
 # # Assign subjects to books
 # subjects = Subject.all
