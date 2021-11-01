@@ -19,9 +19,6 @@
 
 # categories.each { |cat_name| Category.create! name: cat_name }
 
-# # Subject seeder
-# 20.times { Subject.create! name: Faker::Lorem.unique.sentence(word_count: 1) }
-
 # # Book seeder
 # last_category_id = Category.last.id
 # works = Rails.root.join('lib', 'seeds', 'works.csv')
@@ -32,11 +29,9 @@
 
 #     work = JSON.parse(row[:json])
 
-#     next if Book.where(title: work['title']).first
-
 #     book = Book.new
 
-#     book.title = work['title'] || 'empty'
+#     book.title = work['title']
 #     book.category_id = last_category_id
 
 #     unless work['authors'].nil? || work['authors'][0]['author'].nil? || work['authors'][0]['author']['key'].nil?
@@ -44,35 +39,20 @@
 #     end
 
 #     book.ol_key = work['key']&.split('/')&.last unless work['key'].nil?
+
+#     next if book.nil?
+
 #     book
 #   end
 
-#   books.compact!
 #   Book.import books, batch_size: 5_000
 # end
 
-# # Assign subjects to books
-# subjects = Subject.all
-# books = Book.all
-
-# books.each do |book|
-#   book.add_subject subjects.sample
-#   book.add_subject subjects.sample
-# end
-
 # # Author seeder
-# 20.times do
-#   Author.create!(
-#     name: Faker::Book.unique.author.split(' ').first,
-#     surname: Faker::Book.unique.author.split(' ').last
-#   )
-# end
+# seed db from authors csv file
 
 # # Assign authors to books
-# books = Book.all
-# authors = Author.all
-
-# books.each { |book| book.add_author(authors.sample) }
+# based on ol data
 
 # # Create book_tiles
 # books = Book.all
