@@ -12,60 +12,44 @@
 #   )
 # end
 
-# Category seeder
-categories = ['History', 'Philosophy', 'Religion and Spirituality', 'Science', 'Popular Science',
-              'Politics and Social Sciences', 'Essay', 'Self-Help', 'Business and Economics', 'Health and Wellness', 'Crafts and Hobbies', 'Travel Guides
-              ', 'Cookbooks', 'Parenting and Family', 'Children’s Nonfiction', 'Educational Guides', 'Textbooks', 'Language Books', 'Humor', 'Arts Books', 'Memoirs and autobiographies', 'Biographies', 'Travel Literature', 'Journalism', 'CATCHALL']
+# # Category seeder
+# categories = ['History', 'Philosophy', 'Religion and Spirituality', 'Science', 'Popular Science',
+#               'Politics and Social Sciences', 'Essay', 'Self-Help', 'Business and Economics', 'Health and Wellness', 'Crafts and Hobbies', 'Travel Guides
+#               ', 'Cookbooks', 'Parenting and Family', 'Children’s Nonfiction', 'Educational Guides', 'Textbooks', 'Language Books', 'Humor', 'Arts Books', 'Memoirs and autobiographies', 'Biographies', 'Travel Literature', 'Journalism', 'CATCHALL']
 
-categories.each { |cat_name| Category.create! name: cat_name }
+# categories.each { |cat_name| Category.create! name: cat_name }
 
 # # Subject seeder
 # 20.times { Subject.create! name: Faker::Lorem.unique.sentence(word_count: 1) }
 
 # # Book seeder
-last_category_id = Category.last.id
-columns = %w[title category_id ol_author_key ol_key]
+# last_category_id = Category.last.id
+# works = Rails.root.join('lib', 'seeds', 'works.csv')
 
-works = Rails.root.join('lib', 'seeds', 'works.csv')
+# SmarterCSV.process(works, chunk_size: 20_000) do |chunk|
+#   books = Parallel.map(chunk) do |row|
+#     next if row.nil?
 
-SmarterCSV.process(works, chunk_size: 2060) do |chunk|
-  books = Parallel.map(chunk) do |row|
-    next if row.nil?
+#     work = JSON.parse(row[:json])
 
-    work = JSON.parse(row[:json])
+#     next if Book.where(title: work['title']).first
 
-    book = []
+#     book = Book.new
 
-    next if Book.where(title: work['title']).first
+#     book.title = work['title'] || 'empty'
+#     book.category_id = last_category_id
 
-    book << work['title'] || 'empty'
-    book << last_category_id
+#     unless work['authors'].nil? || work['authors'][0]['author'].nil? || work['authors'][0]['author']['key'].nil?
+#       book.ol_author_key = work['authors'][0]['author']['key']&.split('/')&.last
+#     end
 
-    ol_author_key = if work['authors'].nil?
-                      'empty'
-                    elsif work['authors'][0]['author'].nil?
-                      'empty'
-                    elsif work['authors'][0]['author']['key'].nil?
-                      'empty'
-                    else
-                      work['authors'][0]['author']['key']&.split('/')&.last
-                    end
+#     book.ol_key = work['key']&.split('/')&.last unless work['key'].nil?
+#     book
+#   end
 
-    book << ol_author_key
-
-    ol_key = work['key'].nil? ? 'empty' : work['key']&.split('/')&.last
-    book << ol_key
-
-    book
-  end
-
-  books.compact!
-
-  Book.import columns, books
-end
-
-# import last batch
-Book.import books
+#   books.compact!
+#   Book.import books, batch_size: 5_000
+# end
 
 # # Assign subjects to books
 # subjects = Subject.all
