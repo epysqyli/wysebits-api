@@ -25,6 +25,6 @@ class Book < ApplicationRecord
   end
 
   def self.search(keywords)
-    Book.where((['title ILIKE ?'] * keywords.size).join(' OR '), * keywords.map { |k| "%#{k}%" })
+    Book.where((['title ILIKE ?'] * keywords.size).join(' AND '), * keywords.map { |k| "%#{k}%" })
   end
 end

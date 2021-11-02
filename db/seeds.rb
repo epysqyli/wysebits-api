@@ -87,7 +87,7 @@
 # end
 
 # # Create book_tiles
-# books = Book.all
+# books = Book.limit(100)
 # users = User.all
 
 # 10.times do
