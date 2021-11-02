@@ -20,11 +20,16 @@ class Book < ApplicationRecord
     author.books << self
   end
 
-  def author
-    Author.find_by_key(ol_author_key)
-  end
+  # # writing to db on a search query, really bad choice
+  # def author
+  #   author = Author.find_by_key(ol_author_key)
+  #   add_author(author) unless author.nil?
 
+  #   authors
+  # end
+
+  # need for pagination
   def self.search(keywords)
-    Book.where((['title ILIKE ?'] * keywords.size).join(' AND '), * keywords.map { |k| "%#{k}%" })
+    Book.where((['title ILIKE ?'] * keywords.size).join(' AND '), * keywords.map { |k| "%#{k}%" }).eager_load(:category, :authors).limit(10)
   end
 end
