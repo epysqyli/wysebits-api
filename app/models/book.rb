@@ -20,6 +20,10 @@ class Book < ApplicationRecord
     author.books << self
   end
 
+  def author
+    Author.find_by_key(ol_author_key)
+  end
+
   def self.search(keywords)
     Book.where((['title ILIKE ?'] * keywords.size).join(' OR '), * keywords.map { |k| "%#{k}%" })
   end

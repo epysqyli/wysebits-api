@@ -48,30 +48,43 @@
 #   Book.import books, batch_size: 5_000
 # end
 
-# Author seeder
-authors = Rails.root.join('lib', 'seeds', 'authors.csv')
+# # Author seeder
+# authors = Rails.root.join('lib', 'seeds', 'authors.csv')
 
-SmarterCSV.process(authors, chunk_size: 30_000) do |chunk|
-  people = Parallel.map(chunk) do |row|
-    next if row.nil?
+# SmarterCSV.process(authors, chunk_size: 30_000) do |chunk|
+#   people = Parallel.map(chunk) do |row|
+#     next if row.nil?
 
-    person = JSON.parse(row[:json])
+#     person = JSON.parse(row[:json])
 
-    author = Author.new
+#     author = Author.new
 
-    author.full_name = person['name']
-    author.key = person['key']&.split('/')&.last unless person['key'].nil?
+#     author.full_name = person['name']
+#     author.key = person['key']&.split('/')&.last unless person['key'].nil?
 
-    next if author.nil?
+#     next if author.nil?
 
-    author
-  end
+#     author
+#   end
 
-  Author.import people, batch_size: 7_500
-end
+#   Author.import people, batch_size: 7_500
+# end
 
 # # Assign authors to books
-# based on ol data
+# progress = 0
+# Book.all.in_batches(of: 30_000) do |batch|
+#   Parallel.each(batch) do |book|
+#     next if book.ol_author_key.nil?
+
+#     author_key = book.ol_author_key
+#     author = Author.find_by_key(author_key)
+
+#     book.add_author(author)
+#   end
+
+#   progress += batch.length
+#   puts "#{progress} books processed\n"
+# end
 
 # # Create book_tiles
 # books = Book.all
