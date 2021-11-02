@@ -1,8 +1,8 @@
 class Book < ApplicationRecord
   belongs_to :category
   has_many :book_tiles
-  has_and_belongs_to_many :authors, join_table: 'authors_books', foreign_key: 'author_id'
-  has_and_belongs_to_many :subjects, join_table: 'subjects_books', foreign_key: 'subject_id'
+  has_and_belongs_to_many :authors, join_table: 'authors_books', foreign_key: 'book_id'
+  has_and_belongs_to_many :subjects, join_table: 'subjects_books', foreign_key: 'book_id'
 
   validates :title, presence: true, uniqueness: true
 
@@ -22,6 +22,6 @@ class Book < ApplicationRecord
 
   # need for pagination
   def self.search(keywords)
-    Book.where((['title ILIKE ?'] * keywords.size).join(' AND '), * keywords.map { |k| "%#{k}%" }).eager_load(:category, :authors).limit(10)
+    Book.where((['title ILIKE ?'] * keywords.size).join(' AND '), * keywords.map { |k| "%#{k}%" }).eager_load(:category, :authors).limit(100)
   end
 end
