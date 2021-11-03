@@ -1,4 +1,13 @@
 class Book < ApplicationRecord
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
+  settings do
+    mapping dynamic: false do
+      indexes :title, analyzer: :english
+    end
+  end
+
   belongs_to :category
   has_many :book_tiles
   has_and_belongs_to_many :authors, join_table: 'authors_books', foreign_key: 'book_id'
@@ -20,8 +29,40 @@ class Book < ApplicationRecord
     author.books << self
   end
 
-  # need for pagination
-  def self.search(keywords)
-    Book.where((['title ILIKE ?'] * keywords.size).join(' AND '), * keywords.map { |k| "%#{k}%" }).eager_load(:category, :authors).limit(100)
+  # # need for pagination
+  # def self.search(keywords)
+  #   Book.where((['title ILIKE ?'] * keywords.size).join(' AND '), * keywords.map do |k|
+  #                                                                   "%#{k}%"
+  #                                                                 end).eager_load(:category, :authors).limit(100)
+  # end
+
+  def self.search(query)
+    query = query.join(' ')
+    __elasticsearch__.search(
+      {
+        query: {
+          multi_match: {
+            query: query,
+            fields: ['title']
+          }
+        },
+        highlight: {
+          pre_tags: ['<mark>'],
+          post_tags: ['</mark>'],
+          fields: {
+            title: {}
+          }
+        },
+        suggest: {
+          text: query,
+          title: {
+            term: {
+              size: 1,
+              field: :title
+            }
+          }
+        }
+      }
+    )
   end
 end

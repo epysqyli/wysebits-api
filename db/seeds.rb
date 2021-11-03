@@ -1,3 +1,5 @@
+# use bulk_import instead of import to avoid conflicts with es
+
 # # User seeder
 # 10.times do
 #   psw = Faker::Internet.password

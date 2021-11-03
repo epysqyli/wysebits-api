@@ -6,6 +6,8 @@ ruby '3.0.1'
 gem 'activerecord-import'
 gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.4.4', require: false
+gem 'elasticsearch-model', '~> 7.1.0'
+gem 'elasticsearch-rails', '~> 7.1.0'
 gem 'json'
 gem 'jwt', '~> 2.2', '>= 2.2.3'
 gem 'pg', '~> 1.1'
