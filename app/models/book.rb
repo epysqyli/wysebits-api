@@ -29,13 +29,11 @@ class Book < ApplicationRecord
     author.books << self
   end
 
-  # # need for pagination
   # def self.search(keywords)
-  #   Book.where((['title ILIKE ?'] * keywords.size).join(' AND '), * keywords.map do |k|
-  #                                                                   "%#{k}%"
-  #                                                                 end).eager_load(:category, :authors).limit(100)
+  #   Book.where((['title ILIKE ?'] * keywords.size).join(' AND '), * keywords.map { |k| "%#{k}%" }).eager_load(:category, :authors).limit(100)
   # end
 
+  # Implement pagination
   def self.search(query)
     query = query.join(' ')
     __elasticsearch__.search(
