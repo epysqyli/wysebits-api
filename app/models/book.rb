@@ -43,9 +43,14 @@ class Book < ApplicationRecord
     __elasticsearch__.search(
       {
         query: {
-          multi_match: { query: query, fields: ['title'] }
+          multi_match: { query: query, fields: ['title'], fuzziness: 'AUTO' }
         },
-        size: 20
+        size: 20,
+        highlight: {
+          pre_tags: ['<b>'],
+          post_tags: ['</b>'],
+          fields: { title: {} }
+        }
       }
     )
   end
