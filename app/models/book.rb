@@ -47,13 +47,12 @@ class Book < ApplicationRecord
 
   # Implement pagination
   def self.search(query)
-    query = query.join(' ')
     __elasticsearch__.search(
       {
         query: {
           multi_match: { query: query, fields: %w[title authors category], fuzziness: 'AUTO' }
         },
-        size: 20,
+        size: 100,
         highlight: {
           pre_tags: ['<b>'],
           post_tags: ['</b>'],

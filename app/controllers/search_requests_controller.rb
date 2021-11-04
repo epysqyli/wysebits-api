@@ -6,7 +6,7 @@ class SearchRequestsController < ApplicationController
     if res.empty?
       render json: { message: 'No results. Do you want to create this book record?' }
     else
-      render json: res.as_json(include: %i[authors category])
+      render json: res
     end
   end
 
