@@ -52,7 +52,7 @@ class Book < ApplicationRecord
         query: {
           multi_match: { query: query, fields: %w[title authors category], fuzziness: 'AUTO' }
         },
-        size: 100,
+        size: 25,
         highlight: {
           pre_tags: ['<b>'],
           post_tags: ['</b>'],
