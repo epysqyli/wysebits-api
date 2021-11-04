@@ -1,14 +1,4 @@
 class Book < ApplicationRecord
-  # elasticsearch configuration
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
-
-  settings index: { number_of_shards: 2 } do
-    mapping dynamic: false do
-      indexes :title, analyzer: :english
-    end
-  end
-
   # model associations
   belongs_to :category
   has_many :book_tiles
@@ -33,9 +23,27 @@ class Book < ApplicationRecord
     author.books << self
   end
 
-  # def self.search(keywords)
-  #   Book.where((['title ILIKE ?'] * keywords.size).join(' AND '), * keywords.map { |k| "%#{k}%" }).eager_load(:category, :authors).limit(100)
-  # end
+  # elasticsearch configuration
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
+  settings index: { number_of_shards: 2 } do
+    mapping dynamic: false do
+      indexes :title, analyzer: :english
+      indexes :category, type: 'nested' do
+        indexes :name, analyzer: :english
+      end
+      indexes :authors, type: 'nested' do
+        indexes :full_name, analyzer: :standard
+      end
+    end
+  end
+
+  def as_indexed_json(_options = {})
+    as_json(
+      include: %i[authors category]
+    )
+  end
 
   # Implement pagination
   def self.search(query)
@@ -43,7 +51,7 @@ class Book < ApplicationRecord
     __elasticsearch__.search(
       {
         query: {
-          multi_match: { query: query, fields: ['title'], fuzziness: 'AUTO' }
+          multi_match: { query: query, fields: %w[title authors category], fuzziness: 'AUTO' }
         },
         size: 20,
         highlight: {
