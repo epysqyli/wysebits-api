@@ -13,6 +13,7 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(book_params)
     if @book.save
+      @book.book_cover.attach(book_params[:book_cover])
       render json: @book
     else
       render json: { message: 'One or more parameters are causing an error' }
@@ -36,6 +37,6 @@ class BooksController < ApplicationController
   end
 
   def book_params
-    params.require(:book).permit(:title, :release_date, :category_id)
+    params.require(:book).permit(:title, :release_date, :category_id, :book_cover)
   end
 end

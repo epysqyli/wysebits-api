@@ -4,6 +4,7 @@ class Book < ApplicationRecord
   has_many :book_tiles
   has_and_belongs_to_many :authors, join_table: 'authors_books', foreign_key: 'book_id'
   has_and_belongs_to_many :subjects, join_table: 'subjects_books', foreign_key: 'book_id'
+  has_one_attached :book_cover
 
   # model validations
   validates :title, presence: true, uniqueness: true
@@ -45,7 +46,6 @@ class Book < ApplicationRecord
     )
   end
 
-  # Implement pagination
   def self.search(query)
     __elasticsearch__.search(
       {
