@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-  before_action :book, only: :tiles
+  before_action :book, only: %i[tiles show destroy]
   skip_before_action :authenticate_request, only: %i[tiles show]
 
   def tiles
@@ -11,7 +11,7 @@ class BooksController < ApplicationController
   end
 
   def create
-    @book = Book.new(book_params)
+    @book = Book.new
 
     # define author to assign the book to --> move it to the model
     full_name = Author.arel_table[:full_name]
@@ -23,6 +23,11 @@ class BooksController < ApplicationController
                  else
                    results.max_by { |author| author.books.size }
                  end
+
+    @book.title = book_params[:title]
+    @book.category_id = book_params[:category_id]
+    @book.ol_key = nil
+    @book.ol_author_key = new_author.key || nil
 
     if @book.save
       @book.add_author(new_author)
