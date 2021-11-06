@@ -12,7 +12,20 @@ class BooksController < ApplicationController
 
   def create
     @book = Book.new(book_params)
+
+    # define author to assign the book to
+    full_name = Author.arel_table[:full_name]
+    full_name_param = book_params[:author_full_name].split.map(&:capitalize).join(' ')
+    results = Author.where(full_name.matches("%#{full_name_param}%"))
+
+    new_author = if results.empty?
+                   Author.create! full_name: full_name_param
+                 else
+                   results.max_by { |author| author.books.size }
+                 end
+
     if @book.save
+      @book.add_author(new_author)
       @book.book_cover.attach(book_params[:book_cover])
       render json: @book
     else
@@ -37,6 +50,6 @@ class BooksController < ApplicationController
   end
 
   def book_params
-    params.require(:book).permit(:title, :release_date, :category_id, :book_cover)
+    params.require(:book).permit(:title, :category_id, :book_cover, :author_full_name)
   end
 end
