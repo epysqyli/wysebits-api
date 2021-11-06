@@ -13,7 +13,7 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(book_params)
 
-    # define author to assign the book to
+    # define author to assign the book to --> move it to the model
     full_name = Author.arel_table[:full_name]
     full_name_param = book_params[:author_full_name].split.map(&:capitalize).join(' ')
     results = Author.where(full_name.matches("%#{full_name_param}%"))
@@ -50,6 +50,6 @@ class BooksController < ApplicationController
   end
 
   def book_params
-    params.require(:book).permit(:title, :category_id, :book_cover, :author_full_name)
+    params.permit(:title, :category_id, :book_cover, :author_full_name)
   end
 end
