@@ -7,7 +7,15 @@ class BooksController < ApplicationController
   end
 
   def show
-    render json: { data: book.as_json(include: %i[authors category book_cover]) }
+    if book.book_cover.attached?
+      render json:
+      {
+        data: book.as_json(include: %i[authors category]),
+        image_url: url_for(book.book_cover).as_json
+      }
+    else
+      render json: { data: book.as_json(include: %i[authors category]) }
+    end
   end
 
   def create
