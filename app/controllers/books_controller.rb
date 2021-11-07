@@ -7,15 +7,13 @@ class BooksController < ApplicationController
   end
 
   def show
-    render json: { data: book }
+    render json: { data: book.as_json(include: %i[authors category]) }
   end
 
   def create
     @book = Book.new
 
-    # define author to assign the book to
     # move whatever can be moved to the model
-    # fix image upload
     full_name = Author.arel_table[:full_name]
     full_name_param = book_params[:author_full_name].split.map(&:capitalize).join(' ')
     results = Author.where(full_name.matches("%#{full_name_param}%"))
@@ -34,7 +32,7 @@ class BooksController < ApplicationController
     if @book.save
       @book.add_author(new_author) # authors being created twice?
       @book.book_cover.attach(book_params[:book_cover])
-      render json: @book
+      render json: @book.as_json(include: :authors)
     else
       render json: { message: 'One or more parameters are causing an error' }
     end
