@@ -13,24 +13,22 @@ class BooksController < ApplicationController
   def create
     @book = Book.new
 
-    # move whatever can be moved to the model
     full_name = Author.arel_table[:full_name]
     full_name_param = book_params[:author_full_name].split.map(&:capitalize).join(' ')
     results = Author.where(full_name.matches("%#{full_name_param}%"))
 
-    new_author = if results.empty?
-                   Author.create! full_name: full_name_param
-                 else
-                   results.max_by { |author| author.books.size }
-                 end
+    author = if results.empty?
+               Author.create! full_name: full_name_param
+             else
+               results.max_by { |author_i| author_i.books.size }
+             end
 
     @book.title = book_params[:title]
     @book.category_id = book_params[:category_id]
-    @book.ol_key = nil
-    @book.ol_author_key = new_author.key || nil
+    @book.ol_author_key = author.key || nil
 
     if @book.save
-      @book.add_author(new_author) # authors being created twice?
+      @book.add_author(author)
       @book.book_cover.attach(book_params[:book_cover])
       render json: @book.as_json(include: :authors)
     else
