@@ -7,7 +7,7 @@ class BooksController < ApplicationController
   end
 
   def show
-    render json: { data: book.as_json(include: %i[authors category]) }
+    render json: { data: book.as_json(include: %i[authors category book_cover]) }
   end
 
   def create
@@ -24,13 +24,13 @@ class BooksController < ApplicationController
              end
 
     @book.title = book_params[:title]
-    @book.category_id = book_params[:category_id]
+    @book.category_id = book_params[:category_id].to_i
     @book.ol_author_key = author.key || nil
 
     if @book.save
-      @book.add_author(author)
+      @book.add_author(author) # fix duplicate author bug
       @book.book_cover.attach(book_params[:book_cover])
-      render json: @book.as_json(include: :authors)
+      render json: @book
     else
       render json: { message: 'One or more parameters are causing an error' }
     end
