@@ -47,7 +47,9 @@ class BooksController < ApplicationController
   def update; end
 
   def destroy
+    attachment_id = book.book_cover.attachment.id
     if book.destroy
+      ActiveStorage::Attachment.find(attachment_id).purge
       render json: { message: 'Book deleted from database', status: 'success' }
     else
       render json: { message: 'Not possible to process the request' }
