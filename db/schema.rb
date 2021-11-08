@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_211_106_144_759) do
+ActiveRecord::Schema.define(version: 20_211_108_121_429) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(version: 20_211_106_144_759) do
     t.datetime 'updated_at', precision: 6, null: false
     t.string 'ol_author_key'
     t.string 'ol_key'
+    t.text 'cover_url'
     t.index ['category_id'], name: 'index_books_on_category_id'
   end
 
