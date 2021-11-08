@@ -22,6 +22,8 @@ class Book < ApplicationRecord
 
     authors << author
     author.books << self
+
+    __elasticsearch__.index_document
   end
 
   # elasticsearch configuration
