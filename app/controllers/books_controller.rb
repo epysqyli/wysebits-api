@@ -13,15 +13,7 @@ class BooksController < ApplicationController
   def create
     @book = Book.new
 
-    full_name = Author.arel_table[:full_name]
-    full_name_param = book_params[:author_full_name].split.map(&:capitalize).join(' ')
-    results = Author.where(full_name.matches("%#{full_name_param}%"))
-
-    author = if results.empty?
-               Author.create! full_name: full_name_param
-             else
-               results.max_by { |author_i| author_i.books.size }
-             end
+    author = Author.find_or_create_author(book_params)
 
     @book.title = book_params[:title]
     @book.category_id = book_params[:category_id].to_i
