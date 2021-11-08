@@ -21,9 +21,11 @@ class BooksController < ApplicationController
 
     if @book.save
       @book.add_author(author) # fix duplicate author bug
-      @book.book_cover.attach(book_params[:book_cover])
+
+      @book.handle_attachment(book_params[:book_cover])
       @book.cover_url = url_for(@book.book_cover)
       @book.save
+
       render json: @book
     else
       render json: { message: 'One or more parameters are causing an error' }

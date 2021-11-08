@@ -26,6 +26,10 @@ class Book < ApplicationRecord
     __elasticsearch__.index_document
   end
 
+  def handle_attachment(cover)
+    book_cover.attach(cover)
+  end
+
   # elasticsearch configuration
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks

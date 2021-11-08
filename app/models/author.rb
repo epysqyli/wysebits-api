@@ -10,7 +10,7 @@ class Author < ApplicationRecord
     if results.empty?
       Author.create! full_name: full_name_param
     else
-      results.max_by { |author_i| author_i.books.size }
+      results.max_by { |author| author.books.size }
     end
   end
 end
