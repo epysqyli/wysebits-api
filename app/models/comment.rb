@@ -1,7 +1,7 @@
 class Comment < ApplicationRecord
   belongs_to :user
   belongs_to :commentable, polymorphic: true
-  has_many :replies, class_name: 'Comment', foreign_key: 'commentable_id', as: :commentable
+  has_many :replies, class_name: 'Comment', foreign_key: 'commentable_id', as: :commentable, dependent: :destroy
 
   validates :content, presence: true
 
