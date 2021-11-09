@@ -11,7 +11,9 @@ class BookTilesController < ApplicationController
 
   def index
     user_book_tiles = user.book_tiles
-    render json: user_book_tiles.as_json(include: %i[book tile_entries])
+    tiles = user_book_tiles.as_json(include: { book: { include: %i[authors category] } })
+    entries = user_book_tiles.as_json(include: :tile_entries)
+    render json: { entries: entries, tiles: tiles }
   end
 
   def show
@@ -21,7 +23,6 @@ class BookTilesController < ApplicationController
   def create
     @book_tile = BookTile.new({ book_id: book_tile_params[:book_id], user_id: params[:user_id] })
     if @book_tile.save
-      # integrate front-end flow for book_tile creation
       user.book_tiles << @book_tile
       book.book_tiles << @book_tile
       render json: @book_tile
