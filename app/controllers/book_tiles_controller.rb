@@ -11,9 +11,8 @@ class BookTilesController < ApplicationController
 
   def index
     user_book_tiles = user.book_tiles
-    tiles = user_book_tiles.as_json(include: { book: { include: %i[authors category] } })
-    entries = user_book_tiles.as_json(include: :tile_entries)
-    render json: { entries: entries, tiles: tiles }
+    book_tiles = user_book_tiles.as_json(include: [:tile_entries, { book: { include: %i[authors category] } }])
+    render json: book_tiles
   end
 
   def show
