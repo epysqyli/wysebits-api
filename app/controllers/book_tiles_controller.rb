@@ -5,13 +5,13 @@ class BookTilesController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index show]
 
   def tiles_index
-    @book_tiles = BookTile.all
-    render json: @book_tiles
+    book_tiles = BookTile.all
+    render json: book_tiles
   end
 
   def index
-    @book_tiles = user.book_tiles
-    render json: @book_tiles
+    user_book_tiles = user.book_tiles
+    render json: user_book_tiles
   end
 
   def show
