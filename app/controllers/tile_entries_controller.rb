@@ -18,11 +18,18 @@ class TileEntriesController < ApplicationController
   end
 
   def create
-    @tile_entry = TileEntry.new book_id: params[:book_id], content: tile_entry_params[:content]
-    if @tile_entry.save
-      render json: { data: @tile_entry, status: 'created' }
+    @first_entry = TileEntry.new book_tile_id: params[:book_tile_id], content: tile_entry_params[:first_entry]
+
+    @second_entry = TileEntry.new book_tile_id: params[:book_tile_id], content: tile_entry_params[:second_entry]
+
+    @third_entry = TileEntry.new book_tile_id: params[:book_tile_id], content: tile_entry_params[:third_entry]
+
+    entries = [@first_entry, @second_entry, @third_entry]
+
+    if entries.each(&:save)
+      render json: { data: [@first_entry, @second_entry, @third_entry], status: 'created' }
     else
-      render json: { message: 'Tile entry was not created', error_message: @tile_entry.errors.messages }
+      render json: { message: 'Tile entry was not created', error_messages: entries.each(&:errors.messages) }
     end
   end
 
@@ -41,6 +48,6 @@ class TileEntriesController < ApplicationController
   end
 
   def tile_entry_params
-    params.require(:tile_entry).permit(:content)
+    params.permit(:first_entry, :second_entry, :third_entry, :book_tile_id, :tile_entry)
   end
 end
