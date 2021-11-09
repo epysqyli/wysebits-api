@@ -11,7 +11,7 @@ class BookTilesController < ApplicationController
 
   def index
     user_book_tiles = user.book_tiles
-    render json: user_book_tiles
+    render json: user_book_tiles.as_json(include: %i[book tile_entries])
   end
 
   def show
