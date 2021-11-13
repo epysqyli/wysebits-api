@@ -16,7 +16,7 @@ class BookTilesController < ApplicationController
   end
 
   def show
-    render json: book_tile
+    render json: book_tile.as_json(include: [:tile_entries, { book: { include: %i[authors category] } }])
   end
 
   def create

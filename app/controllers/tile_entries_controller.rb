@@ -1,11 +1,12 @@
 class TileEntriesController < ApplicationController
   before_action :book_tile, only: %i[index create]
-  before_action :tile_entry, only: :show
+  before_action :tile_entry, only: %i[show update]
   skip_before_action :authenticate_request, only: %i[top_tiles index show]
 
   def top_tiles
     @top_three = TileEntry.all.order('upvotes DESC').first(10)
-    render json: { data: @top_three.as_json(include: { book_tile: { include: [{ book: { include: :category } }, :user] } }) }
+    render json: { data: @top_three.as_json(include: { book_tile: { include: [{ book: { include: :category } },
+                                                                              :user] } }) }
   end
 
   def index
@@ -33,7 +34,13 @@ class TileEntriesController < ApplicationController
     end
   end
 
-  def update; end
+  def update
+    if tile_entry.update(tile_entry_params)
+      render json: { data: tile_entry }
+    else
+      render json: { message: 'error' }
+    end
+  end
 
   def destroy; end
 
@@ -48,6 +55,6 @@ class TileEntriesController < ApplicationController
   end
 
   def tile_entry_params
-    params.permit(:first_entry, :second_entry, :third_entry, :book_tile_id, :tile_entry)
+    params.permit(:first_entry, :second_entry, :third_entry, :book_tile_id, :tile_entry, :id, :content)
   end
 end
