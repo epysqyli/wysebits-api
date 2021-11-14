@@ -33,10 +33,16 @@ class BooksController < ApplicationController
   end
 
   def update
+    @book = book
     partial_book_params = { title: book_params[:title], category_id: book_params[:category_id] }
-    if book.update(partial_book_params)
-      book.add_author(Author.find_or_create_author(book_params))
-      render json: book.as_json(include: %i[authors category])
+    if @book.update(partial_book_params)
+      @book.add_author(Author.find_or_create_author(book_params))
+      if book_params[:book_cover]
+        @book.handle_attachment(book_params[:book_cover])
+        @book.cover_url = url_for(book.book_cover)
+        @book.save
+      end
+      render json: @book.as_json(include: %i[authors category])
     else
       render json: { message: 'error' }
     end
