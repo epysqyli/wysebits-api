@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-  before_action :book, only: %i[tiles show destroy]
+  before_action :book, only: %i[tiles show update destroy]
   skip_before_action :authenticate_request, only: %i[tiles show]
 
   def tiles
@@ -32,7 +32,15 @@ class BooksController < ApplicationController
     end
   end
 
-  def update; end
+  def update
+    partial_book_params = { title: book_params[:title], category_id: book_params[:category_id] }
+    if book.update(partial_book_params)
+      book.add_author(Author.find_or_create_author(book_params))
+      render json: book.as_json(include: %i[authors category])
+    else
+      render json: { message: 'error' }
+    end
+  end
 
   def destroy
     attachment_id = book.book_cover.attachment.id
