@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_211_108_121_429) do
+ActiveRecord::Schema.define(version: 20_211_120_142_522) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -77,6 +77,14 @@ ActiveRecord::Schema.define(version: 20_211_108_121_429) do
     t.string 'ol_key'
     t.text 'cover_url'
     t.index ['category_id'], name: 'index_books_on_category_id'
+  end
+
+  create_table 'books_users', id: false, force: :cascade do |t|
+    t.bigint 'book_id'
+    t.bigint 'user_id'
+    t.index %w[book_id user_id], name: 'index_books_users_on_book_id_and_user_id'
+    t.index ['book_id'], name: 'index_books_users_on_book_id'
+    t.index ['user_id'], name: 'index_books_users_on_user_id'
   end
 
   create_table 'categories', force: :cascade do |t|
