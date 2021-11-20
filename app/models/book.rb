@@ -4,7 +4,7 @@ class Book < ApplicationRecord
   has_many :book_tiles
   has_and_belongs_to_many :authors, join_table: 'authors_books', foreign_key: 'book_id'
   has_and_belongs_to_many :subjects, join_table: 'subjects_books', foreign_key: 'book_id'
-  has_and_belongs_to_many :users, join_table: 'books_users', foreign_key: 'book_id'
+  has_and_belongs_to_many :liking_users, class_name: 'User', join_table: 'books_users', foreign_key: 'book_id'
   has_one_attached :book_cover
 
   # model validations
@@ -25,6 +25,12 @@ class Book < ApplicationRecord
     # author.books << self
 
     __elasticsearch__.index_document
+  end
+
+  def add_liking_users(user)
+    return if liking_users.include?(user)
+
+    liking_users << user
   end
 
   def handle_attachment(cover)

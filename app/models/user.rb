@@ -6,8 +6,11 @@ class User < ApplicationRecord
 
   # associations
   has_many :book_tiles
+
   has_many :comments
-  has_and_belongs_to_many :books, join_table: 'books_users', foreign_key: 'user_id'
+  has_and_belongs_to_many :fav_books, class_name: 'Book', join_table: 'books_users', foreign_key: 'user_id'
+  has_and_belongs_to_many :fav_tile_entries, class_name: 'TileEntry', join_table: 'tile_entries_users',
+                                             foreign_key: 'user_id'
 
   has_many :active_relationships, class_name: 'Relationship', foreign_key: 'follower_id', dependent: :destroy
   has_many :following, through: :active_relationships, source: :followed
@@ -37,14 +40,16 @@ class User < ApplicationRecord
     other_user.followers.delete(self)
   end
 
-  def add_to_favs(book)
-    return if books.include?(book)
+  def add_to_fav_books(book)
+    return if fav_books.include?(book)
 
-    books << book
+    fav_books << book
   end
 
-  def favs
-    books
+  def add_to_fav_tile_entries(entry)
+    return if tile_entries.include?(entry)
+
+    fav_tile_entries << entry
   end
 
   # callbacks
