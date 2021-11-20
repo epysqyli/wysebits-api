@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :users, only: :index
   before_action :user, only: %i[show destroy fav_books fav_tile_entries]
-  skip_before_action :authenticate_request, only: :create
+  skip_before_action :authenticate_request, only: %i[create]
 
   def index
     render json: { users: users }
