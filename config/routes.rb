@@ -8,6 +8,9 @@ Rails.application.routes.draw do
     post '/follow', to: 'users#add_following'
     post '/unfollow', to: 'users#remove_following'
 
+    get '/users/:id/fav_books', to: 'users#fav_books'
+    get '/users/:id/fav_tile_entries', to: 'users#fav_tile_entries'
+
     get '/all_book_tiles', to: 'book_tiles#tiles_index'
     get '/top_tiles', to: 'tile_entries#top_tiles'
     get '/all_tiles_from_book/:id', to: 'books#tiles'
