@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :users, only: :index
-  before_action :user, only: %i[show destroy]
+  before_action :user, only: %i[show destroy fav_books fav_tile_entries]
   skip_before_action :authenticate_request, only: :create
 
   def index
@@ -48,6 +48,12 @@ class UsersController < ApplicationController
     @current_user.unfollow(user_to_unfollow)
     render json: { message: "You no longer follow #{user_to_unfollow.name}", current_user: @current_user.name }
   end
+
+  def fav_books
+    render json: user.fav_books.as_json(include: %i[authors category])
+  end
+
+  def fav_tile_entries; end
 
   private
 
