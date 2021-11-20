@@ -3,6 +3,7 @@ class BookTilesController < ApplicationController
   before_action :book, only: :create
   before_action :book_tile, only: %i[show destroy]
   skip_before_action :authenticate_request, only: %i[index show]
+  include Pagy::Backend
 
   def tiles_index
     book_tiles = BookTile.all
@@ -10,9 +11,9 @@ class BookTilesController < ApplicationController
   end
 
   def index
-    user_book_tiles = user.book_tiles
-    book_tiles = user_book_tiles.as_json(include: [:tile_entries, { book: { include: %i[authors category] } }])
-    render json: book_tiles
+    pagy, user_book_tiles = pagy(user.book_tiles)
+    resp = user_book_tiles.as_json(include: [:tile_entries, { book: { include: %i[authors category] } }])
+    render json: { tiles: resp, pagy: pagy_metadata(pagy) }
   end
 
   def show
