@@ -11,7 +11,7 @@ class BookTilesController < ApplicationController
   end
 
   def index
-    pagy, user_book_tiles = pagy(user.book_tiles)
+    pagy, user_book_tiles = pagy(user.book_tiles.order(updated_at: :desc))
     resp = user_book_tiles.as_json(include: [:tile_entries, { book: { include: %i[authors category] } }])
     render json: { tiles: resp, pagy: pagy_metadata(pagy) }
   end
