@@ -4,7 +4,7 @@ class User < ApplicationRecord
 
   has_secure_password
 
-  # associations
+  # model associations
   has_many :book_tiles
 
   has_many :comments
