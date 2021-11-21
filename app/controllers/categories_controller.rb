@@ -1,4 +1,6 @@
 class CategoriesController < ApplicationController
+  include Pagy::Backend
+
   before_action :category, only: :category_books
   skip_before_action :authenticate_request
 
@@ -8,7 +10,9 @@ class CategoriesController < ApplicationController
   end
 
   def books
-    render json: category.books.as_json(include: %i[authors category])
+    pagy, books = pagy(category.books)
+    resp = books.as_json(include: %i[authors category])
+    render json: { books: resp, pagy: pagy_metadata(pagy) }
   end
 
   private
