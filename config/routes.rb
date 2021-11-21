@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get '/all_tiles_from_book/:id', to: 'books#tiles'
 
     resources :categories, only: :index
+    get '/categories/:slug/books', to: 'categories#books'
 
     resources :books
     post '/search/books', to: 'search_requests#search_books'
