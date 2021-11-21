@@ -1,9 +1,11 @@
 class BooksController < ApplicationController
-  before_action :book, only: %i[tiles show update destroy]
-  skip_before_action :authenticate_request, only: %i[tiles show]
+  before_action :book, only: %i[tile_entries show update destroy]
+  skip_before_action :authenticate_request, only: %i[tile_entries show]
 
-  def tiles
-    render json: { data: book.book_tiles }
+  def tile_entries
+    book_tiles = book.book_tiles
+    all_entries = book_tiles.map(&:tile_entries)
+    render json: all_entries
   end
 
   def show

@@ -37,6 +37,10 @@ class Book < ApplicationRecord
     book_cover.attach(cover)
   end
 
+  def slug
+    "#{title.parameterize}-#{id}"
+  end
+
   # elasticsearch configuration
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks

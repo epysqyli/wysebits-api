@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     get '/categories/:slug/books', to: 'categories#books'
 
     resources :books
+    get '/books/:id/tile_entries', to: 'books#tile_entries'
     post '/search/books', to: 'search_requests#search_books'
 
     resources :users, only: :nil do
