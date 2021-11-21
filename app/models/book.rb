@@ -15,14 +15,12 @@ class Book < ApplicationRecord
     return if subjects.include?(subject)
 
     subjects << subject
-    # subject.books << self
   end
 
   def add_author(author)
     return if authors.include?(author)
 
     authors << author
-    # author.books << self
 
     __elasticsearch__.index_document
   end
