@@ -37,8 +37,8 @@ class Book < ApplicationRecord
     book_cover.attach(cover)
   end
 
-  def slug
-    "#{title.parameterize}-#{id}"
+  def all_tile_entries
+    book_tiles.map(&:tile_entries)
   end
 
   # elasticsearch configuration

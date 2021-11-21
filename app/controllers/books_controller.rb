@@ -3,9 +3,7 @@ class BooksController < ApplicationController
   skip_before_action :authenticate_request, only: %i[tile_entries show]
 
   def tile_entries
-    book_tiles = book.book_tiles
-    all_entries = book_tiles.map(&:tile_entries)
-    render json: all_entries
+    render json: book.all_tile_entries
   end
 
   def show
@@ -22,7 +20,7 @@ class BooksController < ApplicationController
     @book.ol_author_key = author.key || nil
 
     if @book.save
-      @book.add_author(author) # fix duplicate author bug
+      @book.add_author(author)
 
       @book.handle_attachment(book_params[:book_cover])
       @book.cover_url = url_for(@book.book_cover)
