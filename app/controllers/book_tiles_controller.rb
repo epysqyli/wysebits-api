@@ -1,6 +1,6 @@
 class BookTilesController < ApplicationController
   include Pagy::Backend
-  
+
   before_action :user, only: %i[index create]
   before_action :book, only: :create
   before_action :book_tile, only: %i[show destroy]

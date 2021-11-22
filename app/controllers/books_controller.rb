@@ -3,7 +3,8 @@ class BooksController < ApplicationController
   skip_before_action :authenticate_request, only: %i[tile_entries show]
 
   def tile_entries
-    render json: book.all_tile_entries
+    tile_entries = book.all_tile_entries.as_json(include: [book_tile: { include: :user }])
+    render json: tile_entries
   end
 
   def show
