@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :users, only: :index
   before_action :user, only: %i[show destroy fav_books fav_tile_entries]
+  before_action :book, only: :add_to_fav_books
   skip_before_action :authenticate_request, only: %i[create]
 
   def index
@@ -53,6 +54,15 @@ class UsersController < ApplicationController
     render json: user.fav_books.as_json(include: %i[authors category])
   end
 
+  def add_to_fav_books
+    user.add_to_fav_books(book)
+    if user.fav_books.include?(book)
+      render json: { message: 'book added to favorites' }
+    else
+      render json: { message: 'error' }
+    end
+  end
+
   def fav_tile_entries; end
 
   private
@@ -63,6 +73,10 @@ class UsersController < ApplicationController
 
   def users
     User.all.map { |user| { id: user.id, email_address: user.email_address } }
+  end
+
+  def book
+    Book.find(params[:book_id])
   end
 
   def user_params
