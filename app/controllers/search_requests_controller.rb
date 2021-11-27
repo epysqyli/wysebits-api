@@ -1,4 +1,6 @@
 class SearchRequestsController < ApplicationController
+  skip_before_action :authenticate_request, only: :search_books
+
   def search_books
     search_terms = JSON.parse(search_params[:keywords])
     res = Book.search(search_terms)
