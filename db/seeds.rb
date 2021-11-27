@@ -15,7 +15,7 @@
 # end
 
 # # Category seeder
-# categories = ['History', 'Philosophy', 'Religion and Spirituality', 'Science','Politics', 'Social Sciences', 'Essay', 'Self-Help', 'Business', 'Economics', 'Health and Wellness', 'Crafts and Hobbies','Academic Texts', 'Language Books', 'Arts Books', 'Memoirs and autobiographies', 'Biographies','Journalism', 'Guides and How To Manuals' 'CATCHALL']
+# categories = ['History', 'Philosophy', 'Religion and Spirituality', 'Science','Politics', 'Social Sciences', 'Essay', 'Self-Help', 'Business', 'Economics and Finance', 'Health and Wellness', 'Crafts and Hobbies','Academic Texts', 'Language Books', 'Arts Books', 'Memoirs and autobiographies', 'Biographies','Journalism', 'Guides and How To Manuals' 'CATCHALL']
 
 # categories.each { |cat_name| Category.create! name: cat_name }
 
