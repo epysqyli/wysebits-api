@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
   before_action :users, only: :index
-  before_action :user, only: %i[show destroy fav_books fav_tile_entries]
+  before_action :user, except: %i[index create]
   before_action :book, only: :add_to_fav_books
+  before_action :tile_entry, only: :add_to_fav_tile_entries
   skip_before_action :authenticate_request, only: %i[create]
 
   def index
@@ -28,7 +29,6 @@ class UsersController < ApplicationController
 
   def update; end
 
-  # users should only be able to destroy themselves and their own resources
   def destroy
     if user == current_user
       user.destroy
@@ -63,7 +63,18 @@ class UsersController < ApplicationController
     end
   end
 
-  def fav_tile_entries; end
+  def fav_tile_entries
+    render json: user.fav_tile_entries
+  end
+
+  def add_to_fav_tile_entries
+    user.add_to_fav_tile_entries(tile_entry)
+    if user.fav_tile_entries.include?(tile_entry)
+      render json: { message: 'insight added to favorites' }
+    else
+      render json: { message: 'error' }
+    end
+  end
 
   private
 
@@ -77,6 +88,10 @@ class UsersController < ApplicationController
 
   def book
     Book.find(params[:book_id])
+  end
+
+  def tile_entry
+    TileEntry.find(params[:tile_entry_id])
   end
 
   def user_params

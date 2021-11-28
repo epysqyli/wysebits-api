@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     get '/users/:id/fav_books', to: 'users#fav_books'
     post '/users/:id/fav_books/:book_id', to: 'users#add_to_fav_books'
     get '/users/:id/fav_tile_entries', to: 'users#fav_tile_entries'
+    post '/users/:id/fav_tile_entries/:tile_entry_id', to: 'users#add_to_fav_tile_entries'
 
     get '/all_book_tiles', to: 'book_tiles#tiles_index'
     get '/top_tiles', to: 'tile_entries#top_tiles'
