@@ -47,7 +47,7 @@ class User < ApplicationRecord
   end
 
   def add_to_fav_tile_entries(entry)
-    return if tile_entries.include?(entry)
+    return if fav_tile_entries.include?(entry)
 
     fav_tile_entries << entry
   end
