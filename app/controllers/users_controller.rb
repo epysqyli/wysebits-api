@@ -64,7 +64,10 @@ class UsersController < ApplicationController
   end
 
   def fav_tile_entries
-    render json: user.fav_tile_entries.as_json(include: [book_tile: { include: [user: { only: :username }] }])
+    render json: user.fav_tile_entries.as_json(include:
+      [book_tile:
+        { include:
+          [{ user: { only: :username } }, :book] }])
   end
 
   def add_to_fav_tile_entries
