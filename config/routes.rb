@@ -5,8 +5,11 @@ Rails.application.routes.draw do
     get '/logged_in', to: 'authentication#logged_in'
     post '/signup', to: 'users#create'
 
-    post '/follow', to: 'users#add_following'
-    post '/unfollow', to: 'users#remove_following'
+    get '/users/:id/following', to: 'users#following'
+    get '/users/:id/followers', to: 'users#followers'
+
+    post '/users/:id/follow', to: 'users#add_following'
+    post '/users/:id/unfollow', to: 'users#remove_following'
 
     get '/users/:id/fav_books', to: 'users#fav_books'
     post '/users/:id/fav_books/:book_id', to: 'users#add_to_fav_books'

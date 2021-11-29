@@ -38,16 +38,24 @@ class UsersController < ApplicationController
     end
   end
 
+  def following
+    render json: user.following
+  end
+
+  def followers
+    render json: user.followers
+  end
+
   def add_following
     user_to_follow = User.find(follow_params[:other_user_id])
-    @current_user.follow(user_to_follow)
-    render json: { message: "You now follow #{user_to_follow.name}", current_user: @current_user.name }
+    user.follow(user_to_follow)
+    render json: { message: "You now follow #{user_to_follow.name}" }
   end
 
   def remove_following
     user_to_unfollow = User.find(follow_params[:other_user_id])
-    @current_user.unfollow(user_to_unfollow)
-    render json: { message: "You no longer follow #{user_to_unfollow.name}", current_user: @current_user.name }
+    user.unfollow(user_to_unfollow)
+    render json: { message: "You no longer follow #{user_to_unfollow.name}" }
   end
 
   def fav_books
