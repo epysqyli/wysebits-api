@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  include Pagy::Backend
+
   before_action :users, only: :index
   before_action :user, except: %i[index create]
   before_action :book, only: :add_to_fav_books
@@ -59,7 +61,9 @@ class UsersController < ApplicationController
   end
 
   def fav_books
-    render json: user.fav_books.as_json(include: %i[authors category])
+    pagy, fav_books = pagy(user.fav_books)
+    resp = fav_books.as_json(include: %i[authors category])
+    render json: { books: resp, pagy: pagy_metadata(pagy) }
   end
 
   def add_to_fav_books
