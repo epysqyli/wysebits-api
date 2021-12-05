@@ -1,10 +1,13 @@
 class BooksController < ApplicationController
+  include Pagy::Backend
+
   before_action :book, only: %i[tile_entries show update destroy]
   skip_before_action :authenticate_request, only: %i[tile_entries show]
 
   def tile_entries
-    tile_entries = book.all_tile_entries.as_json(include: [book_tile: { include: [user: { only: :username }] }])
-    render json: tile_entries
+    pagy, all_tile_entries = pagy_array(book.all_tile_entries)
+    resp = all_tile_entries.as_json(include: [book_tile: { include: [user: { only: %i[username id] }] }])
+    render json: { entries: resp, pagy: pagy_metadata(pagy) }
   end
 
   def show

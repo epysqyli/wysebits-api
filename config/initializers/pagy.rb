@@ -33,7 +33,7 @@ Pagy::DEFAULT[:outset] = 0 # default
 
 # Array extra: Paginate arrays efficiently, avoiding expensive array-wrapping and without overriding
 # See https://ddnexus.github.io/pagy/extras/array
-# require 'pagy/extras/array'
+require 'pagy/extras/array'
 
 # Calendar extra: Paginate a collection by calendar Time unit (year, month, week or day)
 # See https://ddnexus.github.io/pagy/extras/calendar
