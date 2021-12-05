@@ -69,7 +69,7 @@ class UsersController < ApplicationController
   def add_to_fav_books
     user.add_to_fav_books(book)
     if user.fav_books.include?(book)
-      render json: { message: 'book added to favorites', book: book }
+      render json: { message: 'book added to favorites', book: book, fav_books: user.fav_books }
     else
       render json: { message: 'error' }
     end
@@ -77,7 +77,7 @@ class UsersController < ApplicationController
 
   def remove_from_fav_books
     user.fav_books.delete(book)
-    render json: { message: "#{book.title} removed from favorite books" }
+    render json: { message: "#{book.title} removed from favorite books", fav_books: user.fav_books }
   end
 
   def fav_tile_entries
