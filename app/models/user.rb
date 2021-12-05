@@ -46,10 +46,22 @@ class User < ApplicationRecord
     fav_books << book
   end
 
+  def remove_from_fav_books(book)
+    return unless fav_books.include?(book)
+
+    fav_books.delete(book)
+  end
+
   def add_to_fav_tile_entries(entry)
     return if fav_tile_entries.include?(entry)
 
     fav_tile_entries << entry
+  end
+
+  def remove_from_fav_tile_entries(entry)
+    return unless fav_tile_entries.include?(entry)
+
+    fav_tile_entries.delete(entry)
   end
 
   # callbacks
