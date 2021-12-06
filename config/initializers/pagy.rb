@@ -30,6 +30,7 @@ Pagy::DEFAULT[:outset] = 0 # default
 # See https://ddnexus.github.io/pagy/extras
 
 # Backend Extras
+# require 'pagy/extras/arel'
 
 # Array extra: Paginate arrays efficiently, avoiding expensive array-wrapping and without overriding
 # See https://ddnexus.github.io/pagy/extras/array

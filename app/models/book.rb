@@ -41,7 +41,7 @@ class Book < ApplicationRecord
   end
 
   def all_tile_entries
-    book_tiles.map(&:tile_entries)
+    TileEntry.where(book_tile_id: BookTile.where(book_id: id))
   end
 
   # elasticsearch configuration
