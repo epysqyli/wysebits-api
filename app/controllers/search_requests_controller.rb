@@ -1,14 +1,16 @@
 class SearchRequestsController < ApplicationController
+  include Pagy::Backend
   skip_before_action :authenticate_request, only: :search_books
 
   def search_books
     search_terms = JSON.parse(search_params[:keywords])
-    res = Book.search(search_terms)
+    results = Book.pagy_search(search_terms)
+    pagy, resp = pagy_elasticsearch_rails(results, items: 10)
 
-    if res.empty?
+    if resp.empty?
       render json: { message: 'No results. Do you want to create this book record?' }
     else
-      render json: res
+      render json: { results: resp, pagy: pagy }
     end
   end
 

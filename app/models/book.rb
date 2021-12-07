@@ -78,24 +78,26 @@ class Book < ApplicationRecord
     )
   end
 
-  def self.search(query)
-    __elasticsearch__.search(
-      {
-        query: {
-          multi_match:
-          {
-            query: query,
-            fields: %w[title authors category],
-            fuzziness: 'AUTO'
-          }
-        },
-        size: 50,
-        highlight: {
-          pre_tags: ['<b>'],
-          post_tags: ['</b>'],
-          fields: { title: {} }
-        }
-      }
-    )
-  end
+  extend Pagy::ElasticsearchRails
+
+  # def self.search(query)
+  #   __elasticsearch__.search(
+  #     {
+  #       query: {
+  #         multi_match:
+  #         {
+  #           query: query,
+  #           fields: %w[title authors category],
+  #           fuzziness: 'AUTO'
+  #         }
+  #       },
+  #       size: 50,
+  #       highlight: {
+  #         pre_tags: ['<b>'],
+  #         post_tags: ['</b>'],
+  #         fields: { title: {} }
+  #       }
+  #     }
+  #   )
+  # end
 end
