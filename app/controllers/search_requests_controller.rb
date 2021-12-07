@@ -4,19 +4,19 @@ class SearchRequestsController < ApplicationController
 
   def search_books
     search_terms = JSON.parse(search_params[:keywords])
-    results = Book.pagy_search(search_terms)
-    pagy, resp = pagy_elasticsearch_rails(results, items: 10)
+    # from = JSON.parse(search_params[:from])
+    results = Book.search(search_terms)
 
-    if resp.empty?
+    if results.empty?
       render json: { message: 'No results. Do you want to create this book record?' }
     else
-      render json: { results: resp, pagy: pagy }
+      render json: results
     end
   end
 
   private
 
   def search_params
-    params.permit(:keywords, search_request: [:keywords])
+    params.permit(:keywords, :from, search_request: [:keywords])
   end
 end
