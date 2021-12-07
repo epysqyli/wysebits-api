@@ -82,7 +82,12 @@ class Book < ApplicationRecord
     __elasticsearch__.search(
       {
         query: {
-          multi_match: { query: query, fields: %w[title authors category], fuzziness: 'AUTO' }
+          multi_match:
+          {
+            query: query,
+            fields: %w[title authors category],
+            fuzziness: 'AUTO'
+          }
         },
         size: 50,
         highlight: {

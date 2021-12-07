@@ -56,7 +56,7 @@ require 'pagy/extras/array'
 # default :pagy_search method: change only if you use also
 # the searchkick or meilisearch extra that defines the same
 # Pagy::DEFAULT[:elasticsearch_rails_search_method] = :pagy_search
-# require 'pagy/extras/elasticsearch_rails'
+require 'pagy/extras/elasticsearch_rails'
 
 # Headers extra: http response headers (and other helpers) useful for API pagination
 # See http://ddnexus.github.io/pagy/extras/headers
