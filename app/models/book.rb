@@ -78,7 +78,7 @@ class Book < ApplicationRecord
     )
   end
 
-  def self.search(query)
+  def self.search(query, from = 0)
     __elasticsearch__.search(
       {
         query: {
@@ -89,7 +89,8 @@ class Book < ApplicationRecord
             fuzziness: 'AUTO'
           }
         },
-        size: 50,
+        size: 20,
+        from: from,
         highlight: {
           pre_tags: ['<b>'],
           post_tags: ['</b>'],
