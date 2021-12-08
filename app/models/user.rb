@@ -45,7 +45,7 @@ class User < ApplicationRecord
   end
 
   def add_to_fav_books(book)
-    fav_books << book unless fav_books.include?(book)   
+    fav_books << book unless fav_books.include?(book)
   end
 
   def remove_from_fav_books(book)
@@ -64,8 +64,16 @@ class User < ApplicationRecord
     upvoted_entries << entry unless upvoted_entries.include?(entry)
   end
 
+  def remove_upvote(entry)
+    upvoted_entries.delete(entry) if upvoted_entries.include?(entry)
+  end
+
   def downvote(entry)
     downvoted_entries << entry unless downvoted_entries.include?(entry)
+  end
+
+  def remove_downvote(entry)
+    downvoted_entries.delete(entry) if downvoted_entries.include?(entry)
   end
 
   # callbacks
