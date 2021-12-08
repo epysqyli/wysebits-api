@@ -34,9 +34,7 @@ class User < ApplicationRecord
 
   # model methods
   def follow(other_user)
-    return if following.include?(other_user)
-
-    following << other_user
+    following << other_user unless following.include?(other_user)
   end
 
   def unfollow(other_user)
@@ -47,27 +45,27 @@ class User < ApplicationRecord
   end
 
   def add_to_fav_books(book)
-    return if fav_books.include?(book)
-
-    fav_books << book
+    fav_books << book unless fav_books.include?(book)   
   end
 
   def remove_from_fav_books(book)
-    return unless fav_books.include?(book)
-
-    fav_books.delete(book)
+    fav_books.delete(book) if fav_books.include?(book)
   end
 
   def add_to_fav_tile_entries(entry)
-    return if fav_tile_entries.include?(entry)
-
-    fav_tile_entries << entry
+    fav_tile_entries << entry unless fav_tile_entries.include?(entry)
   end
 
   def remove_from_fav_tile_entries(entry)
-    return unless fav_tile_entries.include?(entry)
+    fav_tile_entries.delete(entry) if fav_tile_entries.include?(entry)
+  end
 
-    fav_tile_entries.delete(entry)
+  def upvote(entry)
+    upvoted_entries << entry unless upvoted_entries.include?(entry)
+  end
+
+  def downvote(entry)
+    downvoted_entries << entry unless downvoted_entries.include?(entry)
   end
 
   # callbacks
