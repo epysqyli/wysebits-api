@@ -72,8 +72,9 @@ class User < ApplicationRecord
   def remove_upvote(entry)
     return unless upvoted_entries.include?(entry)
 
-    entry.upvote -= 1
+    entry.upvotes -= 1
     upvoted_entries.delete(entry)
+    entry.save
   end
 
   def downvote(entry)
@@ -90,6 +91,7 @@ class User < ApplicationRecord
 
     entry.downvotes -= 1
     downvoted_entries.delete(entry)
+    entry.save
   end
 
   # callbacks
