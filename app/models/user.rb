@@ -12,6 +12,9 @@ class User < ApplicationRecord
   has_and_belongs_to_many :fav_tile_entries, class_name: 'TileEntry', join_table: 'tile_entries_users',
                                              foreign_key: 'user_id'
 
+  has_and_belongs_to_many :upvoted_entries, class_name: 'TileEntry', join_table: 'upvoted_entries_users',
+                                            foreign_key: 'user_id'
+
   has_and_belongs_to_many :downvoted_entries, class_name: 'TileEntry', join_table: 'downvoted_entries_users',
                                               foreign_key: 'user_id'
 

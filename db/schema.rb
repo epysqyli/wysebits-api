@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_08_163608) do
+ActiveRecord::Schema.define(version: 2021_12_08_164343) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -153,6 +153,15 @@ ActiveRecord::Schema.define(version: 2021_12_08_163608) do
     t.index ["tile_entry_id", "user_id"], name: "index_tile_entries_users_on_tile_entry_id_and_user_id"
     t.index ["tile_entry_id"], name: "index_tile_entries_users_on_tile_entry_id"
     t.index ["user_id"], name: "index_tile_entries_users_on_user_id"
+  end
+
+  create_table "upvoted_entries_users", force: :cascade do |t|
+    t.bigint "tile_entry_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["tile_entry_id"], name: "index_upvoted_entries_users_on_tile_entry_id"
+    t.index ["user_id"], name: "index_upvoted_entries_users_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
