@@ -61,19 +61,31 @@ class User < ApplicationRecord
   end
 
   def upvote(entry)
-    upvoted_entries << entry unless upvoted_entries.include?(entry)
+    return if upvoted_entries.include?(entry)
+
+    upvoted_entries << entry
+    entry.upvotes += 1
   end
 
   def remove_upvote(entry)
-    upvoted_entries.delete(entry) if upvoted_entries.include?(entry)
+    return unless upvoted_entries.include?(entry)
+
+    upvoted_entries.delete(entry)
+    entry.upvote -= 1
   end
 
   def downvote(entry)
-    downvoted_entries << entry unless downvoted_entries.include?(entry)
+    return if downvoted_entries.include?(entry)
+
+    downvoted_entries << entry
+    entry.downvotes += 1
   end
 
   def remove_downvote(entry)
-    downvoted_entries.delete(entry) if downvoted_entries.include?(entry)
+    return unless downvoted_entries.include?(entry)
+
+    downvoted_entries.delete(entry)
+    entry.downvotes -= 1
   end
 
   # callbacks
