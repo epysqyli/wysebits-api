@@ -63,8 +63,8 @@ class UsersController < ApplicationController
   end
 
   def fav_books
-    pagy, liked_books = pagy(user.liked_books)
-    resp = liked_books.as_json(include: %i[authors category fav_books])
+    pagy, liked_books = pagy(user.fav_books.order(created_at: :desc))
+    resp = liked_books.as_json(include: { book: { include: %i[authors category] } })
     render json: { books: resp, pagy: pagy_metadata(pagy) }
   end
 
