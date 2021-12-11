@@ -22,7 +22,9 @@ Rails.application.routes.draw do
     get '/users/:id/upvoted_entries', to: 'users#upvoted_entries'
     get '/users/:id/downvoted_entries', to: 'users#downvoted_entries'
     post '/users/:id/tile_entries/:tile_entry_id/upvote', to: 'users#upvote'
+    post '/users/:id/tile_entries/:tile_entry_id/remove_upvote', to: 'users#remove_upvote'
     post '/users/:id/tile_entries/:tile_entry_id/downvote', to: 'users#downvote'
+    post '/users/:id/tile_entries/:tile_entry_id/remove_downvote', to: 'users#revemo_downvote'
 
     get '/all_book_tiles', to: 'book_tiles#tiles_index'
     get '/top_tiles', to: 'tile_entries#top_tiles'
