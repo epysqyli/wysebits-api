@@ -8,7 +8,6 @@ class Book < ApplicationRecord
   has_many :fav_books
   has_many :liking_users, through: :fav_books, source: :user
 
-  # has_and_belongs_to_many :liking_users, class_name: 'User', join_table: 'books_users', foreign_key: 'book_id'
   has_one_attached :book_cover
 
   # model validations
