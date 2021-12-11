@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_11_183444) do
+ActiveRecord::Schema.define(version: 2021_12_11_195030) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,14 +79,6 @@ ActiveRecord::Schema.define(version: 2021_12_11_183444) do
     t.index ["category_id"], name: "index_books_on_category_id"
   end
 
-  create_table "books_users", id: false, force: :cascade do |t|
-    t.bigint "book_id"
-    t.bigint "user_id"
-    t.index ["book_id", "user_id"], name: "index_books_users_on_book_id_and_user_id"
-    t.index ["book_id"], name: "index_books_users_on_book_id"
-    t.index ["user_id"], name: "index_books_users_on_user_id"
-  end
-
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -111,6 +103,15 @@ ActiveRecord::Schema.define(version: 2021_12_11_183444) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["tile_entry_id"], name: "index_downvoted_entries_users_on_tile_entry_id"
     t.index ["user_id"], name: "index_downvoted_entries_users_on_user_id"
+  end
+
+  create_table "fav_books", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "book_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["book_id"], name: "index_fav_books_on_book_id"
+    t.index ["user_id"], name: "index_fav_books_on_user_id"
   end
 
   create_table "relationships", force: :cascade do |t|
