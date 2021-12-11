@@ -116,11 +116,21 @@ class UsersController < ApplicationController
   end
 
   def upvote
-    user.upvote(tile_entry)
+    if user.upvoted_entries.include?(tile_entry)
+      render json: { message: 'Entry already upvoted' }
+    else
+      user.upvote(tile_entry)
+      render json: { message: 'Upvote submitted' }
+    end
   end
 
   def downvote
-    user.downvote(tile_entry)
+    if user.downvoted_entries.include?(tile_entry)
+      render json: { message: 'Entry already downvoted' }
+    else
+      user.downvote(tile_entry)
+      render json: { message: 'Downvote submitted' }
+    end
   end
 
   private
