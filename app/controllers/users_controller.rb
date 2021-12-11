@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :users, only: :index
   before_action :user, except: %i[index create]
   before_action :book, only: %i[add_to_fav_books remove_from_fav_books]
-  before_action :tile_entry, only: %i[add_to_fav_tile_entries remove_from_fav_tile_entries]
+  before_action :tile_entry, only: %i[add_to_fav_tile_entries remove_from_fav_tile_entries upvote downvote]
   skip_before_action :authenticate_request, only: %i[create]
 
   def index
@@ -105,6 +105,22 @@ class UsersController < ApplicationController
     else
       render json: { message: 'insight removed from favorites' }
     end
+  end
+
+  def upvoted_entries
+    render json: { upvoted_entries: user.upvoted_entries }
+  end
+
+  def downvoted_entries
+    render json: { downvoted_entries: user.downvoted_entries }
+  end
+
+  def upvote
+    user.upvote(tile_entry)
+  end
+
+  def downvote
+    user.downvote(tile_entry)
   end
 
   private
