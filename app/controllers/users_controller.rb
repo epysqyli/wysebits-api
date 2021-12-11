@@ -63,22 +63,22 @@ class UsersController < ApplicationController
   end
 
   def fav_books
-    pagy, fav_books = pagy(user.fav_books)
-    resp = fav_books.as_json(include: %i[authors category])
+    pagy, liked_books = pagy(user.liked_books)
+    resp = liked_books.as_json(include: %i[authors category fav_books])
     render json: { books: resp, pagy: pagy_metadata(pagy) }
   end
 
   def add_to_fav_books
     user.add_to_fav_books(book)
-    if user.fav_books.include?(book)
-      render json: { message: 'book added to favorites', book: book, fav_books: user.fav_books }
+    if user.liked_books.include?(book)
+      render json: { message: 'book added to favorites', book: book, fav_books: user.liked_books }
     else
       render json: { message: 'error' }
     end
   end
 
   def remove_from_fav_books
-    user.fav_books.delete(book)
+    user.remove_from_fav_books(book)
     render json: { message: "#{book.title} removed from favorite books", fav_books: user.fav_books }
   end
 
