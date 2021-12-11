@@ -47,11 +47,11 @@ class User < ApplicationRecord
   end
 
   def add_to_fav_books(book)
-    fav_books << book unless fav_books.include?(book)
+    liked_books << book unless liked_books.include?(book)
   end
 
   def remove_from_fav_books(book)
-    fav_books.delete(book) if fav_books.include?(book)
+    liked_books.delete(book) if liked_books.include?(book)
   end
 
   def add_to_fav_tile_entries(entry)
