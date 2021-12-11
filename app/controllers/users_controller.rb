@@ -4,7 +4,9 @@ class UsersController < ApplicationController
   before_action :users, only: :index
   before_action :user, except: %i[index create]
   before_action :book, only: %i[add_to_fav_books remove_from_fav_books]
-  before_action :tile_entry, only: %i[add_to_fav_tile_entries remove_from_fav_tile_entries upvote downvote]
+  before_action :tile_entry,
+                only: %i[add_to_fav_tile_entries remove_from_fav_tile_entries upvote downvote remove_upvote
+                         remove_downvote]
   skip_before_action :authenticate_request, only: %i[create]
 
   def index
@@ -124,6 +126,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def remove_upvote
+    user.remove_upvote(tile_entry)
+    render json: { message: 'Upvote removed' }
+  end
+
   def downvote
     if user.downvoted_entries.include?(tile_entry)
       render json: { message: 'Entry already downvoted' }
@@ -131,6 +138,11 @@ class UsersController < ApplicationController
       user.downvote(tile_entry)
       render json: { message: 'Downvote submitted' }
     end
+  end
+
+  def remove_downvote
+    user.remove_downvote(tile_entry)
+    render json: { message: 'Downvote removed' }
   end
 
   private
