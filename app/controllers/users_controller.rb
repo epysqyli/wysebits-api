@@ -87,8 +87,7 @@ class UsersController < ApplicationController
     resp = fav_tile_entries.as_json(include: [tile_entry: { include:
       [book_tile:
         { include:
-          [{ user: { only: :username } }, :book] }] }])
-    resp = resp.map { |item| item['tile_entry'] }
+          [{ user: { only: :username } }, :book] }] }]).map { |item| item['tile_entry'] }
     render json: { tile_entries: resp, pagy: pagy_metadata(pagy) }
   end
 
