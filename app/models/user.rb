@@ -55,11 +55,11 @@ class User < ApplicationRecord
   end
 
   def add_to_fav_tile_entries(entry)
-    fav_tile_entries << entry unless fav_tile_entries.include?(entry)
+    liked_entries << entry unless liked_entries.include?(entry)
   end
 
   def remove_from_fav_tile_entries(entry)
-    fav_tile_entries.delete(entry) if fav_tile_entries.include?(entry)
+    liked_entries.delete(entry) if liked_entries.include?(entry)
   end
 
   def upvote(entry)
