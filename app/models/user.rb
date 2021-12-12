@@ -14,9 +14,6 @@ class User < ApplicationRecord
   has_many :fav_tile_entries
   has_many :liked_entries, through: :fav_tile_entries, source: :tile_entry
 
-  # has_and_belongs_to_many :fav_tile_entries, class_name: 'TileEntry', join_table: 'tile_entries_users',
-  #                                            foreign_key: 'user_id'
-
   has_and_belongs_to_many :upvoted_entries, class_name: 'TileEntry', join_table: 'upvoted_entries_users',
                                             foreign_key: 'user_id'
 
