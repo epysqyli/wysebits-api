@@ -11,6 +11,7 @@ class CategoriesController < ApplicationController
 
   def books
     pagy, books = pagy(category.books)
+    books = books.sort_by { |book| book.book_tiles.size }.reverse
     resp = books.as_json(include: %i[authors category])
     render json: { books: resp, pagy: pagy_metadata(pagy) }
   end
