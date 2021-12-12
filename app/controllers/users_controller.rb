@@ -83,11 +83,11 @@ class UsersController < ApplicationController
   end
 
   def fav_tile_entries
-    pagy, fav_tile_entries = pagy(user.fav_tile_entries)
-    resp = fav_tile_entries.as_json(include:
+    pagy, fav_tile_entries = pagy(user.fav_tile_entries.order(created_at: :desc))
+    resp = fav_tile_entries.as_json(include: [tile_entry: { include:
       [book_tile:
         { include:
-          [{ user: { only: :username } }, :book] }])
+          [{ user: { only: :username } }, :book] }] }])
     render json: { tile_entries: resp, pagy: pagy_metadata(pagy) }
   end
 
