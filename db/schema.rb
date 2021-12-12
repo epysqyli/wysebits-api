@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_11_195030) do
+ActiveRecord::Schema.define(version: 2021_12_12_125055) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,6 +114,15 @@ ActiveRecord::Schema.define(version: 2021_12_11_195030) do
     t.index ["user_id"], name: "index_fav_books_on_user_id"
   end
 
+  create_table "fav_tile_entries", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "tile_entry_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["tile_entry_id"], name: "index_fav_tile_entries_on_tile_entry_id"
+    t.index ["user_id"], name: "index_fav_tile_entries_on_user_id"
+  end
+
   create_table "relationships", force: :cascade do |t|
     t.integer "follower_id"
     t.integer "followed_id"
@@ -146,14 +155,6 @@ ActiveRecord::Schema.define(version: 2021_12_11_195030) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["book_tile_id"], name: "index_tile_entries_on_book_tile_id"
-  end
-
-  create_table "tile_entries_users", id: false, force: :cascade do |t|
-    t.bigint "tile_entry_id"
-    t.bigint "user_id"
-    t.index ["tile_entry_id", "user_id"], name: "index_tile_entries_users_on_tile_entry_id_and_user_id"
-    t.index ["tile_entry_id"], name: "index_tile_entries_users_on_tile_entry_id"
-    t.index ["user_id"], name: "index_tile_entries_users_on_user_id"
   end
 
   create_table "upvoted_entries_users", force: :cascade do |t|

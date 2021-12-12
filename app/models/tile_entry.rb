@@ -2,8 +2,12 @@ class TileEntry < ApplicationRecord
   # model associations
   belongs_to :book_tile
   has_many :comments, as: :commentable, dependent: :destroy
-  has_and_belongs_to_many :liking_users, class_name: 'User', join_table: 'tile_entries_users',
-                                         foreign_key: 'tile_entry_id'
+
+  has_many :fav_tile_entries
+  has_many :liking_users, through: :fav_tile_entries, source: :user
+
+  # has_and_belongs_to_many :liking_users, class_name: 'User', join_table: 'tile_entries_users',
+  #                                        foreign_key: 'tile_entry_id'
 
   has_and_belongs_to_many :upvoters, class_name: 'User', join_table: 'upvoted_entries_users',
                                      foreign_key: 'tile_entry_id'
