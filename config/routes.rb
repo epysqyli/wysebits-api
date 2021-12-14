@@ -40,6 +40,8 @@ Rails.application.routes.draw do
       resources :book_tiles
     end
 
+    get '/users/:user_id/book_tiles_no_pagy', to: 'book_tiles#index_no_pagy'
+
     resources :book_tiles, only: :nil do
       resources :tile_entries
     end
