@@ -6,11 +6,6 @@ class BookTilesController < ApplicationController
   before_action :book_tile, only: %i[show destroy]
   skip_before_action :authenticate_request, only: %i[index show]
 
-  def tiles_index
-    book_tiles = BookTile.all
-    render json: book_tiles
-  end
-
   def index
     pagy, user_book_tiles = pagy(user.book_tiles.order(updated_at: :desc))
     resp = user_book_tiles.as_json(include: [:tile_entries, { book: { include: %i[authors category] } }])
