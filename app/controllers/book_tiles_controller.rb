@@ -18,9 +18,21 @@ class BookTilesController < ApplicationController
 
   def create
     @book_tile = BookTile.new({ book_id: book_tile_params[:book_id], user_id: params[:user_id] })
+
     if @book_tile.save
       user.book_tiles << @book_tile
       book.book_tiles << @book_tile
+
+      # handle metric_data creation if not present
+      unless book.metric_data
+        book.metric_data = MetricData.new(
+          fav_books_count: 0,
+          fav_entries_count: 0,
+          upvotes_count: 0,
+          downvotes_count: 0
+        )
+      end
+
       render json: @book_tile
     else
       render json: { message: @book_tile.errors.messages }
