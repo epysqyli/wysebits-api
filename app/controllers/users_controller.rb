@@ -19,7 +19,7 @@ class UsersController < ApplicationController
     if user
       book_tiles = user.book_tiles.order(created_at: :desc)
                        .as_json(include:
-                        [:tile_entries, { book: { include: %i[authors category] } }])
+                        [{ tile_entries: { include: { book_tile: { include: :book} } }}, { book: { include: %i[authors category] } }])
 
       render json: { username: user.username, book_tiles: book_tiles }
     else
