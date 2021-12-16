@@ -35,6 +35,8 @@ Rails.application.routes.draw do
     get '/all_tiles_from_book/:id', to: 'books#tiles'
 
     # resources
+    get '/users/:username', to: 'users#show'
+
     resources :categories, only: :index
     get '/categories/:slug/books', to: 'categories#books'
 

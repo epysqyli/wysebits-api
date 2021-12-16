@@ -3,11 +3,12 @@ class UsersController < ApplicationController
 
   before_action :users, only: :index
   before_action :user, except: %i[index create]
+  # before_action :user_by_username, only: :show
   before_action :book, only: %i[add_to_fav_books remove_from_fav_books]
   before_action :tile_entry,
                 only: %i[add_to_fav_tile_entries remove_from_fav_tile_entries upvote downvote remove_upvote
                          remove_downvote]
-  skip_before_action :authenticate_request, only: %i[create]
+  skip_before_action :authenticate_request, only: %i[show create]
 
   # model CRUD
   def index
@@ -16,7 +17,7 @@ class UsersController < ApplicationController
 
   def show
     if user
-      render json: { user: { user_id: user.id, email_address: user.email_address } }
+      render json: { username: user.username, book_tiles: user.book_tiles.as_json(include: :tile_entries) }
     else
       render json: { message: 'User not found' }, status: 404
     end
@@ -183,7 +184,11 @@ class UsersController < ApplicationController
   private
 
   def user
-    User.find(params[:id])
+    if params[:id]
+      User.find(params[:id])
+    else
+      User.find_by_username(params[:username])
+    end
   end
 
   def users
