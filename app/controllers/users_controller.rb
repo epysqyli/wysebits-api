@@ -70,6 +70,8 @@ class UsersController < ApplicationController
 
   def add_to_fav_books
     user.add_to_fav_books(book)
+    metric_data = book.find_or_create_metric_data
+    metric_data.fav_books_count += 1
     if user.liked_books.include?(book)
       render json: { message: 'book added to favorites', book: book, fav_books: user.fav_books }
     else
@@ -79,6 +81,8 @@ class UsersController < ApplicationController
 
   def remove_from_fav_books
     user.remove_from_fav_books(book)
+    metric_data = book.find_or_create_metric_data
+    metric_data.fav_books_count -= 1
     render json: { message: "#{book.title} removed from favorite books", fav_books: user.fav_books }
   end
 
