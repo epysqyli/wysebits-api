@@ -17,7 +17,8 @@ class UsersController < ApplicationController
 
   def show
     if user
-      render json: { username: user.username, book_tiles: user.book_tiles.as_json(include: :tile_entries) }
+      book_tiles = user.book_tiles.order(created_at: :desc).as_json(include: %i[book tile_entries])
+      render json: { username: user.username, book_tiles: book_tiles }
     else
       render json: { message: 'User not found' }, status: 404
     end
