@@ -29,7 +29,7 @@ class BookTilesController < ApplicationController
       book.book_tiles << @book_tile
 
       # handle metric_data creation if not present
-      
+      book.find_or_create_metric_data
 
       render json: @book_tile
     else

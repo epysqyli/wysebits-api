@@ -50,12 +50,13 @@ class Book < ApplicationRecord
 
   def find_or_create_metric_data
     unless metric_data
-      metric_data = MetricData.new(
+      new_metric_data = MetricData.new(
         fav_books_count: 0,
         fav_entries_count: 0,
         upvotes_count: 0,
         downvotes_count: 0
       )
+      self.metric_data = new_metric_data
     end
 
     metric_data
