@@ -9,6 +9,7 @@ class UsersController < ApplicationController
                          remove_downvote]
   skip_before_action :authenticate_request, only: %i[create]
 
+  # model CRUD
   def index
     render json: { users: users }
   end
@@ -42,6 +43,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # user relationships
   def following
     render json: user.following.as_json({ only: %i[username id] })
   end
@@ -62,6 +64,7 @@ class UsersController < ApplicationController
     render json: { message: "You no longer follow #{user_to_unfollow.username}" }
   end
 
+  # fav books actions
   def fav_books
     pagy, liked_books = pagy(user.fav_books.order(created_at: :desc))
     resp = liked_books.as_json(include: { book: { include: %i[authors category] } })
@@ -88,6 +91,7 @@ class UsersController < ApplicationController
     render json: { message: "#{book.title} removed from favorite books", fav_books: user.fav_books }
   end
 
+  # fav insights actions
   def fav_tile_entries
     pagy, fav_tile_entries = pagy(user.fav_tile_entries.order(created_at: :desc))
     resp = fav_tile_entries.as_json(include: [tile_entry: { include:
@@ -123,6 +127,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # upvote/downvote actions
   def upvoted_entries
     render json: { upvoted_entries: user.upvoted_entries }
   end
