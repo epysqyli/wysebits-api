@@ -95,9 +95,7 @@ class Book < ApplicationRecord
   end
 
   def as_indexed_json(_options = {})
-    as_json(
-      include: %i[authors category]
-    )
+    as_json(include: %i[authors category])
   end
 
   def self.search(query, from = 0)
