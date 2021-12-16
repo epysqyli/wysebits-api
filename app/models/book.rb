@@ -62,6 +62,10 @@ class Book < ApplicationRecord
     metric_data
   end
 
+  def rank_score
+    book_tiles.size + metric_data.fav_books_count * 0.5 + metric_data.fav_entries_count * 0.9 + metric_data.upvotes_count * 0.75 + metric_data.downvotes_count * 0.7
+  end
+
   # elasticsearch configuration
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
