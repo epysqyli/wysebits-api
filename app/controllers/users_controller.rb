@@ -97,6 +97,9 @@ class UsersController < ApplicationController
 
   def add_to_fav_tile_entries
     user.add_to_fav_tile_entries(tile_entry)
+    book = tile_entry.book_tile.book
+    metric_data = book.find_or_create_metric_data
+    metric_data.fav_entries_count += 1
     if user.fav_tile_entries.include?(tile_entry)
       render json: { message: 'insight added to favorites' }
     else
@@ -106,6 +109,9 @@ class UsersController < ApplicationController
 
   def remove_from_fav_tile_entries
     user.remove_from_fav_tile_entries(tile_entry)
+    book = tile_entry.book_tile.book
+    metric_data = book.find_or_create_metric_data
+    metric_data.fav_entries_count -= 1
     if user.fav_tile_entries.include?(tile_entry)
       render json: { message: 'error' }
     else
@@ -126,12 +132,18 @@ class UsersController < ApplicationController
       render json: { message: 'Entry already upvoted' }
     else
       user.upvote(tile_entry)
+      book = tile_entry.book_tile.book
+      metric_data = book.find_or_create_metric_data
+      metric_data.upvotes_count += 1
       render json: { message: 'Upvote submitted' }
     end
   end
 
   def remove_upvote
     user.remove_upvote(tile_entry)
+    book = tile_entry.book_tile.book
+    metric_data = book.find_or_create_metric_data
+    metric_data.upvotes_count -= 1
     render json: { message: 'Upvote removed' }
   end
 
@@ -140,12 +152,18 @@ class UsersController < ApplicationController
       render json: { message: 'Entry already downvoted' }
     else
       user.downvote(tile_entry)
+      book = tile_entry.book_tile.book
+      metric_data = book.find_or_create_metric_data
+      metric_data.downvotes_count += 1
       render json: { message: 'Downvote submitted' }
     end
   end
 
   def remove_downvote
     user.remove_downvote(tile_entry)
+    book = tile_entry.book_tile.book
+    metric_data = book.find_or_create_metric_data
+    metric_data.downvotes_count -= 1
     render json: { message: 'Downvote removed' }
   end
 
