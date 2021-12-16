@@ -72,6 +72,7 @@ class UsersController < ApplicationController
     user.add_to_fav_books(book)
     metric_data = book.find_or_create_metric_data
     metric_data.fav_books_count += 1
+    metric_data.save
     if user.liked_books.include?(book)
       render json: { message: 'book added to favorites', book: book, fav_books: user.fav_books }
     else
@@ -83,6 +84,7 @@ class UsersController < ApplicationController
     user.remove_from_fav_books(book)
     metric_data = book.find_or_create_metric_data
     metric_data.fav_books_count -= 1
+    metric_data.save
     render json: { message: "#{book.title} removed from favorite books", fav_books: user.fav_books }
   end
 
@@ -100,6 +102,7 @@ class UsersController < ApplicationController
     book = tile_entry.book_tile.book
     metric_data = book.find_or_create_metric_data
     metric_data.fav_entries_count += 1
+    metric_data.save
     if user.fav_tile_entries.include?(tile_entry)
       render json: { message: 'insight added to favorites' }
     else
@@ -112,6 +115,7 @@ class UsersController < ApplicationController
     book = tile_entry.book_tile.book
     metric_data = book.find_or_create_metric_data
     metric_data.fav_entries_count -= 1
+    metric_data.save
     if user.fav_tile_entries.include?(tile_entry)
       render json: { message: 'error' }
     else
@@ -135,6 +139,7 @@ class UsersController < ApplicationController
       book = tile_entry.book_tile.book
       metric_data = book.find_or_create_metric_data
       metric_data.upvotes_count += 1
+      metric_data.save
       render json: { message: 'Upvote submitted' }
     end
   end
@@ -144,6 +149,7 @@ class UsersController < ApplicationController
     book = tile_entry.book_tile.book
     metric_data = book.find_or_create_metric_data
     metric_data.upvotes_count -= 1
+    metric_data.save
     render json: { message: 'Upvote removed' }
   end
 
@@ -155,6 +161,7 @@ class UsersController < ApplicationController
       book = tile_entry.book_tile.book
       metric_data = book.find_or_create_metric_data
       metric_data.downvotes_count += 1
+      metric_data.save
       render json: { message: 'Downvote submitted' }
     end
   end
@@ -164,6 +171,7 @@ class UsersController < ApplicationController
     book = tile_entry.book_tile.book
     metric_data = book.find_or_create_metric_data
     metric_data.downvotes_count -= 1
+    metric_data.save
     render json: { message: 'Downvote removed' }
   end
 
