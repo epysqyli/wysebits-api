@@ -48,6 +48,19 @@ class Book < ApplicationRecord
     TileEntry.where(book_tile_id: BookTile.where(book_id: id))
   end
 
+  def find_or_create_metric_data
+    unless metric_data
+      metric_data = MetricData.new(
+        fav_books_count: 0,
+        fav_entries_count: 0,
+        upvotes_count: 0,
+        downvotes_count: 0
+      )
+    end
+
+    metric_data
+  end
+
   # elasticsearch configuration
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks

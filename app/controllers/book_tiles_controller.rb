@@ -29,14 +29,7 @@ class BookTilesController < ApplicationController
       book.book_tiles << @book_tile
 
       # handle metric_data creation if not present
-      unless book.metric_data
-        book.metric_data = MetricData.new(
-          fav_books_count: 0,
-          fav_entries_count: 0,
-          upvotes_count: 0,
-          downvotes_count: 0
-        )
-      end
+      
 
       render json: @book_tile
     else
