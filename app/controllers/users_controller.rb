@@ -184,11 +184,7 @@ class UsersController < ApplicationController
   private
 
   def user
-    if params[:id]
-      User.find(params[:id])
-    else
-      User.find_by_username(params[:username])
-    end
+    params[:id] ? User.find(params[:id]) : User.find_by_username(params[:username])
   end
 
   def users
