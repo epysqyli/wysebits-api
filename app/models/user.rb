@@ -99,11 +99,11 @@ class User < ApplicationRecord
     entry.save
   end
 
-  def add_to_fav_category(category)
+  def add_to_fav_categories(category)
     fav_categories << category unless fav_categories.include?(category)
   end
 
-  def remove_from_fav_category(category)
+  def remove_from_fav_categories(category)
     fav_categories.delete(category) if fav_categories.include?(category)
   end
 
