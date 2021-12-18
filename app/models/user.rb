@@ -20,8 +20,8 @@ class User < ApplicationRecord
   has_and_belongs_to_many :downvoted_entries, class_name: 'TileEntry', join_table: 'downvoted_entries_users',
                                               foreign_key: 'user_id'
 
-  has_and_belongs_to_many :categories, class_name: 'Category', join_table: 'categories_users',
-                                       foreign_key: 'user_id'
+  has_and_belongs_to_many :fav_categories, class_name: 'Category', join_table: 'categories_users',
+                                           foreign_key: 'user_id'
 
   has_many :active_relationships, class_name: 'Relationship', foreign_key: 'follower_id', dependent: :destroy
   has_many :following, through: :active_relationships, source: :followed
@@ -97,6 +97,14 @@ class User < ApplicationRecord
     entry.downvotes -= 1
     downvoted_entries.delete(entry)
     entry.save
+  end
+
+  def add_to_fav_category(category)
+    fav_categories << category unless fav_categories.include?(category)
+  end
+
+  def remove_from_fav_category(category)
+    fav_categories.delete(category) if fav_categories.include?(category)
   end
 
   # callbacks
