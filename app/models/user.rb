@@ -100,7 +100,7 @@ class User < ApplicationRecord
   end
 
   def add_to_fav_categories(category)
-    fav_categories << category unless fav_categories.include?(category)
+    fav_categories << category if fav_categories.size < 3 && !fav_categories.include?(category)
   end
 
   def remove_from_fav_categories(category)
