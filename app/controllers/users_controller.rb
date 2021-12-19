@@ -53,7 +53,8 @@ class UsersController < ApplicationController
 
   # user relationships
   def following
-    resp = user.following.as_json(include: { book_tiles: { include: :tile_entries } }, only: %i[username id])
+    resp = user.active_relationships.order(created_at: :desc).as_json(include: 
+      { followed: { only: %i[username id],include: { book_tiles: { include: :tile_entries } } } })
     render json: resp
   end
 
