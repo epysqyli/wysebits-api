@@ -35,7 +35,7 @@ Rails.application.routes.draw do
     get '/all_tiles_from_book/:id', to: 'books#tiles'
 
     # resources
-    get '/users/:username', to: 'users#show'
+    get '/users/:username', to: 'users#show', constraints: { username: %r{[^/]+} }
 
     resources :categories, only: :index
     get '/categories/:slug/books', to: 'categories#books'
