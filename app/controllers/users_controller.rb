@@ -53,7 +53,8 @@ class UsersController < ApplicationController
 
   # user relationships
   def following
-    render json: user.following.as_json({ only: %i[username id] })
+    resp = user.following.as_json(include: { book_tiles: { include: :tile_entries } }, only: %i[username id])
+    render json: resp
   end
 
   def followers
