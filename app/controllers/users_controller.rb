@@ -60,7 +60,10 @@ class UsersController < ApplicationController
   end
 
   def followers
-    render json: user.followers.as_json({ only: %i[username id] })
+    pagy, user_followers = pagy(user.passive_relationships.order(created_at: :desc))
+    resp = user_followers.as_json(include:
+      { followed: { only: %i[username id], include: { book_tiles: { include: :tile_entries } } } })
+    render json: { followers: resp, pagy: pagy_metadata(pagy) }
   end
 
   def add_following
