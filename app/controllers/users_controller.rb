@@ -3,7 +3,6 @@ class UsersController < ApplicationController
 
   before_action :users, only: :index
   before_action :user, except: %i[index create]
-  # before_action :user_by_username, only: :show
   before_action :book, only: %i[add_to_fav_books remove_from_fav_books]
   before_action :tile_entry,
                 only: %i[add_to_fav_tile_entries remove_from_fav_tile_entries upvote downvote remove_upvote
@@ -57,6 +56,10 @@ class UsersController < ApplicationController
     resp = user_following.as_json(include:
       { followed: { only: %i[username id], include: { book_tiles: { include: :tile_entries } } } })
     render json: { following: resp, pagy: pagy_metadata(pagy) }
+  end
+
+  def unpaged_following
+    render json: user.following.as_json(only: %i[username id])
   end
 
   def followers

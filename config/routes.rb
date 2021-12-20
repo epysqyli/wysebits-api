@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
     # user relationships
     get '/users/:id/following', to: 'users#following'
+    get '/users/:id/unpaged_following', to: 'users#unpaged_following'
     get '/users/:id/followers', to: 'users#followers'
     post '/users/:id/follow/:other_user_id', to: 'users#add_following'
     post '/users/:id/unfollow/:other_user_id', to: 'users#remove_following'
