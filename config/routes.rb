@@ -9,8 +9,8 @@ Rails.application.routes.draw do
     # user relationships
     get '/users/:id/following', to: 'users#following'
     get '/users/:id/followers', to: 'users#followers'
-    post '/users/:id/follow', to: 'users#add_following'
-    post '/users/:id/unfollow', to: 'users#remove_following'
+    post '/users/:id/follow/:other_user_id', to: 'users#add_following'
+    post '/users/:id/unfollow/:other_user_id', to: 'users#remove_following'
 
     # user fav books
     get '/users/:id/fav_books', to: 'users#fav_books'

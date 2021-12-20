@@ -67,15 +67,15 @@ class UsersController < ApplicationController
   end
 
   def add_following
-    user_to_follow = User.find(follow_params[:other_user_id])
-    user.follow(user_to_follow)
-    render json: { message: "You now follow #{user_to_follow.username}" }
+    other_user = User.find(params[:other_user_id])
+    user.follow(other_user)
+    render json: { message: "You now follow #{other_user.username}" }
   end
 
   def remove_following
-    user_to_unfollow = User.find(follow_params[:other_user_id])
-    user.unfollow(user_to_unfollow)
-    render json: { message: "You no longer follow #{user_to_unfollow.username}" }
+    other_user = User.find(params[:other_user_id])
+    user.unfollow(other_user)
+    render json: { message: "You no longer follow #{other_user.username}" }
   end
 
   # fav books actions
@@ -214,9 +214,5 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:name, :surname, :username, :email_address, :password, :password_confirmation)
-  end
-
-  def follow_params
-    params.permit(:other_user_id)
   end
 end
