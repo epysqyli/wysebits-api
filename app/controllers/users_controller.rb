@@ -69,6 +69,10 @@ class UsersController < ApplicationController
     render json: { followers: resp, pagy: pagy_metadata(pagy) }
   end
 
+  def unpaged_followers
+    render json: user.followers.as_json(only: %i[username id])
+  end
+
   def add_following
     other_user = User.find(params[:other_user_id])
     user.follow(other_user)
