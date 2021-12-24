@@ -82,6 +82,24 @@ class Book < ApplicationRecord
     __elasticsearch__.delete_document
   end
 
+  def self.import
+    includes(:category, :authors).find_in_batches do |books|
+      bulk_index(books)
+    end
+  end
+
+  def self.bulk_index(books)
+    __elasticsearch__.client.bulk({
+                                    index: __elasticsearch__.index_name,
+                                    type: '_doc',
+                                    body: map_for_import(books)
+                                  })
+  end
+
+  def map_for_import(books)
+    books.map { |book| { index: { _id: book.id, data: book.as_indexed_json } } }
+  end
+
   settings index: { number_of_shards: 2 } do
     mapping dynamic: false do
       indexes :title, analyzer: :english
