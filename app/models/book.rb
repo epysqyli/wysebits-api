@@ -1,4 +1,7 @@
 class Book < ApplicationRecord
+  # elasticsearch concern
+  include Searchable
+
   # model associations
   belongs_to :category
   has_many :book_tiles
@@ -64,77 +67,5 @@ class Book < ApplicationRecord
 
   def rank_score
     book_tiles.size + metric_data.fav_books_count * 0.5 + metric_data.fav_entries_count * 0.9 + metric_data.upvotes_count * 0.75 + metric_data.downvotes_count * 0.7
-  end
-
-  # elasticsearch configuration
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
-
-  after_commit on: [:create] do
-    __elasticsearch__.index_document
-  end
-
-  after_commit on: [:update] do
-    __elasticsearch__.update_document
-  end
-
-  after_commit on: [:destroy] do
-    __elasticsearch__.delete_document
-  end
-
-  def self.import
-    includes(:category, :authors).find_in_batches do |books|
-      bulk_index(books)
-    end
-  end
-
-  def self.bulk_index(books)
-    __elasticsearch__.client.bulk({
-                                    index: __elasticsearch__.index_name,
-                                    type: '_doc',
-                                    body: map_for_import(books)
-                                  })
-  end
-
-  def map_for_import(books)
-    books.map { |book| { index: { _id: book.id, data: book.as_indexed_json } } }
-  end
-
-  settings index: { number_of_shards: 2 } do
-    mapping dynamic: false do
-      indexes :title, analyzer: :english
-      indexes :category, type: 'nested' do
-        indexes :name, analyzer: :english
-      end
-      indexes :authors, type: 'nested' do
-        indexes :full_name, analyzer: :standard
-      end
-    end
-  end
-
-  def as_indexed_json(_options = {})
-    as_json(include: %i[authors category])
-  end
-
-  def self.search(query, from = 0)
-    __elasticsearch__.search(
-      {
-        query: {
-          multi_match:
-          {
-            query: query,
-            fields: %w[title authors category],
-            fuzziness: 'AUTO'
-          }
-        },
-        size: 20,
-        from: from,
-        highlight: {
-          pre_tags: ['<b>'],
-          post_tags: ['</b>'],
-          fields: { title: {} }
-        }
-      }
-    )
   end
 end
