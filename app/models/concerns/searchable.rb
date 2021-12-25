@@ -1,3 +1,4 @@
+# elasticsearch concern for Book model
 module Searchable
   extend ActiveSupport::Concern
 
@@ -5,10 +6,12 @@ module Searchable
     include Elasticsearch::Model
     include Elasticsearch::Model::Callbacks
 
-    def self.import
-      includes(:category, :authors).find_in_batches do |books|
-        bulk_index(books)
-      end
+    def as_indexed_json(_options = {})
+      as_json(include: %i[authors category])
+    end
+
+    def map_for_import(books)
+      books.map { |book| { index: { _id: book.id, data: book.as_indexed_json } } }
     end
 
     def self.bulk_index(books)
@@ -19,8 +22,10 @@ module Searchable
                                     })
     end
 
-    def map_for_import(books)
-      books.map { |book| { index: { _id: book.id, data: book.as_indexed_json } } }
+    def self.import
+      includes(:category, :authors).find_in_batches do |books|
+        bulk_index(books)
+      end
     end
 
     settings index: { number_of_shards: 2 } do
@@ -33,10 +38,6 @@ module Searchable
           indexes :full_name, analyzer: :standard
         end
       end
-    end
-
-    def as_indexed_json(_options = {})
-      as_json(include: %i[authors category])
     end
 
     def self.search(query, from = 0)
