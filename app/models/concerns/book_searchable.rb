@@ -1,5 +1,5 @@
 # elasticsearch concern for Book model
-module Searchable
+module BookSearchable
   extend ActiveSupport::Concern
 
   included do

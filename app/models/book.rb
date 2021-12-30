@@ -1,6 +1,6 @@
 class Book < ApplicationRecord
   # elasticsearch concern
-  include Searchable
+  include BookSearchable
 
   # model associations
   belongs_to :category
