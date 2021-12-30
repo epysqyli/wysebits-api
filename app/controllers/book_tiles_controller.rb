@@ -22,18 +22,23 @@ class BookTilesController < ApplicationController
   end
 
   def create
-    @book_tile = BookTile.new({ book_id: book_tile_params[:book_id], user_id: params[:user_id] })
-
-    if @book_tile.save
-      user.book_tiles << @book_tile
-      book.book_tiles << @book_tile
-
-      # handle metric_data creation if not present
-      book.find_or_create_metric_data
-
-      render json: @book_tile
+    existing_book_tile = user.book_tiles.any? { |book_tile| book_tile.book_id == book_tile_params[:book_id] }
+    if existing_book_tile
+      render json: { message: 'book tile already exists' }
     else
-      render json: { message: @book_tile.errors.messages }
+      @book_tile = BookTile.new({ book_id: book_tile_params[:book_id], user_id: params[:user_id] })
+
+      if @book_tile.save
+        user.book_tiles << @book_tile
+        book.book_tiles << @book_tile
+
+        # handle metric_data creation if not present
+        book.find_or_create_metric_data
+
+        render json: @book_tile
+      else
+        render json: { message: @book_tile.errors.messages }
+      end
     end
   end
 
