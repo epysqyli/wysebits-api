@@ -82,7 +82,6 @@ class User < ApplicationRecord
     entry.upvotes -= 1
     upvoted_entries.delete(entry)
     entry.update_net_votes
-    entry.save
   end
 
   def downvote(entry)
@@ -102,7 +101,6 @@ class User < ApplicationRecord
     entry.downvotes -= 1
     downvoted_entries.delete(entry)
     entry.update_net_votes
-    entry.save
   end
 
   def add_to_fav_categories(category)

@@ -20,5 +20,6 @@ class TileEntry < ApplicationRecord
 
   def update_net_votes
     self.net_votes = upvotes - downvotes
+    save
   end
 end
