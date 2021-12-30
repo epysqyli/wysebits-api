@@ -23,8 +23,9 @@ class BookTilesController < ApplicationController
 
   def create
     existing_book_tile = user.book_tiles.any? { |book_tile| book_tile.book_id == book_tile_params[:book_id] }
+
     if existing_book_tile
-      render json: { message: 'book tile already exists' }
+      render json: BookTile.find(book_tile_params[:book_id])
     else
       @book_tile = BookTile.new({ book_id: book_tile_params[:book_id], user_id: params[:user_id] })
 

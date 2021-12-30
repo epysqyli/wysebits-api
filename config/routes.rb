@@ -54,6 +54,7 @@ Rails.application.routes.draw do
 
     resources :book_tiles, only: :nil do
       resources :tile_entries
+      resources :temporary_entries
     end
 
     resources :tile_entries, only: %i[show] do
