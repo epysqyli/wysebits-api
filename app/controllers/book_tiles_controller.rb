@@ -1,8 +1,8 @@
 class BookTilesController < ApplicationController
   include Pagy::Backend
 
-  before_action :user, only: %i[index index_no_pagy create]
-  before_action :book, only: :create
+  before_action :user, only: %i[index index_no_pagy create available?]
+  before_action :book, only: %i[create available?]
   before_action :book_tile, only: %i[show destroy]
   skip_before_action :authenticate_request, only: %i[index index_no_pagy show]
 
@@ -13,12 +13,13 @@ class BookTilesController < ApplicationController
   end
 
   def index_no_pagy
-    user_book_tiles = user.book_tiles
+    user_book_tiles = user.book_tiles.as_json(include: :tile_entries)
     render json: { tiles: user_book_tiles }
   end
 
   def show
-    render json: book_tile.as_json(include: [:tile_entries, { book: { include: %i[authors category] } }])
+    render json: book_tile.as_json(include: [:tile_entries, { book: { include: %i[authors category] } },
+                                             :temporary_entries])
   end
 
   def create
@@ -50,6 +51,18 @@ class BookTilesController < ApplicationController
       render json: { message: 'Book_tile deleted from database', status: 'success' }
     else
       render json: { message: 'Not possible to process the request' }
+    end
+  end
+
+  def available?
+    book_tile = user.book_tiles.find { |tile| tile.book_id == book.id }
+
+    if book_tile.nil?
+      render json: { res: true }
+    elsif book_tile.tile_entries.empty?
+      render json: { res: true }
+    else
+      render json: { res: false, existing_book_tile: book_tile }
     end
   end
 
