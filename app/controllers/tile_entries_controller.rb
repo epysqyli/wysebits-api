@@ -18,6 +18,7 @@ class TileEntriesController < ApplicationController
     render json: { data: tile_entry } if tile_entry
   end
 
+  # remove any temporary entries if present after entries creation
   def create
     @first_entry = TileEntry.new book_tile_id: params[:book_tile_id], content: tile_entry_params[:first_entry]
 

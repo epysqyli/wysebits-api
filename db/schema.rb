@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_30_103636) do
+ActiveRecord::Schema.define(version: 2021_12_30_170824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -167,6 +167,14 @@ ActiveRecord::Schema.define(version: 2021_12_30_103636) do
     t.index ["subject_id"], name: "index_subjects_books_on_subject_id"
   end
 
+  create_table "temporary_entries", force: :cascade do |t|
+    t.bigint "book_tile_id", null: false
+    t.text "content"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["book_tile_id"], name: "index_temporary_entries_on_book_tile_id"
+  end
+
   create_table "tile_entries", force: :cascade do |t|
     t.text "content"
     t.integer "upvotes", default: 0
@@ -206,5 +214,6 @@ ActiveRecord::Schema.define(version: 2021_12_30_103636) do
   add_foreign_key "book_tiles", "users"
   add_foreign_key "books", "categories"
   add_foreign_key "metric_data", "books"
+  add_foreign_key "temporary_entries", "book_tiles"
   add_foreign_key "tile_entries", "book_tiles"
 end
