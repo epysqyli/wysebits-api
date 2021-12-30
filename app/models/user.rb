@@ -72,6 +72,8 @@ class User < ApplicationRecord
 
     entry.upvotes += 1
     upvoted_entries << entry
+
+    entry.update_net_votes
   end
 
   def remove_upvote(entry)
@@ -79,6 +81,7 @@ class User < ApplicationRecord
 
     entry.upvotes -= 1
     upvoted_entries.delete(entry)
+    entry.update_net_votes
     entry.save
   end
 
@@ -89,6 +92,8 @@ class User < ApplicationRecord
 
     entry.downvotes += 1
     downvoted_entries << entry
+
+    entry.update_net_votes
   end
 
   def remove_downvote(entry)
@@ -96,6 +101,7 @@ class User < ApplicationRecord
 
     entry.downvotes -= 1
     downvoted_entries.delete(entry)
+    entry.update_net_votes
     entry.save
   end
 

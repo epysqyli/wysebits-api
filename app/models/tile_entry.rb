@@ -17,4 +17,8 @@ class TileEntry < ApplicationRecord
 
     liking_users << user
   end
+
+  def update_net_votes
+    self.net_votes = upvotes - downvotes
+  end
 end
