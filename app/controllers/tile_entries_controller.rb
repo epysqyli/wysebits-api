@@ -18,7 +18,6 @@ class TileEntriesController < ApplicationController
     render json: { data: tile_entry } if tile_entry
   end
 
-  # remove any temporary entries if present after entries creation
   def create
     @first_entry = TileEntry.new book_tile_id: params[:book_tile_id], content: tile_entry_params[:first_entry]
 
@@ -29,6 +28,7 @@ class TileEntriesController < ApplicationController
     entries = [@first_entry, @second_entry, @third_entry]
 
     if entries.each(&:save)
+      book_tile.temporary_entries.each(&:destroy)
       render json: { data: [@first_entry, @second_entry, @third_entry], status: 'created' }
     else
       render json: { message: 'Tile entry was not created', error_messages: entries.each(&:errors.messages) }
