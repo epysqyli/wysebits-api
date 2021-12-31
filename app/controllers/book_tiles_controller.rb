@@ -60,7 +60,7 @@ class BookTilesController < ApplicationController
     if book_tile.nil?
       render json: { res: true }
     elsif book_tile.tile_entries.empty?
-      render json: { res: true }
+      render json: { res: true, temporary_entries: book_tile.temporary_entries }
     else
       render json: { res: false, existing_book_tile: book_tile }
     end

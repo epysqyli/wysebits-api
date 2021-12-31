@@ -1,6 +1,8 @@
 class TemporaryEntriesController < ApplicationController
   before_action :temporary_entry, only: :show
-  before_action :book_tile, only: :create
+  before_action :book_tile, only: %i[index create]
+
+  def index; end
 
   def show
     render json: temporary_entry
