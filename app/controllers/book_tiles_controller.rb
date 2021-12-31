@@ -1,7 +1,7 @@
 class BookTilesController < ApplicationController
   include Pagy::Backend
 
-  before_action :user, only: %i[index index_no_pagy create available?]
+  before_action :user, only: %i[index index_no_pagy index_temp_entries create available?]
   before_action :book, only: %i[create available?]
   before_action :book_tile, only: %i[show destroy]
   skip_before_action :authenticate_request, only: %i[index index_no_pagy show]
@@ -15,6 +15,12 @@ class BookTilesController < ApplicationController
   def index_no_pagy
     user_book_tiles = user.book_tiles.as_json(include: :tile_entries)
     render json: { tiles: user_book_tiles }
+  end
+
+  def index_temp_entries
+    pagy, temp_book_tiles = pagy(user.book_tiles.filter { |bt| bt.temporary_entries.present? }).order(created_at: :desc)
+    resp = temp_book_tiles.as_json(include: [:tile_entries, { book: { include: %i[authors category] } }])
+    render json: { tiles: resp, pagy: pagy_metadata(pagy) }
   end
 
   def show
