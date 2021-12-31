@@ -18,7 +18,8 @@ class BookTilesController < ApplicationController
   end
 
   def index_temp_entries
-    pagy, temp_book_tiles = pagy(user.book_tiles.filter { |bt| bt.temporary_entries.present? }).order(created_at: :desc)
+    temp_book_tiles = user.book_tiles.filter { |bt| bt.temporary_entries.present? }
+    pagy, temp_book_tiles = pagy_array(temp_book_tiles)
     resp = temp_book_tiles.as_json(include: [:tile_entries, { book: { include: %i[authors category] } }])
     render json: { tiles: resp, pagy: pagy_metadata(pagy) }
   end
