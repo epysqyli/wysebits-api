@@ -51,6 +51,7 @@ Rails.application.routes.draw do
     end
 
     get '/users/:user_id/book_tiles_no_pagy', to: 'book_tiles#index_no_pagy'
+    get '/users/:user_id/temp_book_tiles', to: 'book_tiles#index_temp_entries'
     get '/users/:user_id/book_tiles/:book_id/is_available', to: 'book_tiles#available?'
 
     resources :book_tiles, only: :nil do
