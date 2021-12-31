@@ -23,10 +23,10 @@ class BookTilesController < ApplicationController
   end
 
   def create
-    existing_book_tile = user.book_tiles.any? { |book_tile| book_tile.book_id == book_tile_params[:book_id] }
+    existing_book_tile = user.book_tiles.find { |bt| bt.book_id == book_tile_params[:book_id] }
 
     if existing_book_tile
-      render json: BookTile.find(book_tile_params[:book_id])
+      render json: existing_book_tile
     else
       @book_tile = BookTile.new({ book_id: book_tile_params[:book_id], user_id: params[:user_id] })
 
