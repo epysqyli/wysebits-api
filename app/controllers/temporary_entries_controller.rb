@@ -1,5 +1,5 @@
 class TemporaryEntriesController < ApplicationController
-  before_action :temporary_entry, only: :show
+  before_action :temporary_entry, only: %i[show update]
   before_action :book_tile, only: %i[index create]
 
   def index; end
@@ -15,6 +15,14 @@ class TemporaryEntriesController < ApplicationController
       render json: new_temp_entry
     else
       render json: 'An error occurred in the creation'
+    end
+  end
+
+  def update
+    if temporary_entry.update(temp_entry_params)
+      render json: temporary_entry
+    else
+      render json: 'Something went wrong'
     end
   end
 
