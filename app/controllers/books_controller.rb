@@ -11,7 +11,7 @@ class BooksController < ApplicationController
   end
 
   def show
-    render json: { data: book.as_json(include: %i[authors category]) }
+    render json: book.as_json(include: %i[authors category])
   end
 
   def create
