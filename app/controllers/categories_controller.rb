@@ -6,7 +6,7 @@ class CategoriesController < ApplicationController
 
   def index
     @categories = Category.select(:name, :slug, :id)
-    render json: { data: @categories }
+    render json: @categories
   end
 
   def books
