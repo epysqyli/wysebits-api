@@ -23,7 +23,7 @@ class UsersController < ApplicationController
                          { book: { include: %i[authors category] } }])
 
       user_followers = user.followers.as_json(only: %i[username id])
-      render json: { username: user.username, id: user.id, book_tiles: book_tiles, followers: user_followers }
+      render json: { user: { username: user.username, id: user.id }, book_tiles: book_tiles, followers: user_followers }
     else
       render json: { message: 'User not found' }, status: 404
     end
