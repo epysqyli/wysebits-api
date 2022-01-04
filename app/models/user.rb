@@ -111,6 +111,10 @@ class User < ApplicationRecord
     fav_categories.delete(category) if fav_categories.include?(category)
   end
 
+  def all_tile_entries
+    TileEntry.where(book_tile_id: BookTile.where(user_id: id))
+  end
+
   # callbacks
   def downcase_email
     self.email_address = email_address.delete(' ').downcase

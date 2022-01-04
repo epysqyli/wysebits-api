@@ -43,8 +43,8 @@ class TileEntriesController < ApplicationController
   def destroy; end
 
   def all_user_entries
-    pagy, user_entries = user.tile_entries.order(updated_at: :desc)
-    resp = user_entries.as_json(include: { book_tile: [:book, { include: { user: { only: %i[username id] } } }] })
+    pagy, user_entries = pagy(user.all_tile_entries.order(updated_at: :desc))
+    resp = user_entries.as_json(include: { book_tile: { include: [:book, { user: { only: %i[id username] } }] } })
     render json: { entries: resp, pagy: pagy_metadata(pagy) }
   end
 
