@@ -1,13 +1,10 @@
 class TileEntriesController < ApplicationController
+  include Pagy::Backend
+
   before_action :book_tile, only: %i[index create]
   before_action :tile_entry, only: %i[show update]
-  skip_before_action :authenticate_request, only: %i[top_tiles index show]
-
-  def top_tiles
-    @top_three = TileEntry.all.order('upvotes DESC').first(10)
-    render json: { data: @top_three.as_json(include: { book_tile: { include: [{ book: { include: :category } },
-                                                                              :user] } }) }
-  end
+  before_action :user, only: :all_user_entries
+  skip_before_action :authenticate_request, only: %i[top_tiles index show all_user_entries]
 
   def index
     @tile_entries = book_tile.tile_entries
@@ -45,7 +42,17 @@ class TileEntriesController < ApplicationController
 
   def destroy; end
 
+  def all_user_entries
+    pagy, user_entries = user.tile_entries.order(updated_at: :desc)
+    resp = user_entries.as_json(include: { book_tile: [:book, { include: { user: { only: %i[username id] } } }] })
+    render json: { entries: resp, pagy: pagy_metadata(pagy) }
+  end
+
   private
+
+  def user
+    User.find(params[:user_id])
+  end
 
   def tile_entry
     TileEntry.find(params[:id])

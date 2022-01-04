@@ -59,6 +59,8 @@ Rails.application.routes.draw do
       resources :temporary_entries
     end
 
+    get '/users/:user_id/tile_entries/all_user_entries', to: 'tile_entries#all_user_entries'
+
     resources :tile_entries, only: %i[show] do
       resources :comments
     end
