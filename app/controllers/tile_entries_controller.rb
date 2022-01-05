@@ -25,7 +25,7 @@ class TileEntriesController < ApplicationController
     entries = [@first_entry, @second_entry, @third_entry]
 
     if entries.each(&:save)
-      book_tile.temporary_entries.each(&:destroy)
+      book_tile.temporary_entries.each(&:destroy) if book_tile.temporary_entries.present?
       render json: { data: [@first_entry, @second_entry, @third_entry], status: 'created' }
     else
       render json: { message: 'Tile entry was not created', error_messages: entries.each(&:errors.messages) }
