@@ -18,6 +18,10 @@ class CategoriesController < ApplicationController
 
   private
 
+  def user
+    User.find(params[:user_id])
+  end
+
   def category
     Category.find_by_slug(params[:slug])
   end

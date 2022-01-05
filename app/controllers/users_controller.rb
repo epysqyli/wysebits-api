@@ -7,6 +7,8 @@ class UsersController < ApplicationController
   before_action :tile_entry,
                 only: %i[add_to_fav_tile_entries remove_from_fav_tile_entries upvote downvote remove_upvote
                          remove_downvote]
+
+  before_action :category, only: %i[add_to_fav_categories remove_from_fav_categories]
   skip_before_action :authenticate_request, only: %i[show create]
 
   # model CRUD
@@ -48,6 +50,21 @@ class UsersController < ApplicationController
     else
       render json: { message: 'Unauthorized' }, status: 401
     end
+  end
+
+  # user favorite categories
+  def fav_categories
+    render json: user.fav_categories
+  end
+
+  def add_to_fav_categories
+    user.add_to_fav_categories category
+    render json: user.fav_categories
+  end
+
+  def remove_from_fav_categories
+    user.remove_from_fav_categories category
+    render json: user.fav_categories
   end
 
   # user relationships
@@ -217,6 +234,10 @@ class UsersController < ApplicationController
 
   def tile_entry
     TileEntry.find(params[:tile_entry_id])
+  end
+
+  def category
+    Category.find(params[:category_id])
   end
 
   def user_params
