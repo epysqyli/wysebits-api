@@ -1,14 +1,21 @@
 class TileEntriesController < ApplicationController
   include Pagy::Backend
 
-  before_action :book_tile, only: %i[index create]
+  before_action :book_tile, only: %i[create]
   before_action :tile_entry, only: %i[show update]
   before_action :user, only: :all_user_entries
-  skip_before_action :authenticate_request, only: %i[top_tiles index show all_user_entries]
+  skip_before_action :authenticate_request, only: %i[index show all_user_entries]
+
+  # def index
+  #   @tile_entries = book_tile.tile_entries
+  #   render json: { data: @tile_entries }
+  # end
 
   def index
-    @tile_entries = book_tile.tile_entries
-    render json: { data: @tile_entries }
+    pagy, entries = pagy(TileEntry.all.order(updated_at: :desc))
+    resp = entries.as_json(include: { book_tile: { include: [{ book: { include: %i[authors category] } },
+                                                             { user: { only: %i[username id] } }] } })
+    render json: { entries: resp, pagy: pagy_metadata(pagy) }
   end
 
   def show
