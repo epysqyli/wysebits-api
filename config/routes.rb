@@ -34,8 +34,8 @@ Rails.application.routes.draw do
 
     # user favorite categories
     get '/users/:id/fav_categories', to: 'users#fav_categories'
-    post '/users/:id/categories/:category_id/add_to_fav', to: 'users#remove_from_fav_categories'
-    post '/users/:id/categories/:category_id/remove_from_fav', to: 'users#add_to_fav_categories'
+    post '/users/:id/categories/:category_id/add_to_fav', to: 'users#add_to_fav_categories'
+    post '/users/:id/categories/:category_id/remove_from_fav', to: 'users#remove_from_fav_categories'
 
     # top tiles? to be checked
     get '/top_tiles', to: 'tile_entries#top_tiles'
