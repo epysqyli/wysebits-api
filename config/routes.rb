@@ -37,9 +37,9 @@ Rails.application.routes.draw do
     post '/users/:id/categories/:category_id/add_to_fav', to: 'users#add_to_fav_categories'
     post '/users/:id/categories/:category_id/remove_from_fav', to: 'users#remove_from_fav_categories'
 
-    # top tiles? to be checked
-    get '/top_tiles', to: 'tile_entries#top_tiles'
+    # tile_entries
     get '/all_tiles_from_book/:id', to: 'books#tiles'
+    get '/tile_entries/all_entries', to: 'tile_entries#all_entries'
 
     # resources
     get '/users/:username', to: 'users#show', constraints: { username: /[0-z.]+/ }
