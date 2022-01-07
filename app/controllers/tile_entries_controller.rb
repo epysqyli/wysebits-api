@@ -4,7 +4,7 @@ class TileEntriesController < ApplicationController
   before_action :book_tile, only: %i[create]
   before_action :tile_entry, only: %i[show update]
   before_action :user, only: :all_user_entries
-  skip_before_action :authenticate_request, only: %i[index show all_user_entries]
+  skip_before_action :authenticate_request, only: %i[all_entries show all_user_entries]
 
   def all_entries
     pagy, entries = pagy(TileEntry.all.order(updated_at: :desc))
@@ -19,9 +19,7 @@ class TileEntriesController < ApplicationController
 
   def create
     @first_entry = TileEntry.new book_tile_id: params[:book_tile_id], content: tile_entry_params[:first_entry]
-
     @second_entry = TileEntry.new book_tile_id: params[:book_tile_id], content: tile_entry_params[:second_entry]
-
     @third_entry = TileEntry.new book_tile_id: params[:book_tile_id], content: tile_entry_params[:third_entry]
 
     entries = [@first_entry, @second_entry, @third_entry]
