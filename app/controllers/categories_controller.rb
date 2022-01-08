@@ -1,7 +1,7 @@
 class CategoriesController < ApplicationController
   include Pagy::Backend
 
-  before_action :category, only: :category_books
+  before_action :category, only: %i[category_books recommendations]
   skip_before_action :authenticate_request
 
   def index
@@ -16,6 +16,13 @@ class CategoriesController < ApplicationController
     render json: { books: resp, pagy: pagy_metadata(pagy) }
   end
 
+  def recommendations
+    books = category.books.order(updated_at: :desc).limit(50)
+    recommendations = books.sort_by(&:rank_score).reverse.slice(0, 4)
+    recommendations = recommendations.as_json(include: %i[authors category])
+    render json: recommendations
+  end
+
   private
 
   def user
@@ -23,6 +30,6 @@ class CategoriesController < ApplicationController
   end
 
   def category
-    Category.find_by_slug(params[:slug])
+    params[:slug] ? Category.find_by_slug(params[:slug]) : Category.find(params[:id])
   end
 end

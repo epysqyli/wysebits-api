@@ -46,6 +46,7 @@ Rails.application.routes.draw do
 
     resources :categories, only: :index
     get '/categories/:slug/books', to: 'categories#books'
+    get '/categories/:id/recommendations', to: 'categories#recommendations'
 
     resources :books
     get '/books/:id/tile_entries', to: 'books#tile_entries'
