@@ -3,11 +3,18 @@ class TileEntriesController < ApplicationController
 
   before_action :book_tile, only: %i[create]
   before_action :tile_entry, only: %i[show update]
-  before_action :user, only: %i[custom_feed all_user_entries]
-  skip_before_action :authenticate_request, only: %i[all_user_entries show feed]
+  before_action :user, only: %i[user_feed custom_feed all_user_entries]
+  skip_before_action :authenticate_request, only: %i[all_user_entries show guest_feed]
 
-  def feed
+  def guest_feed
     pagy, entries = pagy(TileEntry.all.order(updated_at: :desc))
+    resp = entries.as_json(include: { book_tile: { include: [{ book: { include: %i[authors category] } },
+                                                             { user: { only: %i[username id] } }] } })
+    render json: { entries: resp, pagy: pagy_metadata(pagy) }
+  end
+
+  def user_feed
+    pagy, entries = pagy(TileEntry.where.not(book_tile_id: BookTile.where(user_id: user.id)).order(updated_at: :desc))
     resp = entries.as_json(include: { book_tile: { include: [{ book: { include: %i[authors category] } },
                                                              { user: { only: %i[username id] } }] } })
     render json: { entries: resp, pagy: pagy_metadata(pagy) }

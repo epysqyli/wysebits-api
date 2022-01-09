@@ -37,12 +37,11 @@ Rails.application.routes.draw do
     post '/users/:id/categories/:category_id/add_to_fav', to: 'users#add_to_fav_categories'
     post '/users/:id/categories/:category_id/remove_from_fav', to: 'users#remove_from_fav_categories'
 
-    # user custom recommendations feed
-    get '/users/:id/custom_feed', to: 'tile_entries#custom_feed'
-
     # tile_entries
     get '/all_tiles_from_book/:id', to: 'books#tiles'
-    get '/tile_entries/feed', to: 'tile_entries#feed'
+    get '/tile_entries/guest_feed', to: 'tile_entries#guest_feed'
+    get '/users/:id/user_feed', to: 'tile_entries#user_feed'
+    get '/users/:id/custom_feed', to: 'tile_entries#custom_feed'
 
     # resources
     get '/users/:username', to: 'users#show', constraints: { username: /[0-z.]+/ }
