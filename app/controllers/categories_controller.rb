@@ -1,7 +1,8 @@
 class CategoriesController < ApplicationController
   include Pagy::Backend
 
-  before_action :category, only: %i[category_books recommendations]
+  before_action :category, except: :index
+  before_action :user, only: :custom_feed
   skip_before_action :authenticate_request
 
   def index
@@ -22,6 +23,8 @@ class CategoriesController < ApplicationController
     recommendations = recommendations.as_json(include: %i[authors category])
     render json: recommendations
   end
+
+  def custom_feed; end
 
   private
 

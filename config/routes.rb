@@ -37,6 +37,9 @@ Rails.application.routes.draw do
     post '/users/:id/categories/:category_id/add_to_fav', to: 'users#add_to_fav_categories'
     post '/users/:id/categories/:category_id/remove_from_fav', to: 'users#remove_from_fav_categories'
 
+    # user custom recommendations feed
+    get '/users/:id/categories/:category_id/custom_feed', to: 'categories#custom_feed'
+
     # tile_entries
     get '/all_tiles_from_book/:id', to: 'books#tiles'
     get '/tile_entries/all_entries', to: 'tile_entries#all_entries'
