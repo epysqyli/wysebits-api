@@ -20,7 +20,7 @@ class TileEntriesController < ApplicationController
       end
     end
 
-    entries = entries.flatten
+    entries = entries.flatten.filter { |entry| entry.book_tile.user_id != user.id }
     pagy, entries = pagy_array(entries)
     entries = entries.as_json(include: { book_tile: { include: [{ book: { include: %i[authors category] } },
                                                                 { user: { only: %i[username id] } }] } })
