@@ -18,13 +18,9 @@ class CategoriesController < ApplicationController
   end
 
   def recommendations
-    books = category.books.order(updated_at: :desc).limit(50)
-    recommendations = books.sort_by(&:rank_score).reverse.slice(0, 4)
-    recommendations = recommendations.as_json(include: %i[authors category])
+    recommendations = category.recommendations.as_json(include: %i[authors category])
     render json: recommendations
   end
-
-  def custom_feed; end
 
   private
 
