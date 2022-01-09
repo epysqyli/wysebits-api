@@ -2,7 +2,6 @@ class CategoriesController < ApplicationController
   include Pagy::Backend
 
   before_action :category, except: :index
-  before_action :user, only: :custom_feed
   skip_before_action :authenticate_request
 
   def index

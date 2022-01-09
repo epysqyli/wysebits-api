@@ -41,7 +41,7 @@ Rails.application.routes.draw do
 
     # tile_entries
     get '/all_tiles_from_book/:id', to: 'books#tiles'
-    get '/tile_entries/all_entries', to: 'tile_entries#all_entries'
+    get '/tile_entries/feed', to: 'tile_entries#feed'
 
     # resources
     get '/users/:username', to: 'users#show', constraints: { username: /[0-z.]+/ }

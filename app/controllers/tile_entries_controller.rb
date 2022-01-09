@@ -6,7 +6,7 @@ class TileEntriesController < ApplicationController
   before_action :user, only: :all_user_entries
   skip_before_action :authenticate_request, only: %i[all_entries show all_user_entries]
 
-  def all_entries
+  def feed
     pagy, entries = pagy(TileEntry.all.order(updated_at: :desc))
     resp = entries.as_json(include: { book_tile: { include: [{ book: { include: %i[authors category] } },
                                                              { user: { only: %i[username id] } }] } })
