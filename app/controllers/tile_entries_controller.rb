@@ -20,7 +20,8 @@ class TileEntriesController < ApplicationController
       end
     end
 
-    pagy, entries = pagy(entries.flatten.order(updated_at: :desc))
+    entries = entries.flatten
+    pagy, entries = pagy_array(entries)
     entries = entries.as_json(include: { book_tile: { include: [{ book: { include: %i[authors category] } },
                                                                 { user: { only: %i[username id] } }] } })
 
@@ -65,7 +66,7 @@ class TileEntriesController < ApplicationController
   private
 
   def user
-    User.find(params[:user_id])
+    params[:user_id] ? User.find(params[:user_id]) : User.find(params[:id])
   end
 
   def tile_entry
