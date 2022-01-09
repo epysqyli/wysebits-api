@@ -22,4 +22,8 @@ class TileEntry < ApplicationRecord
     self.net_votes = upvotes - downvotes
     save
   end
+
+  def self.other_user_entries(logged_user)
+    TileEntry.where.not(book_tile_id: BookTile.where(user_id: logged_user.id))
+  end
 end

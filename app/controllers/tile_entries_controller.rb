@@ -14,7 +14,7 @@ class TileEntriesController < ApplicationController
   end
 
   def user_feed
-    pagy, entries = pagy(TileEntry.where.not(book_tile_id: BookTile.where(user_id: user.id)).order(updated_at: :desc))
+    pagy, entries = pagy(TileEntry.other_user_entries(user).order(updated_at: :desc))
     resp = entries.as_json(include: { book_tile: { include: [{ book: { include: %i[authors category] } },
                                                              { user: { only: %i[username id] } }] } })
     render json: { entries: resp, pagy: pagy_metadata(pagy) }
