@@ -3,8 +3,8 @@ class TileEntriesController < ApplicationController
 
   before_action :book_tile, only: %i[create]
   before_action :tile_entry, only: %i[show update]
-  before_action :user, only: :all_user_entries
-  skip_before_action :authenticate_request, only: %i[all_entries show all_user_entries]
+  before_action :user, only: %i[custom_feed all_user_entries]
+  skip_before_action :authenticate_request, only: %i[all_user_entries show feed]
 
   def feed
     pagy, entries = pagy(TileEntry.all.order(updated_at: :desc))
@@ -13,8 +13,16 @@ class TileEntriesController < ApplicationController
     render json: { entries: resp, pagy: pagy_metadata(pagy) }
   end
 
+  def custom_feed
+    # apply changes to normal feed results based on user categories
+
+    # apply changes to normal feed results based on user most recent following activity
+
+    # render custom feed
+  end
+
   def show
-    render json: { data: tile_entry } if tile_entry
+    render json: { data: tile_entry }
   end
 
   def create
@@ -43,7 +51,7 @@ class TileEntriesController < ApplicationController
   def destroy; end
 
   def all_user_entries
-    pagy, user_entries = pagy(user.all_tile_entries.order(updated_at: :desc))
+    pagy, user_entries = pagy(user.all_tile_entries.order(created_at: :desc))
     resp = user_entries.as_json(include: { book_tile: { include: [:book, { user: { only: %i[id username] } }] } })
     render json: { entries: resp, pagy: pagy_metadata(pagy) }
   end
