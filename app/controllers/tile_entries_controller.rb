@@ -14,11 +14,17 @@ class TileEntriesController < ApplicationController
   end
 
   def custom_feed
-    # apply changes to normal feed results based on user categories
+    entries = user.fav_categories.map do |cat|
+      cat.books.map do |book|
+        book.all_tile_entries unless book.all_tile_entries.nil?
+      end
+    end
 
-    # apply changes to normal feed results based on user most recent following activity
+    pagy, entries = pagy(entries.flatten.order(updated_at: :desc))
+    entries = entries.as_json(include: { book_tile: { include: [{ book: { include: %i[authors category] } },
+                                                                { user: { only: %i[username id] } }] } })
 
-    # render custom feed
+    render json: { entries: entries, pagy: pagy_metadata(pagy) }
   end
 
   def show
