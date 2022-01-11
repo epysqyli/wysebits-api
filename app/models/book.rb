@@ -32,11 +32,6 @@ class Book < ApplicationRecord
     __elasticsearch__.index_document
   end
 
-  def replace_author(author)
-    authors.each { |aut| authors.delete(aut) } unless authors.empty?
-    add_author(author)
-  end
-
   def add_liking_users(user)
     return if liking_users.include?(user)
 
