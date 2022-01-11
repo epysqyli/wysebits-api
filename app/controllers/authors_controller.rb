@@ -1,11 +1,18 @@
 class AuthorsController < ApplicationController
   before_action :author, only: :show
-  skip_before_action :authenticate_request
-
-  def index; end
+  skip_before_action :authenticate_request, only: :show
 
   def show
     render json: author.books
+  end
+
+  def create
+    new_author = Author.new full_name: params[:full_name]
+    if new_author.save
+      render json: new_author
+    else
+      render json: 'Error in author creation'
+    end
   end
 
   private
@@ -15,6 +22,6 @@ class AuthorsController < ApplicationController
   end
 
   def author_params
-    # params.permit
+    params.permit(:full_name)
   end
 end
