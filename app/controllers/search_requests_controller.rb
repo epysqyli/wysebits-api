@@ -14,6 +14,8 @@ class SearchRequestsController < ApplicationController
     end
   end
 
+  def search_authors; end
+
   private
 
   def search_params
