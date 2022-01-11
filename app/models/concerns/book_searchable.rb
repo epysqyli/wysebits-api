@@ -44,11 +44,12 @@ module BookSearchable
       __elasticsearch__.search(
         {
           query: {
-            multi_match:
+            match:
             {
-              query: query,
-              fields: %w[title authors category],
-              fuzziness: 'AUTO'
+              title: {
+                query: query,
+                fuzziness: 'AUTO'
+              }
             }
           },
           size: 20,
