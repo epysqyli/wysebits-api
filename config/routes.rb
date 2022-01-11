@@ -52,6 +52,8 @@ Rails.application.routes.draw do
 
     resources :books
     get '/books/:id/tile_entries', to: 'books#tile_entries'
+
+    # elasticsearch actions
     post '/search/books', to: 'search_requests#search_books'
     post '/search/authors', to: 'search_requests#search_authors'
 
