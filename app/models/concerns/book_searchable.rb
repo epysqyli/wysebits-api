@@ -28,6 +28,16 @@ module BookSearchable
       end
     end
 
+    # callbacks to keep in sync with postgres
+    after_commit on: %i[create update] do
+      __elasticsearch__.index_document
+    end
+
+    after_commit on: :destroy do
+      __elasticsearch__.delete_document
+    end
+
+    # index creation settings
     settings index: { number_of_shards: 2 } do
       mapping dynamic: false do
         indexes :title, analyzer: :english
