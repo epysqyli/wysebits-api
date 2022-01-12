@@ -40,6 +40,11 @@ class BooksController < ApplicationController
     @book = book
     partial_book_params = { title: book_params[:title], category_id: book_params[:category_id] }
 
+    if params[:author_id]
+      author = Author.find(params[:author_id])
+      @book.add_author author
+    end
+
     if @book.update(partial_book_params) && book_params[:book_cover]
       @book.handle_attachment(book_params[:book_cover])
       @book.cover_url = url_for(book.book_cover)
