@@ -24,7 +24,7 @@ class BooksController < ApplicationController
     @book.ol_author_key = author.key || nil
 
     if @book.save
-      @book.add_author(author)
+      @book.add_or_replace_author(author)
 
       @book.handle_attachment(book_params[:book_cover])
       @book.cover_url = url_for(@book.book_cover)
@@ -42,7 +42,7 @@ class BooksController < ApplicationController
 
     if params[:author_id]
       author = Author.find(params[:author_id])
-      @book.add_author author
+      @book.add_or_replace_author author
     end
 
     if @book.update(partial_book_params) && book_params[:book_cover]

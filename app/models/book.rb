@@ -24,9 +24,10 @@ class Book < ApplicationRecord
     subjects << subject
   end
 
-  def add_author(author)
+  def add_or_replace_author(author)
     return if authors.include?(author)
 
+    authors.each { |aut| delete(aut) }
     authors << author
 
     __elasticsearch__.index_document
