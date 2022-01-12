@@ -40,8 +40,8 @@ class BooksController < ApplicationController
     @book = book
     partial_book_params = { title: book_params[:title], category_id: book_params[:category_id] }
 
-    if params[:author_id]
-      author = Author.find(params[:author_id])
+    if book_params[:author_id]
+      author = Author.find(book_params[:author_id])
       @book.add_or_replace_author author
     end
 
