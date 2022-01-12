@@ -22,9 +22,10 @@ class BooksController < ApplicationController
     @book.category_id = book_params[:category_id].to_i
     @book.ol_author_key = author.key || nil
 
+    @book.save
     @book.add_or_replace_author(author)
 
-    if @book.save && book_params[:book_cover]
+    if book_params[:book_cover]
       @book.handle_attachment(book_params[:book_cover])
       @book.cover_url = url_for(@book.book_cover)
 
