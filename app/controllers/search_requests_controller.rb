@@ -30,6 +30,6 @@ class SearchRequestsController < ApplicationController
   private
 
   def search_params
-    params.permit(:keywords, :page_num, search_request: [:keywords])
+    params.permit(:keywords, :page_num, search_request: %i[keywords page_num])
   end
 end
