@@ -7,7 +7,7 @@ class AuthorsController < ApplicationController
   end
 
   def create
-    new_author = Author.new full_name: params[:full_name]
+    new_author = Author.new full_name: author_params[:full_name]
     if new_author.save
       render json: new_author
     else
