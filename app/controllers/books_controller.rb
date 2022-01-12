@@ -42,7 +42,7 @@ class BooksController < ApplicationController
 
     if book_params[:author_id]
       author = Author.find(book_params[:author_id])
-      @book.add_or_replace_author author
+      @book.add_or_replace_author(author)
     end
 
     if @book.update(partial_book_params) && book_params[:book_cover]
@@ -73,6 +73,6 @@ class BooksController < ApplicationController
   end
 
   def book_params
-    params.permit(:title, :category_id, :book_cover, :author_id)
+    params.permit(:id, :title, :category_id, :book_cover, :author_id)
   end
 end
