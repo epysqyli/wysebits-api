@@ -15,25 +15,25 @@ class BooksController < ApplicationController
   end
 
   def create
-    @book = Book.new
+    new_book = Book.new
     author = Author.find book_params[:author_id]
 
-    @book.title = book_params[:title]
-    @book.category_id = book_params[:category_id].to_i
-    @book.ol_author_key = author.key || nil
+    new_book.title = book_params[:title]
+    new_book.category_id = book_params[:category_id].to_i
+    new_book.ol_author_key = author.key || nil
 
-    @book.save
-    @book.add_or_replace_author(author)
+    new_book.save
+    new_book.add_or_replace_author(author)
 
     if book_params[:book_cover]
-      @book.handle_attachment(book_params[:book_cover])
-      @book.cover_url = url_for(@book.book_cover)
+      new_book.handle_attachment(book_params[:book_cover])
+      new_book.cover_url = url_for(new_book.book_cover)
 
-      @book.save
+      new_book.save
     end
 
-    if @book
-      render json: @book
+    if new_book
+      render json: new_book
     else
       render json: { message: 'One or more parameters are causing an error' }
     end
