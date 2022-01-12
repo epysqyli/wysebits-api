@@ -19,6 +19,15 @@ module AuthorSearchable
       in_batches { |authors| bulk_index(authors) }
     end
 
+    # callbacks to keep in sync with postgres
+    after_commit on: %i[create update] do
+      __elasticsearch__.index_document
+    end
+
+    after_commit on: :destroy do
+      __elasticsearch__.delete_document
+    end
+
     mapping dynamic: false do
       indexes :full_name, analyzer: :standard
     end
