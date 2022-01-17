@@ -46,7 +46,7 @@ Rails.application.routes.draw do
     # resources
     get '/users/:username', to: 'users#show', constraints: { username: /[0-z.]+/ }
 
-    resources :authors, only: %i[create]
+    resources :authors, only: %i[show create]
     resources :categories, only: :index
     get '/categories/:slug/books', to: 'categories#books'
     get '/categories/:id/recommendations', to: 'categories#recommendations'

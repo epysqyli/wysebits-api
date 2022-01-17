@@ -1,9 +1,13 @@
 class AuthorsController < ApplicationController
+  include Pagy::Backend
+
   before_action :author, only: :show
   skip_before_action :authenticate_request, only: :show
 
   def show
-    render json: author.books
+    pagy, author_books = pagy(author.books)
+    resp = author_books.as_json(include: %i[authors category])
+    render json: { books: resp, pagy: pagy_metadata(pagy) }
   end
 
   def create
