@@ -31,6 +31,17 @@ class TileEntriesController < ApplicationController
     render json: { entries: entries, pagy: pagy_metadata(pagy) }
   end
 
+  def following_feed
+    following = user.following.map(&:id)
+    entries = TileEntry.where(book_tile_id: BookTile.where(user_id: following))
+    pagy, entries = pagy(entries.order(updated_at: :desc))
+
+    entries = entries.as_json(include: { book_tile: { include: [{ book: { include: %i[authors category] } },
+                                                                { user: { only: %i[username id] } }] } })
+
+    render json: { entries: entries, pagy: pagy_metadata(pagy) }
+  end
+
   def show
     render json: { data: tile_entry }
   end

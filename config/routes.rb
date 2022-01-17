@@ -42,6 +42,7 @@ Rails.application.routes.draw do
     get '/tile_entries/guest_feed', to: 'tile_entries#guest_feed'
     get '/users/:id/user_feed', to: 'tile_entries#user_feed'
     get '/users/:id/custom_feed', to: 'tile_entries#custom_feed'
+    get '/users/:id/following_feed', to: 'tile_entries#following_feed'
 
     # resources
     get '/users/:username', to: 'users#show', constraints: { username: /[0-z.]+/ }
