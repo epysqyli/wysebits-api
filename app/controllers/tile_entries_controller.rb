@@ -21,14 +21,10 @@ class TileEntriesController < ApplicationController
   end
 
   def custom_feed
-    entries = user.fav_categories.map do |cat|
-      cat.books.map do |book|
-        book.all_tile_entries unless book.all_tile_entries.nil?
-      end
-    end
+    fav_categories = user.fav_categories.map(&:id)
+    entries = TileEntry.where(book_tile_id: BookTile.where(book_id: Book.where(category_id: fav_categories)))
+    pagy, entries = pagy(entries.order(updated_at: :desc))
 
-    entries = entries.flatten.filter { |entry| entry.book_tile.user_id != user.id }
-    pagy, entries = pagy_array(entries)
     entries = entries.as_json(include: { book_tile: { include: [{ book: { include: %i[authors category] } },
                                                                 { user: { only: %i[username id] } }] } })
 
