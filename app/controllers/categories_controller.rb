@@ -10,8 +10,7 @@ class CategoriesController < ApplicationController
   end
 
   def books
-    pagy, books = pagy(category.books)
-    books = books.sort_by { |book| book.book_tiles.size }.reverse
+    pagy, books = pagy(category.books.left_joins(:book_tiles).group(:id).order('COUNT(book_tiles.id) DESC'))
     resp = books.as_json(include: %i[authors category])
     render json: { books: resp, pagy: pagy_metadata(pagy) }
   end
