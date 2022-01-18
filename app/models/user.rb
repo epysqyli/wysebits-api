@@ -4,6 +4,8 @@ class User < ApplicationRecord
 
   has_secure_password
 
+  has_one_attached :avatar
+
   # model associations
   has_many :book_tiles
   has_many :comments
@@ -38,6 +40,10 @@ class User < ApplicationRecord
   validates :password_confirmation, presence: true
 
   # model methods
+  def handle_attachment(user_image)
+    avatar.attach(user_image)
+  end
+
   def follow(other_user)
     following << other_user unless following.include?(other_user)
   end
