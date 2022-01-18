@@ -9,6 +9,7 @@ class UsersController < ApplicationController
                          remove_downvote]
 
   before_action :category, only: %i[add_to_fav_categories remove_from_fav_categories]
+  before_action :user_params, only: :create
   skip_before_action :authenticate_request, only: %i[show create]
 
   # model CRUD
@@ -32,7 +33,20 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.create!(user_params)
+    @user = User.new
+
+    @user.username = user_params[:username]
+    @user.email_address = user_params[:email_address]
+    @user.password = user_params[:password]
+    @user.password_confirmation = user_params[:password_confirmation]
+
+    @user.save
+
+    if user_params[:avatar]
+      @user.handle_attachment(user_params[:avatar])
+      @user.avatar_url = url_for(@user.avatar)
+    end
+
     if @user
       render json: { message: 'User succesfully created', status: 'success',
                      user: { username: @user.username, email: @user.email_address } }
@@ -241,6 +255,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :surname, :username, :email_address, :password, :password_confirmation)
+    params.require(:user).permit(:username, :email_address, :password, :password_confirmation, :avatar)
   end
 end
