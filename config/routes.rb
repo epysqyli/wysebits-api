@@ -41,7 +41,7 @@ Rails.application.routes.draw do
     get '/all_tiles_from_book/:id', to: 'books#tiles'
     get '/tile_entries/guest_feed', to: 'tile_entries#guest_feed'
     get '/users/:id/user_feed', to: 'tile_entries#user_feed'
-    get '/users/:id/custom_feed', to: 'tile_entries#custom_feed'
+    get '/users/:id/categories_feed', to: 'tile_entries#categories_feed'
     get '/users/:id/following_feed', to: 'tile_entries#following_feed'
 
     # resources

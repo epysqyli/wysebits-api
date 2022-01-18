@@ -20,7 +20,7 @@ class TileEntriesController < ApplicationController
     render json: { entries: resp, pagy: pagy_metadata(pagy) }
   end
 
-  def custom_feed
+  def categories_feed
     fav_categories = user.fav_categories.map(&:id)
     entries = TileEntry.where(book_tile_id: BookTile.where(book_id: Book.where(category_id: fav_categories)))
     pagy, entries = pagy(entries.order(updated_at: :desc))
