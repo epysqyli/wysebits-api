@@ -45,6 +45,7 @@ class UsersController < ApplicationController
     if user_params[:avatar]
       @user.handle_attachment(user_params[:avatar])
       @user.avatar_url = url_for(@user.avatar)
+      @user.save
     end
 
     if @user
