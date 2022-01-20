@@ -1,4 +1,5 @@
 class SearchRequestsController < ApplicationController
+  before_action :search_params
   skip_before_action :authenticate_request
 
   def search_books
