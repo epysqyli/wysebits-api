@@ -5,7 +5,7 @@ class Category < ApplicationRecord
                                          foreign_key: 'category_id'
 
   # model methods
-  def recommendations
-    books.order(updated_at: :desc).limit(50).sort_by(&:rank_score).reverse.slice(0, 4)
+  def recommendations(book)
+    books.where.not(id: book.id).order(updated_at: :desc).sort_by(&:rank_score).reverse.slice(0, 4)
   end
 end

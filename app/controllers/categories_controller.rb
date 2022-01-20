@@ -15,11 +15,6 @@ class CategoriesController < ApplicationController
     render json: { books: resp, pagy: pagy_metadata(pagy) }
   end
 
-  def recommendations
-    recommendations = category.recommendations.as_json(include: %i[authors category])
-    render json: recommendations
-  end
-
   private
 
   def user

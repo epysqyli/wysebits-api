@@ -1,8 +1,8 @@
 class BooksController < ApplicationController
   include Pagy::Backend
 
-  before_action :book, only: %i[tile_entries show update destroy]
-  skip_before_action :authenticate_request, only: %i[tile_entries show]
+  before_action :book, except: :create
+  skip_before_action :authenticate_request, only: %i[tile_entries show recommendations]
 
   def tile_entries
     pagy, all_tile_entries = pagy(book.all_tile_entries.order(net_votes: :desc))
@@ -69,6 +69,12 @@ class BooksController < ApplicationController
     else
       render json: { message: 'Not possible to process the request' }
     end
+  end
+
+  def recommendations
+    category = Category.find book.category_id
+    recommendations = category.recommendations(book).as_json(include: %i[authors category])
+    render json: recommendations
   end
 
   private
