@@ -23,7 +23,7 @@ class AuthenticationController < ApplicationController
   def logged_in
     if current_user
       render json: { logged_in: true,
-                     user: { username: current_user.username, email: current_user.email_address, id: current_user.id } }
+                     user: { username: current_user.username, email: current_user.email_address, id: current_user.id, avatar: current_user.avatar_url } }
     else
       render json: { message: 'No user is logged in' }
     end
