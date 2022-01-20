@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     post '/signup', to: 'users#create'
 
     # user avatar update
-    post '/users/:id/update_avatar', to: 'users#update_avatar'
+    put '/users/:id/update_avatar', to: 'users#update_avatar'
 
     # user relationships
     get '/users/:id/following', to: 'users#following'

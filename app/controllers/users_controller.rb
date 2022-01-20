@@ -9,7 +9,7 @@ class UsersController < ApplicationController
                          remove_downvote]
 
   before_action :category, only: %i[add_to_fav_categories remove_from_fav_categories]
-  # before_action :user_params, only: %i[create update_avatar]
+  before_action :user_params, only: %i[create update_avatar]
   skip_before_action :authenticate_request, only: %i[show create]
 
   # model CRUD
@@ -61,8 +61,7 @@ class UsersController < ApplicationController
 
   def update_avatar
     user.handle_attachment(user_params[:avatar])
-    user.avatar_url = url_for(user.avatar)
-    user.save
+    user.update(avatar_url: url_for(user.avatar))
 
     render json: { avatar_url: user.avatar_url }
   end

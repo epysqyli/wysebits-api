@@ -1,6 +1,6 @@
 class User < ApplicationRecord
-  before_save :downcase_email
-  before_create :generate_confirmation_instructions
+  # before_save :downcase_email
+  # before_create :generate_confirmation_instructions
 
   has_secure_password
 
