@@ -9,7 +9,7 @@ class UsersController < ApplicationController
                          remove_downvote]
 
   before_action :category, only: %i[add_to_fav_categories remove_from_fav_categories]
-  before_action :user_params, only: :create
+  before_action :user_params, only: %i[create update_avatar]
   skip_before_action :authenticate_request, only: %i[show create]
 
   # model CRUD
@@ -58,6 +58,18 @@ class UsersController < ApplicationController
   end
 
   def update; end
+
+  def update_avatar
+    if user_params[:avatar]
+      @user.handle_attachment(user_params[:avatar])
+      @user.avatar_url = url_for(@user.avatar)
+      @user.save
+
+      render json: user.avatar_url
+    else
+      render json: 'error'
+    end
+  end
 
   def destroy
     if user == current_user
