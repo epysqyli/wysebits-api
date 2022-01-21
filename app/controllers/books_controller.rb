@@ -5,8 +5,8 @@ class BooksController < ApplicationController
   skip_before_action :authenticate_request, only: %i[tile_entries show recommendations]
 
   def tile_entries
-    pagy, all_tile_entries = pagy(book.all_tile_entries.order(net_votes: :desc))
-    resp = all_tile_entries.as_json(include: [book_tile: { include: [user: { only: %i[username id] }] }])
+    pagy, entries = pagy(book.all_tile_entries.order(net_votes: :desc))
+    resp = entries.as_json(include: [book_tile: { include: [user: { only: %i[username id] }] }])
     render json: { entries: resp, pagy: pagy_metadata(pagy) }
   end
 
