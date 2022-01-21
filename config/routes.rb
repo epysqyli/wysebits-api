@@ -6,8 +6,9 @@ Rails.application.routes.draw do
     get '/logged_in', to: 'authentication#logged_in'
     post '/signup', to: 'users#create'
 
-    # user avatar update
+    # user avatar actions
     put '/users/:id/update_avatar', to: 'users#update_avatar'
+    put '/users/:id/delete_avatar', to: 'users#delete_avatar'
 
     # user relationships
     get '/users/:id/following', to: 'users#following'
