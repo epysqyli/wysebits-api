@@ -66,7 +66,6 @@ class BookTilesController < ApplicationController
   end
 
   def available?
-    # book_tile = user.book_tiles.find { |tile| tile.book_id == book.id }
     book_tile = BookTile.where(user_id: user.id).where(book_id: book.id)
 
     if book_tile.blank?
