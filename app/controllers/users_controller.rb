@@ -103,7 +103,7 @@ class UsersController < ApplicationController
   # user relationships
   def following
     pagy, user_following = pagy(user.active_relationships.order(created_at: :desc)
-    .includes({ followed: [{ book_tile: :tile_entries }, :user] }))
+      .includes({ followed: [{ book_tiles: :tile_entries }] }))
 
     resp = user_following.as_json(include:
       { followed: { only: %i[username id], include: { book_tiles: { include: :tile_entries } } } })
@@ -115,7 +115,9 @@ class UsersController < ApplicationController
   end
 
   def followers
-    pagy, user_followers = pagy(user.passive_relationships.order(created_at: :desc))
+    pagy, user_followers = pagy(user.passive_relationships.order(created_at: :desc)
+      .includes({ follower: [{ book_tiles: :tile_entries }] }))
+
     resp = user_followers.as_json(include:
       { follower: { only: %i[username id], include: { book_tiles: { include: :tile_entries } } } })
     render json: { followers: resp, pagy: pagy_metadata(pagy) }
