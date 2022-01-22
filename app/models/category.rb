@@ -6,6 +6,7 @@ class Category < ApplicationRecord
 
   # model methods
   def recommendations(book)
-    books.where.not(id: book.id).limit(4).order(updated_at: :desc).sort_by(&:rank_score).reverse
+    books.where.not(id: book.id).limit(4).order(updated_at: :desc)
+         .includes(:authors, :category, :metric_data).sort_by(&:rank_score).reverse
   end
 end
