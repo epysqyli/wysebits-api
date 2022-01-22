@@ -66,14 +66,15 @@ class BookTilesController < ApplicationController
   end
 
   def available?
-    book_tile = user.book_tiles.find { |tile| tile.book_id == book.id }
+    # book_tile = user.book_tiles.find { |tile| tile.book_id == book.id }
+    book_tile = BookTile.where(user_id: user.id).where(book_id: book.id)
 
-    if book_tile.nil?
+    if book_tile.blank?
       render json: { res: true }
-    elsif book_tile.tile_entries.empty?
-      render json: { res: true, temporary_entries: book_tile.temporary_entries }
+    elsif book_tile.first.tile_entries.empty?
+      render json: { res: true, temporary_entries: book_tile.first.temporary_entries }
     else
-      render json: { res: false, existing_book_tile: book_tile }
+      render json: { res: false, existing_book_tile: book_tile.first }
     end
   end
 
