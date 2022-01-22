@@ -20,8 +20,10 @@ class BookTilesController < ApplicationController
   end
 
   def index_temp_entries
-    temp_book_tiles = user.book_tiles.filter { |bt| bt.temporary_entries.present? }
-    pagy, temp_book_tiles = pagy_array(temp_book_tiles)
+    temp_book_tiles = BookTile.where(user_id: user.id).joins(:temporary_entries)
+                              .includes({ book: %i[authors category] }, :tile_entries)
+
+    pagy, temp_book_tiles = pagy(temp_book_tiles)
     resp = temp_book_tiles.as_json(include: [:tile_entries, { book: { include: %i[authors category] } }])
     render json: { tiles: resp, pagy: pagy_metadata(pagy) }
   end
