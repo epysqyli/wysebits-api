@@ -5,7 +5,7 @@ class CategoriesController < ApplicationController
   skip_before_action :authenticate_request
 
   def index
-    @categories = Category.select(:name, :slug, :id)
+    @categories = Category.select(:name, :slug, :id).filter { |cat| cat.slug != 'no-category' }
     render json: @categories
   end
 
