@@ -80,7 +80,7 @@ class BooksController < ApplicationController
   private
 
   def book
-    Book.find(params[:id])
+    Book.includes(:authors, :category).find(params[:id])
   end
 
   def book_params
