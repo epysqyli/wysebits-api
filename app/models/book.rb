@@ -44,7 +44,7 @@ class Book < ApplicationRecord
   end
 
   def all_tile_entries
-    TileEntry.where(book_tile_id: BookTile.where(book_id: id))
+    TileEntry.where(book_tile_id: BookTile.where(book_id: id)).includes(:book_tile)
   end
 
   def find_or_create_metric_data
