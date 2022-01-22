@@ -100,7 +100,9 @@ class UsersController < ApplicationController
 
   # user relationships
   def following
-    pagy, user_following = pagy(user.active_relationships.order(created_at: :desc))
+    pagy, user_following = pagy(user.active_relationships.order(created_at: :desc)
+    .includes({ followed: [{ book_tile: :tile_entries }, :user] }))
+
     resp = user_following.as_json(include:
       { followed: { only: %i[username id], include: { book_tiles: { include: :tile_entries } } } })
     render json: { following: resp, pagy: pagy_metadata(pagy) }
@@ -135,7 +137,7 @@ class UsersController < ApplicationController
 
   # fav books actions
   def fav_books
-    pagy, liked_books = pagy(user.fav_books.order(created_at: :desc))
+    pagy, liked_books = pagy(user.fav_books.order(created_at: :desc).includes(book: %i[authors category]))
     resp = liked_books.as_json(include: { book: { include: %i[authors category] } })
     render json: { books: resp, pagy: pagy_metadata(pagy) }
   end
@@ -162,7 +164,9 @@ class UsersController < ApplicationController
 
   # fav insights actions
   def fav_tile_entries
-    pagy, fav_tile_entries = pagy(user.fav_tile_entries.order(created_at: :desc))
+    pagy, fav_tile_entries = pagy(user.fav_tile_entries.order(created_at: :desc)
+    .includes({ tile_entry: [{ book_tile: %i[user book] }] }))
+
     resp = fav_tile_entries.as_json(include: [tile_entry: { include:
       [book_tile:
         { include:
