@@ -5,8 +5,9 @@ class AuthorsController < ApplicationController
   skip_before_action :authenticate_request, only: :show
 
   def show
-    pagy, author_books = pagy(author.books.left_joins(:book_tiles).group(:id).order('COUNT(book_tiles.id) DESC'))
-    resp = author_books.as_json(include: %i[authors category])
+    # pagy, author_books = pagy(author.books.left_joins(:book_tiles).group(:id).order('COUNT(book_tiles.id) DESC'))
+    pagy, author_books = pagy(author.books.order(updated_at: :desc))
+    resp = author_books.includes(:authors, :category).as_json(include: %i[authors category])
     render json: { books: resp, pagy: pagy_metadata(pagy) }
   end
 
