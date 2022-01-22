@@ -19,15 +19,17 @@ class UsersController < ApplicationController
 
   def show
     if user
-      book_tiles = user.book_tiles.order(created_at: :desc)
-                       .as_json(include:
-                        [{ tile_entries: { include: { book_tile:
-                        { include: [:book, { user: { only: %i[id username] } }] } } } },
-                         { book: { include: %i[authors category] } }])
+      # book_tiles = user.book_tiles.order(created_at: :desc)
+      #                  .includes({ tile_entries: [{ book_tile: [book: :user] }] }, { book: %i[authors category] })
+
+      book_tiles_resp = user.book_tiles
+                            .as_json(include: [{ tile_entries:
+        { include: { book_tile: { include: [:book, { user: { only: %i[id username] } }] } } } },
+                                               { book: { include: %i[authors category] } }])
 
       user_followers = user.followers.as_json(only: %i[username id])
       render json: { user: { username: user.username, id: user.id, avatar_url: user.avatar_url },
-                     book_tiles: book_tiles, followers: user_followers }
+                     book_tiles: book_tiles_resp, followers: user_followers }
     else
       render json: { message: 'User not found' }, status: 404
     end
