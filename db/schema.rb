@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_220_118_181_006) do
+ActiveRecord::Schema.define(version: 20_220_122_124_421) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -48,15 +48,12 @@ ActiveRecord::Schema.define(version: 20_220_118_181_006) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.string 'key'
-    t.index ['key'], name: 'index_authors_on_key'
   end
 
   create_table 'authors_books', id: false, force: :cascade do |t|
     t.bigint 'author_id'
     t.bigint 'book_id'
     t.index %w[author_id book_id], name: 'index_authors_books_on_author_id_and_book_id'
-    t.index ['author_id'], name: 'index_authors_books_on_author_id'
-    t.index ['book_id'], name: 'index_authors_books_on_book_id'
   end
 
   create_table 'book_tiles', force: :cascade do |t|
@@ -65,7 +62,6 @@ ActiveRecord::Schema.define(version: 20_220_118_181_006) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['book_id'], name: 'index_book_tiles_on_book_id'
-    t.index ['user_id'], name: 'index_book_tiles_on_user_id'
   end
 
   create_table 'books', force: :cascade do |t|
@@ -76,7 +72,6 @@ ActiveRecord::Schema.define(version: 20_220_118_181_006) do
     t.string 'ol_author_key'
     t.string 'ol_key'
     t.text 'cover_url'
-    t.index ['category_id'], name: 'index_books_on_category_id'
   end
 
   create_table 'categories', force: :cascade do |t|
@@ -84,7 +79,6 @@ ActiveRecord::Schema.define(version: 20_220_118_181_006) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.string 'slug'
-    t.index ['slug'], name: 'index_categories_on_slug', unique: true
   end
 
   create_table 'categories_users', force: :cascade do |t|
@@ -92,8 +86,6 @@ ActiveRecord::Schema.define(version: 20_220_118_181_006) do
     t.bigint 'user_id'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.index ['category_id'], name: 'index_categories_users_on_category_id'
-    t.index ['user_id'], name: 'index_categories_users_on_user_id'
   end
 
   create_table 'comments', force: :cascade do |t|
@@ -110,8 +102,6 @@ ActiveRecord::Schema.define(version: 20_220_118_181_006) do
     t.bigint 'user_id'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.index ['tile_entry_id'], name: 'index_downvoted_entries_users_on_tile_entry_id'
-    t.index ['user_id'], name: 'index_downvoted_entries_users_on_user_id'
   end
 
   create_table 'fav_books', force: :cascade do |t|
@@ -119,8 +109,6 @@ ActiveRecord::Schema.define(version: 20_220_118_181_006) do
     t.bigint 'book_id'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.index ['book_id'], name: 'index_fav_books_on_book_id'
-    t.index ['user_id'], name: 'index_fav_books_on_user_id'
   end
 
   create_table 'fav_tile_entries', force: :cascade do |t|
@@ -128,8 +116,6 @@ ActiveRecord::Schema.define(version: 20_220_118_181_006) do
     t.bigint 'tile_entry_id'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.index ['tile_entry_id'], name: 'index_fav_tile_entries_on_tile_entry_id'
-    t.index ['user_id'], name: 'index_fav_tile_entries_on_user_id'
   end
 
   create_table 'metric_data', force: :cascade do |t|
@@ -140,7 +126,6 @@ ActiveRecord::Schema.define(version: 20_220_118_181_006) do
     t.integer 'downvotes_count'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.index ['book_id'], name: 'index_metric_data_on_book_id'
   end
 
   create_table 'relationships', force: :cascade do |t|
@@ -149,8 +134,6 @@ ActiveRecord::Schema.define(version: 20_220_118_181_006) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['followed_id'], name: 'index_relationships_on_followed_id'
-    t.index %w[follower_id followed_id], name: 'index_relationships_on_follower_id_and_followed_id', unique: true
-    t.index ['follower_id'], name: 'index_relationships_on_follower_id'
   end
 
   create_table 'subjects', force: :cascade do |t|
@@ -162,9 +145,7 @@ ActiveRecord::Schema.define(version: 20_220_118_181_006) do
   create_table 'subjects_books', id: false, force: :cascade do |t|
     t.bigint 'subject_id'
     t.bigint 'book_id'
-    t.index ['book_id'], name: 'index_subjects_books_on_book_id'
     t.index %w[subject_id book_id], name: 'index_subjects_books_on_subject_id_and_book_id'
-    t.index ['subject_id'], name: 'index_subjects_books_on_subject_id'
   end
 
   create_table 'temporary_entries', force: :cascade do |t|
@@ -172,7 +153,6 @@ ActiveRecord::Schema.define(version: 20_220_118_181_006) do
     t.text 'content'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.index ['book_tile_id'], name: 'index_temporary_entries_on_book_tile_id'
   end
 
   create_table 'tile_entries', force: :cascade do |t|
@@ -191,8 +171,6 @@ ActiveRecord::Schema.define(version: 20_220_118_181_006) do
     t.bigint 'user_id'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.index ['tile_entry_id'], name: 'index_upvoted_entries_users_on_tile_entry_id'
-    t.index ['user_id'], name: 'index_upvoted_entries_users_on_user_id'
   end
 
   create_table 'users', force: :cascade do |t|
