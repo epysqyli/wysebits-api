@@ -1,7 +1,4 @@
 class Author < ApplicationRecord
-  # elasticsearch concern
-  include AuthorSearchable
-
   include PgSearch::Model
   pg_search_scope :search_author,
                   against: :full_name,

@@ -1,6 +1,4 @@
 class Book < ApplicationRecord
-  # elasticsearch concern
-  include BookSearchable
   include PgSearch::Model
   pg_search_scope :search_book,
                   against: :title,
@@ -33,8 +31,6 @@ class Book < ApplicationRecord
 
     authors.each { |aut| authors.delete(aut) }
     authors << author
-
-    __elasticsearch__.index_document
   end
 
   def add_liking_users(user)
