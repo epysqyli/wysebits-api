@@ -5,13 +5,13 @@ class SearchRequestsController < ApplicationController
   skip_before_action :authenticate_request
 
   def search_books
-    pagy, books = pagy(Book.search_book(search_params[:keywords]))
+    pagy, books = pagy(Book.search(search_params[:keywords]).with_pg_search_highlight)
     resp = books.includes(:authors, :category).as_json(include: %i[authors category])
     render json: { results: resp, pagy: pagy_metadata(pagy) }
   end
 
   def search_authors
-    pagy, authors = pagy(Author.search_author(search_params[:keywords]))
+    pagy, authors = pagy(Author.search(search_params[:keywords]))
     render json: { results: authors, pagy: pagy_metadata(pagy) }
   end
 

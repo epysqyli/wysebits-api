@@ -2,7 +2,16 @@ class Book < ApplicationRecord
   include PgSearch::Model
   pg_search_scope :search,
                   against: :title,
-                  using: { tsearch: { dictionary: 'english', tsvector_column: 'searchable' } }
+                  using: { tsearch:
+                    { dictionary: 'english',
+                      tsvector_column: 'searchable',
+                      highlight: {
+                        StartSel: '<u>',
+                        StopSel: '</u>',
+                        HighlightAll: true,
+                        MinWords: 1,
+                        MaxWords: 5
+                      } } }
 
   # model associations
   belongs_to :category
