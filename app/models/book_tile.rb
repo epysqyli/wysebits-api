@@ -6,7 +6,7 @@ class BookTile < ApplicationRecord
 
   def update_book_tiles_count
     book = Book.find book_id
-    book.tiles_count += 1
+    book.tiles_count = book.book_tiles.size
     book.save
   end
 
