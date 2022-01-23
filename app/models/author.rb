@@ -1,6 +1,6 @@
 class Author < ApplicationRecord
   include PgSearch::Model
-  pg_search_scope :search_author,
+  pg_search_scope :search,
                   against: :full_name,
                   using: { tsearch: {dictionary: 'english', tsvector_column: 'searchable' } }
 
