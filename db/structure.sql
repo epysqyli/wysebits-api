@@ -133,7 +133,8 @@ CREATE TABLE public.authors (
     full_name character varying,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    key character varying
+    key character varying,
+    searchable tsvector GENERATED ALWAYS AS (to_tsvector('english'::regconfig, (full_name)::text)) STORED
 );
 
 
@@ -1020,6 +1021,13 @@ CREATE INDEX index_authors_books_on_author_id_and_book_id ON public.authors_book
 
 
 --
+-- Name: index_authors_on_searchable; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_authors_on_searchable ON public.authors USING gin (searchable);
+
+
+--
 -- Name: index_book_tiles_on_book_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1172,6 +1180,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220123140709'),
 ('20220123141333'),
 ('20220123162435'),
-('20220123163651');
+('20220123163651'),
+('20220123170027'),
+('20220123170318');
 
 
