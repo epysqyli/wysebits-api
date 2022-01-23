@@ -212,7 +212,8 @@ CREATE TABLE public.books (
     ol_author_key character varying,
     ol_key character varying,
     cover_url text,
-    searchable tsvector GENERATED ALWAYS AS (to_tsvector('english'::regconfig, (title)::text)) STORED
+    searchable tsvector GENERATED ALWAYS AS (to_tsvector('english'::regconfig, (title)::text)) STORED,
+    tiles_count integer DEFAULT 0
 );
 
 
@@ -1182,6 +1183,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220123162435'),
 ('20220123163651'),
 ('20220123170027'),
-('20220123170318');
+('20220123170318'),
+('20220123204635');
 
 
