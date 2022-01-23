@@ -136,6 +136,9 @@ GEM
     pagy (5.4.0)
     parallel (1.21.0)
     pg (1.2.3)
+    pg_search (2.3.6)
+      activerecord (>= 5.2)
+      activesupport (>= 5.2)
     puma (5.5.2)
       nio4r (~> 2.0)
     racc (1.6.0)
@@ -210,6 +213,7 @@ DEPENDENCIES
   pagy (~> 5.4)
   parallel
   pg (~> 1.1)
+  pg_search (~> 2.3, >= 2.3.6)
   puma (~> 5.0)
   rack-cors
   rails (~> 6.1.4, >= 6.1.4.1)

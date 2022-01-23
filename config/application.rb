@@ -26,5 +26,6 @@ module WysebitsApi
     config.load_defaults 6.1
     config.autoload_paths << Rails.root.join('lib')
     config.api_only = true
+    config.active_record.schema_format = :sql
   end
 end

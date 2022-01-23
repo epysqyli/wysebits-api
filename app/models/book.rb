@@ -1,6 +1,10 @@
 class Book < ApplicationRecord
   # elasticsearch concern
   include BookSearchable
+  include PgSearch::Model
+  pg_search_scope :search_book,
+                  against: :title,
+                  using: { tsearch: {dictionary: 'english', tsvector_column: 'searchable' } }
 
   # model associations
   belongs_to :category
