@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_220_122_124_421) do
+ActiveRecord::Schema.define(version: 20_220_123_141_333) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 20_220_122_124_421) do
     t.string 'ol_author_key'
     t.string 'ol_key'
     t.text 'cover_url'
+    t.index ['category_id'], name: 'index_books_on_category_id'
   end
 
   create_table 'categories', force: :cascade do |t|
@@ -133,7 +134,6 @@ ActiveRecord::Schema.define(version: 20_220_122_124_421) do
     t.integer 'followed_id'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.index ['followed_id'], name: 'index_relationships_on_followed_id'
   end
 
   create_table 'subjects', force: :cascade do |t|
@@ -145,7 +145,6 @@ ActiveRecord::Schema.define(version: 20_220_122_124_421) do
   create_table 'subjects_books', id: false, force: :cascade do |t|
     t.bigint 'subject_id'
     t.bigint 'book_id'
-    t.index %w[subject_id book_id], name: 'index_subjects_books_on_subject_id_and_book_id'
   end
 
   create_table 'temporary_entries', force: :cascade do |t|
