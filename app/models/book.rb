@@ -5,6 +5,7 @@ class Book < ApplicationRecord
                   using: { tsearch:
                     { dictionary: 'english',
                       tsvector_column: 'searchable',
+                      normalization: 2,
                       highlight: {
                         StartSel: '<u>',
                         StopSel: '</u>',
