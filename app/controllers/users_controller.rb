@@ -212,11 +212,11 @@ class UsersController < ApplicationController
 
   # upvote/downvote actions
   def upvoted_entries
-    render json: { upvoted_entries: user.upvoted_entries }
+    render json: { upvoted_entries: user.upvoted_entries.select(:id) }
   end
 
   def downvoted_entries
-    render json: { downvoted_entries: user.downvoted_entries }
+    render json: { downvoted_entries: user.downvoted_entries.select(:id) }
   end
 
   def upvote
