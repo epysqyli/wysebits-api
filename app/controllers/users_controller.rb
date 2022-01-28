@@ -126,7 +126,7 @@ class UsersController < ApplicationController
   end
 
   def unpaged_followers
-    render json: user.followers.as_json(only: %i[username id])
+    render json: user.followers.select(:id)
   end
 
   def add_following
