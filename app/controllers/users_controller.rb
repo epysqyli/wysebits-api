@@ -113,7 +113,7 @@ class UsersController < ApplicationController
   end
 
   def unpaged_following
-    render json: user.following.as_json(only: %i[username id])
+    render json: user.following.select(:id)
   end
 
   def followers
