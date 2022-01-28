@@ -26,6 +26,7 @@ Rails.application.routes.draw do
 
     # user fav entries
     get '/users/:id/fav_tile_entries', to: 'users#fav_tile_entries'
+    get '/users/:id/unpaged_fav_tile_entries', to: 'users#unpaged_fav_tile_entries'
     post '/users/:id/fav_tile_entries/:tile_entry_id', to: 'users#add_to_fav_tile_entries'
     delete '/users/:id/fav_tile_entries/:tile_entry_id', to: 'users#remove_from_fav_tile_entries'
 

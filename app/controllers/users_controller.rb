@@ -184,6 +184,10 @@ class UsersController < ApplicationController
     render json: { tile_entries: resp, pagy: pagy_metadata(pagy) }
   end
 
+  def unpaged_fav_tile_entries
+    render json: { tile_entries: user.fav_tile_entries.select(:tile_entry_id) }
+  end
+
   def add_to_fav_tile_entries
     user.add_to_fav_tile_entries(tile_entry)
     book = tile_entry.book_tile.book
