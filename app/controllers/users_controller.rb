@@ -148,6 +148,10 @@ class UsersController < ApplicationController
     render json: { books: resp, pagy: pagy_metadata(pagy) }
   end
 
+  def unpaged_fav_books
+    render json: user.fav_books.select(:book_id)
+  end
+
   def add_to_fav_books
     user.add_to_fav_books(book)
     metric_data = book.find_or_create_metric_data

@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
     # user fav books
     get '/users/:id/fav_books', to: 'users#fav_books'
+    get '/users/:id/unpaged_fav_books', to: 'users#unpaged_fav_books'
     post '/users/:id/fav_books/:book_id', to: 'users#add_to_fav_books'
     delete '/users/:id/fav_books/:book_id', to: 'users#remove_from_fav_books'
 
