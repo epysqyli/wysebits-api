@@ -185,7 +185,8 @@ class UsersController < ApplicationController
   end
 
   def unpaged_fav_tile_entries
-    render json: { tile_entries: user.fav_tile_entries.select(:tile_entry_id) }
+    entries = user.fav_tile_entries.select(user.fav_tile_entries.arel_table['tile_entry_id'].as('id'))
+    render json: { tile_entries: entries }
   end
 
   def add_to_fav_tile_entries
