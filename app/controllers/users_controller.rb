@@ -62,7 +62,7 @@ class UsersController < ApplicationController
 
   def confirm
     token = confirmation_params[:token].to_s
-    user = User.user_find_by_confirmation_token token
+    user = User.find_by_confirmation_token token
 
     if user.present? && user.confirmation_token_valid?
       user.mark_as_confirmed!
