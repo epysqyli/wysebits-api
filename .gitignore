@@ -28,3 +28,6 @@
 
 # Ignore lib/seeds
 /lib/seeds/
+
+# Ignore config development
+config/environments/development.rb
