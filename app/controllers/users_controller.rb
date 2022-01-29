@@ -47,18 +47,17 @@ class UsersController < ApplicationController
 
     UserMailer.with(user: @user).signup_confirmation.deliver_now if @user.save
 
-    # if user_params[:avatar]
-    #   @user.handle_attachment(user_params[:avatar])
-    #   @user.avatar_url = url_for(@user.avatar)
-    #   @user.save
-    # end
+    if user_params[:avatar]
+      @user.handle_attachment(user_params[:avatar])
+      @user.avatar_url = url_for(@user.avatar)
+      @user.save
+    end
 
-    # if @user
-    #   render json: { message: 'User succesfully created', status: 'success',
-    #                  user: { username: @user.username, email: @user.email_address } }
-    # else
-    #   render json: { error: 'User not created' }, status: 403
-    # end
+    if user.present?
+      render json: { status: 'Confirmation email sent' }, status: :ok
+    else
+      render json: { status: 'Error' }, status: :not_found
+    end
   end
 
   def confirm
