@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     get '/logout', to: 'authentication#logout'
     get '/logged_in', to: 'authentication#logged_in'
     post '/signup', to: 'users#create'
+    post '/confirm', to: 'users#confirm'
 
     # user avatar actions
     put '/users/:id/update_avatar', to: 'users#update_avatar'
