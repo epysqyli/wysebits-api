@@ -45,19 +45,31 @@ class UsersController < ApplicationController
     @user.password = user_params[:password]
     @user.password_confirmation = user_params[:password_confirmation]
 
-    @user.save
+    UserMailer.with(user: @user).signup_confirmation.deliver_now if @user.save
 
-    if user_params[:avatar]
-      @user.handle_attachment(user_params[:avatar])
-      @user.avatar_url = url_for(@user.avatar)
-      @user.save
-    end
+    # if user_params[:avatar]
+    #   @user.handle_attachment(user_params[:avatar])
+    #   @user.avatar_url = url_for(@user.avatar)
+    #   @user.save
+    # end
 
-    if @user
-      render json: { message: 'User succesfully created', status: 'success',
-                     user: { username: @user.username, email: @user.email_address } }
+    # if @user
+    #   render json: { message: 'User succesfully created', status: 'success',
+    #                  user: { username: @user.username, email: @user.email_address } }
+    # else
+    #   render json: { error: 'User not created' }, status: 403
+    # end
+  end
+
+  def confirm
+    token = confirmation_params[:token].to_s
+    user = User.user_find_by_confirmation_token token
+
+    if user.present? && user.confirmation_token_valid?
+      user.mark_as_confirmed!
+      render json: { status: 'User confirmed successfully' }, status: :ok
     else
-      render json: { error: 'User not created' }, status: 403
+      render json: { status: 'Invalid token' }, status: :not_found
     end
   end
 
@@ -288,6 +300,10 @@ class UsersController < ApplicationController
 
   def category
     Category.find(params[:category_id])
+  end
+
+  def confirmation_params
+    params.permit(:token)
   end
 
   def user_params

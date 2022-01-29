@@ -1,6 +1,6 @@
 class User < ApplicationRecord
-  # before_save :downcase_email
-  # before_create :generate_confirmation_instructions
+  before_save :downcase_email
+  before_create :generate_confirmation_instructions
 
   has_secure_password
 
@@ -119,6 +119,18 @@ class User < ApplicationRecord
 
   def all_tile_entries
     TileEntry.where(book_tile_id: BookTile.where(user_id: id))
+  end
+
+  # user account confirmation methods
+
+  def confirmation_token_valid?
+    confirmation_sent_at + 30.days > Time.now.utc
+  end
+
+  def mark_as_confirmed!
+    self.confirmation_token = nil
+    self.confirmed_at = Time.now.utc
+    save
   end
 
   # callbacks
