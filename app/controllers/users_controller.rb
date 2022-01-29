@@ -10,7 +10,7 @@ class UsersController < ApplicationController
 
   before_action :category, only: %i[add_to_fav_categories remove_from_fav_categories]
   before_action :user_params, only: %i[create update_avatar]
-  skip_before_action :authenticate_request, only: %i[show create]
+  skip_before_action :authenticate_request, only: %i[show create confirm]
 
   # model CRUD
   def index
