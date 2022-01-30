@@ -2,13 +2,34 @@
 <html>
   <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: Arial;
+      }
+      
+        h1 {
+          margin: auto;
+          padding-top: 2rem;
+          width: 60%;
+          text-align: center;
+        }
+      
+        .main-box {
+          width: 50%;
+          margin: auto;
+          text-align: center;
+          margin-top: 5rem;
+          font-size: 1.5rem;
+        }
+    </style>
   </head>
-  
   <body>
     <h1>Welcome to Wysebits, <%= @user.username %></h1>
-    <div>
+    <div class="main-box">
       <p>Click <a href="http://localhost:3000/registrations/confirm/<%= @user.confirmation_token %>">here</a> to activate your account</p>
     </div>
   </body>
-  
 </html>
