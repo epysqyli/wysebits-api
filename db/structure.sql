@@ -652,8 +652,6 @@ ALTER SEQUENCE public.upvoted_entries_users_id_seq OWNED BY public.upvoted_entri
 
 CREATE TABLE public.users (
     id bigint NOT NULL,
-    name character varying,
-    surname character varying,
     email_address character varying,
     password_digest character varying,
     created_at timestamp(6) without time zone NOT NULL,
@@ -1184,6 +1182,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220123163651'),
 ('20220123170027'),
 ('20220123170318'),
-('20220123204635');
+('20220123204635'),
+('20220130174300');
 
 
