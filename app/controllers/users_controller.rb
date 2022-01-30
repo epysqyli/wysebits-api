@@ -53,7 +53,7 @@ class UsersController < ApplicationController
       @user.save
     end
 
-    if user.present?
+    if @user.present?
       render json: { status: 'Confirmation email sent' }, status: :ok
     else
       render json: { status: 'Error' }, status: :not_found
