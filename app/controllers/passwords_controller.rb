@@ -37,7 +37,7 @@ class PasswordsController < ApplicationController
                     status: :not_found
     end
 
-    if current_user.update(update_params)
+    if current_user.update({ password: update_params[:password] })
       render json: { status: 'ok' }, status: :ok
     else
       render json: { error: user.errors.full_messages }, status: :unprocessable_entity
