@@ -133,7 +133,7 @@ class User < ApplicationRecord
     save
   end
 
-  def generate_password_token
+  def generate_password_token!
     self.reset_password_token = generate_token
     self.reset_password_sent_at = Time.now.utc
     save!

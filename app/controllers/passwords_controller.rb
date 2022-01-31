@@ -1,11 +1,13 @@
 class PasswordsController < ApplicationController
+  skip_before_action :authenticate_request
+
   def forgot
     return render json: { error: 'Email address not present' } if params[:email_address].blank?
 
     user = User.find_by_email_address user_params[:email_address]
     if user.present? && user.confirmed_at?
       user.generate_password_token!
-      UserMailer.with(user: @user).reset_password.deliver_now
+      UserMailer.with(user: user).reset_password.deliver_now
       render json: { status: 'ok' }, status: :ok
     else
       render json: { error: 'Email address not found' }, status: :not_found
