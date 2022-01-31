@@ -15,13 +15,13 @@ class PasswordsController < ApplicationController
   end
 
   def reset
-    return render json: { error: 'Token not present' } if password_params[:token].blank?
+    return render json: { error: 'Token not present' } if reset_params[:token].blank?
 
-    token = password_params[:token].to_s
+    token = reset_params[:token].to_s
     user = User.find_by_reset_password_token token
 
     if user.present? && user.password_token_valid?
-      if user.reset_password! password_params[:password]
+      if user.reset_password! reset_params[:password]
         render json: { status: 'ok' }, status: :ok
       else
         render json: { error: user.errors.full_messages }, status: :unprocessable_entity
@@ -32,7 +32,12 @@ class PasswordsController < ApplicationController
   end
 
   def update
-    if current_user.update(password_params)
+    if current_user.authenticate(update_params[:old_password]) == false
+      return render json: { status: 'Fail' },
+                    status: :not_found
+    end
+
+    if current_user.update(update_params)
       render json: { status: 'ok' }, status: :ok
     else
       render json: { error: user.errors.full_messages }, status: :unprocessable_entity
@@ -45,7 +50,11 @@ class PasswordsController < ApplicationController
     params.permit(:email_address)
   end
 
-  def password_params
+  def reset_params
     params.permit(:token, :password)
+  end
+
+  def update_params
+    params.permit(:password, :old_password)
   end
 end
