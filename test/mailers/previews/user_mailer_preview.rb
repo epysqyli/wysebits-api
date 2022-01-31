@@ -3,4 +3,8 @@ class UserMailerPreview < ActionMailer::Preview
   def signup_confirmation
     UserMailer.with(user: User.last).signup_confirmation
   end
+
+  def reset_password
+    UserMailer.with(user: User.last).signup_confirmation
+  end
 end
