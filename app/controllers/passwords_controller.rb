@@ -15,7 +15,7 @@ class PasswordsController < ApplicationController
   end
 
   def reset
-    return render json: { error: 'Token not present' } if confirmation_params[:token].blank?
+    return render json: { error: 'Token not present' } if reset_params[:token].blank?
 
     token = reset_params[:token].to_s
     user = User.find_by_reset_password_token token
