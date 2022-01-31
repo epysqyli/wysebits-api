@@ -7,9 +7,10 @@ Rails.application.routes.draw do
     post '/signup', to: 'users#create'
     post '/confirm', to: 'users#confirm'
 
-    # password forgot and reset
+    # password routes
     post '/password/forgot', to: 'passwords#forgot'
     put '/password/reset', to: 'passwords#reset'
+    put '/password/update', to: 'password#update'
 
     # user avatar actions
     put '/users/:id/update_avatar', to: 'users#update_avatar'

@@ -122,7 +122,6 @@ class User < ApplicationRecord
   end
 
   # user account confirmation and password reset methods
-
   def confirmation_token_valid?
     confirmation_sent_at + 30.days > Time.now.utc
   end

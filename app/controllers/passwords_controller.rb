@@ -1,5 +1,5 @@
 class PasswordsController < ApplicationController
-  skip_before_action :authenticate_request
+  skip_before_action :authenticate_request, except: :update
 
   def forgot
     return render json: { error: 'Email address not present' } if params[:email_address].blank?
@@ -15,13 +15,13 @@ class PasswordsController < ApplicationController
   end
 
   def reset
-    return render json: { error: 'Token not present' } if reset_params[:token].blank?
+    return render json: { error: 'Token not present' } if password_params[:token].blank?
 
-    token = reset_params[:token].to_s
+    token = password_params[:token].to_s
     user = User.find_by_reset_password_token token
 
     if user.present? && user.password_token_valid?
-      if user.reset_password! reset_params[:password]
+      if user.reset_password! password_params[:password]
         render json: { status: 'ok' }, status: :ok
       else
         render json: { error: user.errors.full_messages }, status: :unprocessable_entity
@@ -31,13 +31,21 @@ class PasswordsController < ApplicationController
     end
   end
 
+  def update
+    if current_user.update(password_params[:password])
+      render json: { status: 'ok' }, status: :ok
+    else
+      render json: { error: user.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def user_params
     params.permit(:email_address)
   end
 
-  def reset_params
+  def password_params
     params.permit(:token, :password)
   end
 end
