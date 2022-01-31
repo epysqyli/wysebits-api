@@ -660,7 +660,9 @@ CREATE TABLE public.users (
     confirmed_at timestamp without time zone,
     confirmation_sent_at timestamp without time zone,
     username character varying,
-    avatar_url text
+    avatar_url text,
+    reset_password_token character varying,
+    reset_password_sent_at timestamp without time zone
 );
 
 
@@ -1183,6 +1185,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220123170027'),
 ('20220123170318'),
 ('20220123204635'),
-('20220130174300');
+('20220130174300'),
+('20220131100027');
 
 
