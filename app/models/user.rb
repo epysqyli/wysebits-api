@@ -121,7 +121,7 @@ class User < ApplicationRecord
     TileEntry.where(book_tile_id: BookTile.where(user_id: id))
   end
 
-  # user account confirmation methods
+  # user account confirmation and password reset methods
 
   def confirmation_token_valid?
     confirmation_sent_at + 30.days > Time.now.utc
