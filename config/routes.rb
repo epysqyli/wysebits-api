@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     # password routes
     post '/password/forgot', to: 'passwords#forgot'
     put '/password/reset', to: 'passwords#reset'
-    put '/password/update', to: 'password#update'
+    put '/password/update', to: 'passwords#update'
 
     # user avatar actions
     put '/users/:id/update_avatar', to: 'users#update_avatar'

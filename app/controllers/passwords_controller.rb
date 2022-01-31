@@ -32,7 +32,7 @@ class PasswordsController < ApplicationController
   end
 
   def update
-    if current_user.update(password_params[:password])
+    if current_user.update(password_params)
       render json: { status: 'ok' }, status: :ok
     else
       render json: { error: user.errors.full_messages }, status: :unprocessable_entity
