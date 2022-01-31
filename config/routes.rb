@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
     # password forgot and reset
     post '/password/forgot', to: 'passwords#forgot'
-    post '/password/reset', to: 'passwords#reset'
+    put '/password/reset', to: 'passwords#reset'
 
     # user avatar actions
     put '/users/:id/update_avatar', to: 'users#update_avatar'
