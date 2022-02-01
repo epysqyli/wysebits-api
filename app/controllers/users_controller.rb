@@ -11,7 +11,7 @@ class UsersController < ApplicationController
   before_action :user_params, only: %i[create update_avatar]
   before_action :validate_new_email_address, only: :update_email
   skip_before_action :authenticate_request,
-                     only: %i[show create confirm confirm_email_update username_available? email_address_available?]
+                     only: %i[show create confirm_account confirm_email_update username_available? email_address_available?]
 
   # model CRUD
   def index
@@ -61,7 +61,7 @@ class UsersController < ApplicationController
     end
   end
 
-  def confirm
+  def confirm_account
     token = confirmation_params[:token].to_s
     user = User.find_by_confirmation_token token
 

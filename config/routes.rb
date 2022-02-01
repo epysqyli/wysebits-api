@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     get '/logout', to: 'authentication#logout'
     get '/logged_in', to: 'authentication#logged_in'
     post '/signup', to: 'users#create'
-    post '/confirm', to: 'users#confirm'
+    post '/confirm', to: 'users#confirm_account'
 
     # password routes
     post '/password/forgot', to: 'passwords#forgot'
