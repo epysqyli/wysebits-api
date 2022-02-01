@@ -72,7 +72,11 @@ class UsersController < ApplicationController
     end
   end
 
-  def update; end
+  def update_username
+    return render json: { status: 'ok' }, status: :ok if current_user.update(update_username_params)
+
+    render json: { error: user.errors.full_messages }, status: :unprocessable_entity
+  end
 
   def update_avatar
     user.handle_attachment(user_params[:avatar])
@@ -281,12 +285,10 @@ class UsersController < ApplicationController
 
   # username update
   def username_available?
-    return render json: true if User.username_available? update_params[:username]
+    return render json: true if User.username_available? update_username_params[:username]
 
     render json: false
   end
-
-  def update_username; end
 
   private
 
@@ -314,7 +316,7 @@ class UsersController < ApplicationController
     params.permit(:token)
   end
 
-  def update_params
+  def update_username_params
     params.permit(:username)
   end
 

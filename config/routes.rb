@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
     # user update
     post '/users/username_available', to: 'users#username_available?'
+    put '/users/update_username', to: 'users#update_username'
 
     # user avatar actions
     put '/users/:id/update_avatar', to: 'users#update_avatar'
@@ -59,7 +60,6 @@ Rails.application.routes.draw do
     get '/users/:id/categories_feed', to: 'tile_entries#categories_feed'
     get '/users/:id/following_feed', to: 'tile_entries#following_feed'
 
-    # resources
     get '/users/:username', to: 'users#show', constraints: { username: /[0-z.]+/ }
 
     resources :authors, only: %i[show create]
