@@ -73,7 +73,7 @@ class UsersController < ApplicationController
   end
 
   def update_username
-    return render json: { status: 'ok' }, status: :ok if current_user.update(update_username_params)
+    return render json: { status: 'ok' }, status: :ok if current_user.update(username_params)
 
     render json: { error: user.errors.full_messages }, status: :unprocessable_entity
   end
@@ -285,7 +285,7 @@ class UsersController < ApplicationController
 
   # username update
   def username_available?
-    return render json: true if User.username_available? update_username_params[:username]
+    return render json: true if User.username_available? username_params[:username]
 
     render json: false
   end
@@ -316,7 +316,7 @@ class UsersController < ApplicationController
     params.permit(:token)
   end
 
-  def update_username_params
+  def username_params
     params.permit(:username)
   end
 
