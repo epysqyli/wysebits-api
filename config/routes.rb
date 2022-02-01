@@ -12,6 +12,9 @@ Rails.application.routes.draw do
     put '/password/reset', to: 'passwords#reset'
     put '/password/update', to: 'passwords#update'
 
+    # user update
+    post '/users/username_available', to: 'users#username_available?'
+
     # user avatar actions
     put '/users/:id/update_avatar', to: 'users#update_avatar'
     put '/users/:id/delete_avatar', to: 'users#delete_avatar'

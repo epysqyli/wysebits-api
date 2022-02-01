@@ -280,9 +280,15 @@ class UsersController < ApplicationController
   end
 
   # username update
-  def update_username
-    
+  def username_available?
+    if User.username_available? update_params[:username]
+      render json: true
+    else
+      render json: false
+    end
   end
+
+  def update_username; end
 
   private
 
