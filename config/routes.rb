@@ -12,14 +12,16 @@ Rails.application.routes.draw do
     put '/password/reset', to: 'passwords#reset'
     put '/password/update', to: 'passwords#update'
 
-    # user fields availability check
+    # user fields availability check und associated updates
     post '/users/username_available', to: 'users#username_available?'
-    put '/users/update_username', to: 'users#update_username'
     post '/users/email_address_available', to: 'users#email_address_available?'
+    put '/users/update_username', to: 'users#update_username'
+    post '/users/update_email', to: 'users#update_email'
+    post '/users/confirm_email_update', to: 'users#confirm_email_update'
 
     # user avatar actions
     put '/users/:id/update_avatar', to: 'users#update_avatar'
-    put '/users/:id/delete_avatar', to: 'users#delete_avatar'
+    delete '/users/:id/delete_avatar', to: 'users#delete_avatar'
 
     # user relationships
     get '/users/:id/following', to: 'users#following'

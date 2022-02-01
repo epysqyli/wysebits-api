@@ -10,6 +10,7 @@ class UsersController < ApplicationController
 
   before_action :category, only: %i[add_to_fav_categories remove_from_fav_categories]
   before_action :user_params, only: %i[create update_avatar]
+  before_action :validate_email_update, only: :update_email
   skip_before_action :authenticate_request, only: %i[show create confirm username_available? email_address_available?]
 
   # model CRUD
@@ -76,6 +77,28 @@ class UsersController < ApplicationController
     return render json: { status: 'ok' }, status: :ok if current_user.update(user_params)
 
     render json: { error: user.errors.full_messages }, status: :unprocessable_entity
+  end
+
+  def update_email
+    if current_user.start_email_update!(@new_email)
+      UserMailer.with(user: current_user).update_email.deliver_now
+      render json: { status: 'Email Confirmation has been sent to your new Email.' }, status: :ok
+    else
+      render json: { errors: current_user.errors.values.flatten.compact }, status: :bad_request
+    end
+  end
+
+  def confirm_email_update
+    token = confirmation_params[:token].to_s
+    user = User.find_by_confirmation_token token
+
+    if user.nil? || user.confirmation_token_valid? == false
+      render json: { error: 'The email link seems to be invalid / expired. Try requesting for a new one.' },
+             status: :not_found
+    else
+      user.update_new_email!
+      render json: { status: 'Email updated successfully' }, status: :ok
+    end
   end
 
   def update_avatar
@@ -316,6 +339,19 @@ class UsersController < ApplicationController
 
   def category
     Category.find(params[:category_id])
+  end
+
+  def validate_email_update
+    @new_email = user_params[:email_address].to_s.downcase
+
+    return render json: { status: 'Email cannot be blank' }, status: :bad_request if @new_email.blank?
+
+    if @new_email == current_user.email
+      return render json: { status: 'Current Email and New email cannot be the same' },
+                    status: :bad_request
+    end
+
+    render json: { error: 'Email is already in use.' }, status: :unprocessable_entity if User.email_used?(@new_email)
   end
 
   def confirmation_params

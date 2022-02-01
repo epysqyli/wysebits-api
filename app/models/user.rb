@@ -59,6 +59,26 @@ class User < ApplicationRecord
     false
   end
 
+  def start_email_update!(email)
+    self.unconfirmed_email = email
+    generate_confirmation_instructions
+    save
+  end
+
+  def self.email_used?(email)
+    existing_user = find_by_email_address email
+    return true if existing_user.present?
+
+    waiting_for_confirmation = find_by_unconfirmed_email email
+    waiting_for_confirmation.present? && waiting_for_confirmation.confirmation_token_valid?
+  end
+
+  def update_new_email!
+    self.email = unconfirmed_email
+    self.unconfirmed_email = nil
+    mark_as_confirmed!
+  end
+
   # model app logic methods
 
   def unfollow(other_user)
