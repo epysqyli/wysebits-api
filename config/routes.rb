@@ -16,7 +16,6 @@ Rails.application.routes.draw do
     post '/users/username_available', to: 'users#username_available?'
     put '/users/update_username', to: 'users#update_username'
     post '/users/email_address_available', to: 'users#email_address_available?'
-    put '/users/update_email_address', to: 'users#update_email_address'
 
     # user avatar actions
     put '/users/:id/update_avatar', to: 'users#update_avatar'

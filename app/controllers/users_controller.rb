@@ -78,12 +78,6 @@ class UsersController < ApplicationController
     render json: { error: user.errors.full_messages }, status: :unprocessable_entity
   end
 
-  def update_email_address
-    return render json: { status: 'ok' }, status: :ok if current_user.update(user_params)
-
-    render json: { error: user.errors.full_messages }, status: :unprocessable_entity
-  end
-
   def update_avatar
     user.handle_attachment(user_params[:avatar])
     user.update(avatar_url: url_for(user.avatar))
