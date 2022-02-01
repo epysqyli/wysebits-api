@@ -39,7 +39,6 @@ class User < ApplicationRecord
   validates :password, presence: true, on: :create
   validates :password_confirmation, presence: true, on: :create
 
-  # model methods
   def handle_attachment(user_image)
     avatar.attach(user_image)
   end
@@ -47,6 +46,14 @@ class User < ApplicationRecord
   def follow(other_user)
     following << other_user unless following.include?(other_user)
   end
+
+  def self.username_available?(new_username)
+    return true if User.find_by_username(new_username).nil?
+
+    false
+  end
+
+  # model app logic methods
 
   def unfollow(other_user)
     return unless following.include?(other_user)

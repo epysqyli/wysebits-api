@@ -279,6 +279,11 @@ class UsersController < ApplicationController
     render json: { message: 'Downvote removed' }
   end
 
+  # username update
+  def update_username
+    
+  end
+
   private
 
   def user
@@ -303,6 +308,10 @@ class UsersController < ApplicationController
 
   def confirmation_params
     params.permit(:token)
+  end
+
+  def update_params
+    params.permit(:username)
   end
 
   def user_params
