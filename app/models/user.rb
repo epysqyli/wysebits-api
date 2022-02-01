@@ -69,8 +69,8 @@ class User < ApplicationRecord
     existing_user = find_by_email_address email
     return true if existing_user.present?
 
-    waiting_for_confirmation = find_by_unconfirmed_email email
-    waiting_for_confirmation.present? && waiting_for_confirmation.confirmation_token_valid?
+    unconfirmed_email_user = find_by_unconfirmed_email email
+    unconfirmed_email_user.present? && waiting_for_confirmation.confirmation_token_valid?
   end
 
   def update_new_email!
