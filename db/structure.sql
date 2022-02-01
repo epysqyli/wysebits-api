@@ -662,7 +662,8 @@ CREATE TABLE public.users (
     username character varying,
     avatar_url text,
     reset_password_token character varying,
-    reset_password_sent_at timestamp without time zone
+    reset_password_sent_at timestamp without time zone,
+    unconfirmed_email character varying
 );
 
 
@@ -1186,6 +1187,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220123170318'),
 ('20220123204635'),
 ('20220130174300'),
-('20220131100027');
+('20220131100027'),
+('20220201201938');
 
 
