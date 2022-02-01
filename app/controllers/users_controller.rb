@@ -10,7 +10,7 @@ class UsersController < ApplicationController
 
   before_action :category, only: %i[add_to_fav_categories remove_from_fav_categories]
   before_action :user_params, only: %i[create update_avatar]
-  skip_before_action :authenticate_request, only: %i[show create confirm]
+  skip_before_action :authenticate_request, only: %i[show create confirm username_available?]
 
   # model CRUD
   def index
@@ -281,11 +281,9 @@ class UsersController < ApplicationController
 
   # username update
   def username_available?
-    if User.username_available? update_params[:username]
-      render json: true
-    else
-      render json: false
-    end
+    return render json: true if User.username_available? update_params[:username]
+
+    render json: false
   end
 
   def update_username; end
