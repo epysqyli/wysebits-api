@@ -53,6 +53,12 @@ class User < ApplicationRecord
     false
   end
 
+  def self.email_address_available?(new_email_address)
+    return true if User.find_by_email_address(new_email_address).nil?
+
+    false
+  end
+
   # model app logic methods
 
   def unfollow(other_user)

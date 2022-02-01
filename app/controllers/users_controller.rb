@@ -73,7 +73,7 @@ class UsersController < ApplicationController
   end
 
   def update_username
-    return render json: { status: 'ok' }, status: :ok if current_user.update(username_params)
+    return render json: { status: 'ok' }, status: :ok if current_user.update(user_params)
 
     render json: { error: user.errors.full_messages }, status: :unprocessable_entity
   end
@@ -283,9 +283,15 @@ class UsersController < ApplicationController
     render json: { message: 'Downvote removed' }
   end
 
-  # username update
+  # user fields availability checks
   def username_available?
-    return render json: true if User.username_available? username_params[:username]
+    return render json: true if User.username_available? user_params[:username]
+
+    render json: false
+  end
+
+  def email_address_available?
+    return render json: true if User.email_address_available? user_params[:username]
 
     render json: false
   end
@@ -314,10 +320,6 @@ class UsersController < ApplicationController
 
   def confirmation_params
     params.permit(:token)
-  end
-
-  def username_params
-    params.permit(:username)
   end
 
   def user_params
