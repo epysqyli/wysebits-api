@@ -10,7 +10,7 @@ class UsersController < ApplicationController
 
   before_action :category, only: %i[add_to_fav_categories remove_from_fav_categories]
   before_action :user_params, only: %i[create update_avatar]
-  skip_before_action :authenticate_request, only: %i[show create confirm username_available?]
+  skip_before_action :authenticate_request, only: %i[show create confirm username_available? email_address_available?]
 
   # model CRUD
   def index
@@ -73,6 +73,12 @@ class UsersController < ApplicationController
   end
 
   def update_username
+    return render json: { status: 'ok' }, status: :ok if current_user.update(user_params)
+
+    render json: { error: user.errors.full_messages }, status: :unprocessable_entity
+  end
+
+  def update_email_address
     return render json: { status: 'ok' }, status: :ok if current_user.update(user_params)
 
     render json: { error: user.errors.full_messages }, status: :unprocessable_entity
@@ -291,7 +297,7 @@ class UsersController < ApplicationController
   end
 
   def email_address_available?
-    return render json: true if User.email_address_available? user_params[:username]
+    return render json: true if User.email_address_available? user_params[:email_address]
 
     render json: false
   end
