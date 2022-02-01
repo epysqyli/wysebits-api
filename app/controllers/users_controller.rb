@@ -10,7 +10,7 @@ class UsersController < ApplicationController
 
   before_action :category, only: %i[add_to_fav_categories remove_from_fav_categories]
   before_action :user_params, only: %i[create update_avatar]
-  before_action :validate_email_update, only: :update_email
+  before_action :validate_new_email_address, only: :update_email
   skip_before_action :authenticate_request, only: %i[show create confirm username_available? email_address_available?]
 
   # model CRUD
@@ -341,7 +341,7 @@ class UsersController < ApplicationController
     Category.find(params[:category_id])
   end
 
-  def validate_email_update
+  def validate_new_email_address
     @new_email = user_params[:email_address].to_s.downcase
 
     return render json: { status: 'Email cannot be blank' }, status: :bad_request if @new_email.blank?
