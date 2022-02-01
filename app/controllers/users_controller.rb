@@ -346,7 +346,7 @@ class UsersController < ApplicationController
 
     return render json: { status: 'Email cannot be blank' }, status: :bad_request if @new_email.blank?
 
-    if @new_email == current_user.email
+    if @new_email == current_user.email_address
       return render json: { status: 'Current Email and New email cannot be the same' },
                     status: :bad_request
     end

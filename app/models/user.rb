@@ -74,7 +74,7 @@ class User < ApplicationRecord
   end
 
   def update_new_email!
-    self.email = unconfirmed_email
+    self.email_address = unconfirmed_email
     self.unconfirmed_email = nil
     mark_as_confirmed!
   end
