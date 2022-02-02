@@ -42,43 +42,16 @@ class User < ApplicationRecord
     avatar.attach(user_image)
   end
 
+  def entries_stats
+    top_entry = all_tile_entries.order(upvotes: :desc).first
+    bottom_entry = all_tile_entries.order(upvotes: :asc).first
+    best_net_entry = all_tile_entries.order(net_votes: :desc).first
+    { most_upvoted: top_entry, most_downvoted: bottom_entry, best_net_entry: best_net_entry }
+  end
+
   def follow(other_user)
     following << other_user unless following.include?(other_user)
   end
-
-  def self.username_available?(new_username)
-    return true if User.find_by_username(new_username).nil?
-
-    false
-  end
-
-  def self.email_address_available?(new_email_address)
-    return true if User.find_by_email_address(new_email_address).nil?
-
-    false
-  end
-
-  def start_email_update!(email)
-    self.unconfirmed_email = email
-    generate_confirmation_instructions
-    save
-  end
-
-  def self.email_used?(email)
-    existing_user = find_by_email_address email
-    return true if existing_user.present?
-
-    unconfirmed_email_user = find_by_unconfirmed_email email
-    unconfirmed_email_user.present? && waiting_for_confirmation.confirmation_token_valid?
-  end
-
-  def update_new_email!
-    self.email_address = unconfirmed_email
-    self.unconfirmed_email = nil
-    mark_as_confirmed!
-  end
-
-  # model app logic methods
 
   def unfollow(other_user)
     return unless following.include?(other_user)
@@ -153,7 +126,7 @@ class User < ApplicationRecord
     TileEntry.where(book_tile_id: BookTile.where(user_id: id))
   end
 
-  # user account confirmation and password reset methods
+  # methods related to username and password confirmation and update
   def confirmation_token_valid?
     confirmation_sent_at + 30.days > Time.now.utc
   end
@@ -177,6 +150,38 @@ class User < ApplicationRecord
   def reset_password!(password)
     self.reset_password_token = nil
     update(password: password)
+  end
+
+  def self.username_available?(new_username)
+    return true if User.find_by_username(new_username).nil?
+
+    false
+  end
+
+  def self.email_address_available?(new_email_address)
+    return true if User.find_by_email_address(new_email_address).nil?
+
+    false
+  end
+
+  def start_email_update!(email)
+    self.unconfirmed_email = email
+    generate_confirmation_instructions
+    save
+  end
+
+  def self.email_used?(email)
+    existing_user = find_by_email_address email
+    return true if existing_user.present?
+
+    unconfirmed_email_user = find_by_unconfirmed_email email
+    unconfirmed_email_user.present? && waiting_for_confirmation.confirmation_token_valid?
+  end
+
+  def update_new_email!
+    self.email_address = unconfirmed_email
+    self.unconfirmed_email = nil
+    mark_as_confirmed!
   end
 
   private
