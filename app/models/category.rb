@@ -6,6 +6,8 @@ class Category < ApplicationRecord
 
   # model methods
   def recommendations(book)
+    return [] if book.category_id == 25
+
     res = books.includes(:authors, :category,
                          :metric_data).limit(5).order(updated_at: :desc).sort_by(&:rank_score).reverse
     res.reject { |b| b.id == book.id }
