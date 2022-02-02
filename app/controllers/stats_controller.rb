@@ -1,5 +1,7 @@
 class StatsController < ApplicationController
+  skip_before_action :authenticate_request
+
   def user_stats; end
 
-  def hot_resources; end
+  def trending; end
 end

@@ -27,7 +27,7 @@ Rails.application.routes.draw do
 
     # stats routes
     get '/users/:id/stats', to: 'stats#user_stats'
-    get '/stats/hot_resources', to: 'stats#hot_resources'
+    get '/stats/trending', to: 'stats#trending'
 
     # user relationships
     get '/users/:id/following', to: 'users#following'
