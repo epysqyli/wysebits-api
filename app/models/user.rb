@@ -32,10 +32,10 @@ class User < ApplicationRecord
   has_many :followers, through: :passive_relationships
 
   # validations
-  validates :email_address, presence: true, uniqueness: true, length: { minimum: 4, maximum: 125 },
-                            format: { with: /^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/, multiline: true, message: 'Invalid format' }
+  validates :email_address, presence: true, uniqueness: true, length: { minimum: 8, maximum: 125 },
+                            format: { with: /^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/, multiline: true }
 
-  validates :username, presence: true, length: { minimum: 3, maximum: 12 }
+  validates :username, presence: true, length: { minimum: 4, maximum: 12 }
   validates :password, presence: true, length: { minimum: 8, maximum: 25 }, on: :create
 
   def handle_attachment(user_image)
