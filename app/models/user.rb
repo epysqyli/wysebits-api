@@ -43,9 +43,15 @@ class User < ApplicationRecord
   end
 
   def entries_stats
-    top_entry = all_tile_entries.order(upvotes: :desc).first
-    bottom_entry = all_tile_entries.order(upvotes: :asc).first
-    best_net_entry = all_tile_entries.order(net_votes: :desc).first
+    top_entry = all_tile_entries.order(upvotes: :desc)
+                                .includes({ book_tile: [{ book: %i[authors category] }, :user] }).first
+
+    bottom_entry = all_tile_entries.order(upvotes: :asc)
+                                   .includes({ book_tile: [{ book: %i[authors category] }, :user] }).first
+
+    best_net_entry = all_tile_entries.order(net_votes: :desc)
+                                     .includes({ book_tile: [{ book: %i[authors category] }, :user] }).first
+
     { most_upvoted: top_entry, most_downvoted: bottom_entry, best_net_entry: best_net_entry }
   end
 
