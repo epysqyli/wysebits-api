@@ -31,7 +31,7 @@ Rails.application.routes.draw do
     get '/users/:id/followers', to: 'users#followers'
     get '/users/:id/unpaged_followers', to: 'users#unpaged_followers'
     post '/users/:id/follow/:other_user_id', to: 'users#add_following'
-    post '/users/:id/unfollow/:other_user_id', to: 'users#remove_following'
+    delete '/users/:id/unfollow/:other_user_id', to: 'users#remove_following'
 
     # user fav books
     get '/users/:id/fav_books', to: 'users#fav_books'
@@ -49,14 +49,14 @@ Rails.application.routes.draw do
     get '/users/:id/upvoted_entries', to: 'users#upvoted_entries'
     get '/users/:id/downvoted_entries', to: 'users#downvoted_entries'
     post '/users/:id/tile_entries/:tile_entry_id/upvote', to: 'users#upvote'
-    post '/users/:id/tile_entries/:tile_entry_id/remove_upvote', to: 'users#remove_upvote'
+    delete '/users/:id/tile_entries/:tile_entry_id/remove_upvote', to: 'users#remove_upvote'
     post '/users/:id/tile_entries/:tile_entry_id/downvote', to: 'users#downvote'
-    post '/users/:id/tile_entries/:tile_entry_id/remove_downvote', to: 'users#remove_downvote'
+    delete '/users/:id/tile_entries/:tile_entry_id/remove_downvote', to: 'users#remove_downvote'
 
     # user favorite categories
     get '/users/:id/fav_categories', to: 'users#fav_categories'
     post '/users/:id/categories/:category_id/add_to_fav', to: 'users#add_to_fav_categories'
-    post '/users/:id/categories/:category_id/remove_from_fav', to: 'users#remove_from_fav_categories'
+    delete '/users/:id/categories/:category_id/remove_from_fav', to: 'users#remove_from_fav_categories'
 
     # tile_entries
     get '/all_tiles_from_book/:id', to: 'books#tiles'
@@ -75,7 +75,7 @@ Rails.application.routes.draw do
     resources :books
     get '/books/:id/tile_entries', to: 'books#tile_entries'
 
-    # elasticsearch actions
+    # full text search actions
     post '/search/books', to: 'search_requests#search_books'
     post '/search/authors', to: 'search_requests#search_authors'
 
