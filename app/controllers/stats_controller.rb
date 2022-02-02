@@ -4,8 +4,9 @@ class StatsController < ApplicationController
 
   def user_stats
     render json: { entries: user.entries_stats
-                                .as_json(include: { book_tile: { include: [{ book: { include: %i[authors category] } },
-                                                                           { user: { only: %i[username id] } }] } }) }
+                                .as_json(include: { book_tile: { include:
+                                  [{ book: { include: %i[authors category] } },
+                                   { user: { only: %i[username id] } }] } }) }
   end
 
   def trending; end
