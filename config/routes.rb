@@ -25,6 +25,10 @@ Rails.application.routes.draw do
     put '/users/:id/update_avatar', to: 'users#update_avatar'
     delete '/users/:id/delete_avatar', to: 'users#delete_avatar'
 
+    # stats routes
+    get '/users/:id/stats', to: 'stats#user_stats'
+    get '/stats/hot_resources', to: 'stats#hot_resources'
+
     # user relationships
     get '/users/:id/following', to: 'users#following'
     get '/users/:id/unpaged_following', to: 'users#unpaged_following'
