@@ -44,7 +44,6 @@ class UsersController < ApplicationController
     @user.username = user_params[:username]
     @user.email_address = user_params[:email_address]
     @user.password = user_params[:password]
-    @user.password_confirmation = user_params[:password_confirmation]
 
     UserMailer.with(user: @user).signup_confirmation.deliver_now if @user.save
 
@@ -359,6 +358,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:username, :email_address, :password, :password_confirmation, :avatar)
+    params.require(:user).permit(:username, :email_address, :password, :avatar)
   end
 end
