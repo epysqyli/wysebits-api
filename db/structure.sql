@@ -335,6 +335,38 @@ ALTER SEQUENCE public.comments_id_seq OWNED BY public.comments.id;
 
 
 --
+-- Name: conversations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.conversations (
+    id bigint NOT NULL,
+    sender_id integer,
+    recipient_id integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: conversations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.conversations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: conversations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.conversations_id_seq OWNED BY public.conversations.id;
+
+
+--
 -- Name: downvoted_entries_users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -428,6 +460,39 @@ CREATE SEQUENCE public.fav_tile_entries_id_seq
 --
 
 ALTER SEQUENCE public.fav_tile_entries_id_seq OWNED BY public.fav_tile_entries.id;
+
+
+--
+-- Name: messages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.messages (
+    id bigint NOT NULL,
+    content text,
+    conversation_id bigint,
+    user_id bigint,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.messages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.messages_id_seq OWNED BY public.messages.id;
 
 
 --
@@ -750,6 +815,13 @@ ALTER TABLE ONLY public.comments ALTER COLUMN id SET DEFAULT nextval('public.com
 
 
 --
+-- Name: conversations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conversations ALTER COLUMN id SET DEFAULT nextval('public.conversations_id_seq'::regclass);
+
+
+--
 -- Name: downvoted_entries_users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -768,6 +840,13 @@ ALTER TABLE ONLY public.fav_books ALTER COLUMN id SET DEFAULT nextval('public.fa
 --
 
 ALTER TABLE ONLY public.fav_tile_entries ALTER COLUMN id SET DEFAULT nextval('public.fav_tile_entries_id_seq'::regclass);
+
+
+--
+-- Name: messages id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.messages ALTER COLUMN id SET DEFAULT nextval('public.messages_id_seq'::regclass);
 
 
 --
@@ -900,6 +979,14 @@ ALTER TABLE ONLY public.comments
 
 
 --
+-- Name: conversations conversations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conversations
+    ADD CONSTRAINT conversations_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: downvoted_entries_users downvoted_entries_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -921,6 +1008,14 @@ ALTER TABLE ONLY public.fav_books
 
 ALTER TABLE ONLY public.fav_tile_entries
     ADD CONSTRAINT fav_tile_entries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: messages messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.messages
+    ADD CONSTRAINT messages_pkey PRIMARY KEY (id);
 
 
 --
@@ -1048,6 +1143,20 @@ CREATE INDEX index_books_on_category_id ON public.books USING btree (category_id
 --
 
 CREATE INDEX index_books_on_searchable ON public.books USING gin (searchable);
+
+
+--
+-- Name: index_messages_on_conversation_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_messages_on_conversation_id ON public.messages USING btree (conversation_id);
+
+
+--
+-- Name: index_messages_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_messages_on_user_id ON public.messages USING btree (user_id);
 
 
 --
@@ -1188,6 +1297,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220123204635'),
 ('20220130174300'),
 ('20220131100027'),
-('20220201201938');
+('20220201201938'),
+('20220206101352'),
+('20220206101514');
 
 

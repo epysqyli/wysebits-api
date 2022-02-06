@@ -25,11 +25,15 @@ class User < ApplicationRecord
   has_and_belongs_to_many :fav_categories, class_name: 'Category', join_table: 'categories_users',
                                            foreign_key: 'user_id'
 
+  # following and followers
   has_many :active_relationships, class_name: 'Relationship', foreign_key: 'follower_id', dependent: :destroy
   has_many :following, through: :active_relationships, source: :followed
 
   has_many :passive_relationships, class_name: 'Relationship', foreign_key: 'followed_id', dependent: :destroy
   has_many :followers, through: :passive_relationships
+
+  has_many :conversations
+  has_many :messages
 
   # validations
   validates :email_address, presence: true, uniqueness: true, length: { minimum: 8, maximum: 125 },
