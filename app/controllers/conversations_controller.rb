@@ -6,7 +6,8 @@ class ConversationsController < ApplicationController
 
   def index
     pagy, conversations = pagy(user.conversations.includes(:messages).order(created_at: :desc))
-    resp = conversations.as_json(include: :messages)
+    conversations.map { |conv| conv.append_partner user }
+    resp = conversations.as_json(include: %i[messages partner])
     render json: { conversations: resp, pagy: pagy_metadata(pagy) }
   end
 
