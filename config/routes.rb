@@ -86,6 +86,7 @@ Rails.application.routes.draw do
     resources :users, only: :nil do
       resources :book_tiles
       resources :conversations, only: %i[index create]
+      resources :following, only: %i[index create destroy]
     end
 
     resources :conversations, only: :nil do
