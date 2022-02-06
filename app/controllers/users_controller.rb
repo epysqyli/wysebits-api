@@ -13,7 +13,6 @@ class UsersController < ApplicationController
   skip_before_action :authenticate_request,
                      only: %i[show create confirm_account confirm_email_update username_available? email_address_available?]
 
-  # model CRUD
   def index
     render json: { users: users }
   end
