@@ -6,6 +6,11 @@ class Conversation < ApplicationRecord
   validates_uniqueness_of :sender_id, scope: :recipient_id
 
   scope :between, lambda { |sender_id, recipient_id|
-    where('(conversations.sender_id = ? AND   conversations.recipient_id =?) OR (conversations.sender_id = ? AND conversations.recipient_id =?)', sender_id, recipient_id, recipient_id, sender_id)
+    where(sender_id: sender_id).and(where(recipient_id: recipient_id))
+                               .or(where(sender_id: recipient_id).and(where(recipient_id: sender_id)))
   }
+
+  def self.valid?(sender_id, recipient_id)
+    between(sender_id, recipient_id).blank?
+  end
 end
