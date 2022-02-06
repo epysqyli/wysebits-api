@@ -1,10 +1,13 @@
 class ConversationsController < ApplicationController
+  include Pagy::Backend
+
   before_action :conversation_params, only: :create
   before_action :user, only: :index
 
   def index
-    conversations = user.conversations.includes(:messages).order(created_at: :desc)
-    render json: { conversations: conversations.as_json(include: :messages) }
+    pagy, conversations = pagy(user.conversations.includes(:messages).order(created_at: :desc))
+    resp = conversations.as_json(include: :messages)
+    render json: { conversations: resp, pagy: pagy_metadata(pagy) }
   end
 
   def create
