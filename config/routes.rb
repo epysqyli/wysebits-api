@@ -85,10 +85,9 @@ Rails.application.routes.draw do
 
     resources :users, only: :nil do
       resources :book_tiles
+      resources :conversations, only: %i[index create]
       resources :messages, only: :create
     end
-
-    resources :conversations, only: %i[index create]
 
     get '/users/:user_id/book_tiles_no_pagy', to: 'book_tiles#index_no_pagy'
     get '/users/:user_id/temp_book_tiles', to: 'book_tiles#index_temp_entries'

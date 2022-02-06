@@ -136,6 +136,10 @@ class User < ApplicationRecord
     TileEntry.where(book_tile_id: BookTile.where(user_id: id))
   end
 
+  def conversations
+    Conversation.where(sender_id: id).or(Conversation.where(recipient_id: id))
+  end
+
   # methods related to username and password confirmation and update
   def confirmation_token_valid?
     confirmation_sent_at + 30.days > Time.now.utc
