@@ -1,4 +1,6 @@
 class Conversation < ApplicationRecord
+  attr_accessor :partner
+
   belongs_to :sender, class_name: 'User'
   belongs_to :recipient, class_name: 'User'
   has_many :messages, dependent: :destroy
@@ -12,5 +14,14 @@ class Conversation < ApplicationRecord
 
   def self.valid?(sender_id, recipient_id)
     between(sender_id, recipient_id).blank?
+  end
+
+  def other_user(user)
+    user == sender ? recipient : sender
+  end
+
+  def append_partner(user)
+    partner = other_user user
+    self.partner = User.where(id: partner.id).select(:username, :id).first
   end
 end
