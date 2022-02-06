@@ -24,4 +24,12 @@ class Conversation < ApplicationRecord
     partner = other_user user
     self.partner = User.where(id: partner.id).select(:username, :id).first
   end
+
+  def last_message
+    messages.order(created_at: :desc).first
+  end
+
+  def messages_count
+    messages.size
+  end
 end
