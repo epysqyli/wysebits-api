@@ -29,10 +29,6 @@ Rails.application.routes.draw do
     get '/users/:id/stats', to: 'stats#user_stats'
     get '/stats/trending', to: 'stats#trending'
 
-    # user relationships
-    get '/users/:id/followers', to: 'users#followers'
-    get '/users/:id/unpaged_followers', to: 'users#unpaged_followers'
-
     # user fav books
     get '/users/:id/fav_books', to: 'users#fav_books'
     get '/users/:id/unpaged_fav_books', to: 'users#unpaged_fav_books'
@@ -82,7 +78,12 @@ Rails.application.routes.draw do
     resources :users, only: :nil do
       resources :book_tiles
       resources :conversations, only: %i[index create]
+
       resources :following, only: %i[index create destroy] do
+        get :nonpaginated, on: :collection
+      end
+
+      resources :followers, only: :index do
         get :nonpaginated, on: :collection
       end
     end

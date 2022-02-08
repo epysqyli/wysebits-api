@@ -11,7 +11,8 @@ class UsersController < ApplicationController
   before_action :user_params, only: %i[create update_avatar]
   before_action :validate_new_email_address, only: :update_email
   skip_before_action :authenticate_request,
-                     only: %i[show create confirm_account confirm_email_update username_available? email_address_available?]
+                     only: %i[show create confirm_account confirm_email_update username_available?
+                              email_address_available?]
 
   def index
     render json: { users: users }
@@ -136,19 +137,6 @@ class UsersController < ApplicationController
   def remove_from_fav_categories
     user.remove_from_fav_categories category
     render json: user.fav_categories
-  end
-
-  def followers
-    pagy, user_followers = pagy(user.passive_relationships.order(created_at: :desc)
-      .includes({ follower: [{ book_tiles: :tile_entries }] }))
-
-    resp = user_followers.as_json(include:
-      { follower: { only: %i[username id avatar_url], include: { book_tiles: { include: :tile_entries } } } })
-    render json: { followers: resp, pagy: pagy_metadata(pagy) }
-  end
-
-  def unpaged_followers
-    render json: user.followers.select(:id)
   end
 
   # fav books actions
