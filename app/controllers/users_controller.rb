@@ -124,37 +124,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # fav books actions
-  def fav_books
-    pagy, liked_books = pagy(user.fav_books.order(created_at: :desc).includes(book: %i[authors category]))
-    resp = liked_books.as_json(include: { book: { include: %i[authors category] } })
-    render json: { books: resp, pagy: pagy_metadata(pagy) }
-  end
-
-  def unpaged_fav_books
-    render json: user.fav_books.select(:book_id)
-  end
-
-  def add_to_fav_books
-    user.add_to_fav_books(book)
-    metric_data = book.find_or_create_metric_data
-    metric_data.fav_books_count += 1
-    metric_data.save
-    if user.liked_books.include?(book)
-      render json: { message: 'book added to favorites', book: book, fav_books: user.fav_books }
-    else
-      render json: { message: 'error' }
-    end
-  end
-
-  def remove_from_fav_books
-    user.remove_from_fav_books(book)
-    metric_data = book.find_or_create_metric_data
-    metric_data.fav_books_count -= 1
-    metric_data.save
-    render json: { message: "#{book.title} removed from favorite books", fav_books: user.fav_books }
-  end
-
   # fav insights actions
   def fav_tile_entries
     pagy, fav_tile_entries = pagy(user.fav_tile_entries.order(created_at: :desc)

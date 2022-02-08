@@ -19,6 +19,10 @@ Rails.application.routes.draw do
         get :nonpaginated, on: :collection
       end
 
+      resources :fav_books, only: %i[index create destroy] do
+        get :nonpaginated, on: :collection
+      end
+
       resources :fav_categories, only: %i[index create destroy]
     end
 
@@ -43,12 +47,6 @@ Rails.application.routes.draw do
     # stats routes
     get '/users/:id/stats', to: 'stats#user_stats'
     get '/stats/trending', to: 'stats#trending'
-
-    # user fav books
-    get '/users/:id/fav_books', to: 'users#fav_books'
-    get '/users/:id/unpaged_fav_books', to: 'users#unpaged_fav_books'
-    post '/users/:id/fav_books/:book_id', to: 'users#add_to_fav_books'
-    delete '/users/:id/fav_books/:book_id', to: 'users#remove_from_fav_books'
 
     # user fav entries
     get '/users/:id/fav_tile_entries', to: 'users#fav_tile_entries'
