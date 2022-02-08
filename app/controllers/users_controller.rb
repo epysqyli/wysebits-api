@@ -124,49 +124,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # fav insights actions
-  def fav_tile_entries
-    pagy, fav_tile_entries = pagy(user.fav_tile_entries.order(created_at: :desc)
-    .includes({ tile_entry: [{ book_tile: %i[user book] }] }))
-
-    resp = fav_tile_entries.as_json(include: [tile_entry: { include:
-      [book_tile:
-        { include:
-          [{ user: { only: %i[username id] } }, :book] }] }]).map { |item| item['tile_entry'] }
-    render json: { tile_entries: resp, pagy: pagy_metadata(pagy) }
-  end
-
-  def unpaged_fav_tile_entries
-    entries = user.fav_tile_entries.select(user.fav_tile_entries.arel_table['tile_entry_id'].as('id'))
-    render json: { tile_entries: entries }
-  end
-
-  def add_to_fav_tile_entries
-    user.add_to_fav_tile_entries(tile_entry)
-    book = tile_entry.book_tile.book
-    metric_data = book.find_or_create_metric_data
-    metric_data.fav_entries_count += 1
-    metric_data.save
-    if user.fav_tile_entries.include?(tile_entry)
-      render json: { message: 'insight added to favorites' }
-    else
-      render json: { message: 'error' }
-    end
-  end
-
-  def remove_from_fav_tile_entries
-    user.remove_from_fav_tile_entries(tile_entry)
-    book = tile_entry.book_tile.book
-    metric_data = book.find_or_create_metric_data
-    metric_data.fav_entries_count -= 1
-    metric_data.save
-    if user.fav_tile_entries.include?(tile_entry)
-      render json: { message: 'error' }
-    else
-      render json: { message: 'insight removed from favorites' }
-    end
-  end
-
   # upvote/downvote actions
   def upvoted_entries
     render json: { upvoted_entries: user.upvoted_entries.select(:id) }
