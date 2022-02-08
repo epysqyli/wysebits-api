@@ -7,6 +7,21 @@ Rails.application.routes.draw do
     post '/signup', to: 'users#create'
     post '/confirm', to: 'users#confirm_account'
 
+    resources :users, only: :nil do
+      resources :book_tiles
+      resources :conversations, only: %i[index create]
+
+      resources :following, only: %i[index create destroy] do
+        get :nonpaginated, on: :collection
+      end
+
+      resources :followers, only: :index do
+        get :nonpaginated, on: :collection
+      end
+
+      resources :fav_categories, only: %i[index create destroy]
+    end
+
     # password routes
     post '/password/forgot', to: 'passwords#forgot'
     put '/password/reset', to: 'passwords#reset'
@@ -49,11 +64,6 @@ Rails.application.routes.draw do
     post '/users/:id/tile_entries/:tile_entry_id/downvote', to: 'users#downvote'
     delete '/users/:id/tile_entries/:tile_entry_id/remove_downvote', to: 'users#remove_downvote'
 
-    # user favorite categories
-    get '/users/:id/fav_categories', to: 'users#fav_categories'
-    post '/users/:id/categories/:category_id/add_to_fav', to: 'users#add_to_fav_categories'
-    delete '/users/:id/categories/:category_id/remove_from_fav', to: 'users#remove_from_fav_categories'
-
     # tile_entries
     get '/all_tiles_from_book/:id', to: 'books#tiles'
     get '/tile_entries/guest_feed', to: 'tile_entries#guest_feed'
@@ -74,19 +84,6 @@ Rails.application.routes.draw do
     # full text search actions
     post '/search/books', to: 'search_requests#search_books'
     post '/search/authors', to: 'search_requests#search_authors'
-
-    resources :users, only: :nil do
-      resources :book_tiles
-      resources :conversations, only: %i[index create]
-
-      resources :following, only: %i[index create destroy] do
-        get :nonpaginated, on: :collection
-      end
-
-      resources :followers, only: :index do
-        get :nonpaginated, on: :collection
-      end
-    end
 
     resources :conversations, only: :nil do
       resources :messages, only: %i[index create]

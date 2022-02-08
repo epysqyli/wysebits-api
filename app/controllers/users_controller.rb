@@ -124,21 +124,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # user favorite categories
-  def fav_categories
-    render json: user.fav_categories
-  end
-
-  def add_to_fav_categories
-    user.add_to_fav_categories category
-    render json: user.fav_categories
-  end
-
-  def remove_from_fav_categories
-    user.remove_from_fav_categories category
-    render json: user.fav_categories
-  end
-
   # fav books actions
   def fav_books
     pagy, liked_books = pagy(user.fav_books.order(created_at: :desc).includes(book: %i[authors category]))
