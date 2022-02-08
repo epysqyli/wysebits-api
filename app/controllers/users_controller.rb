@@ -165,18 +165,6 @@ class UsersController < ApplicationController
     render json: user.followers.select(:id)
   end
 
-  def add_following
-    other_user = User.find(params[:other_user_id])
-    user.follow(other_user)
-    render json: { message: "You now follow #{other_user.username}" }
-  end
-
-  def remove_following
-    other_user = User.find(params[:other_user_id])
-    user.unfollow(other_user)
-    render json: { message: "You no longer follow #{other_user.username}" }
-  end
-
   # fav books actions
   def fav_books
     pagy, liked_books = pagy(user.fav_books.order(created_at: :desc).includes(book: %i[authors category]))

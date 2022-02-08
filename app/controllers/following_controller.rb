@@ -22,7 +22,7 @@ class FollowingController < ApplicationController
   end
 
   def destroy
-    other_user = User.find(params[:other_user_id])
+    other_user = User.find(params[:id])
     user.unfollow(other_user)
     render json: { message: "You no longer follow #{other_user.username}" }
   end
@@ -34,6 +34,6 @@ class FollowingController < ApplicationController
   end
 
   def following_params
-    params.permit(:other_user_id)
+    params.permit(:id, :other_user_id)
   end
 end
