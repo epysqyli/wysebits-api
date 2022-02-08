@@ -11,7 +11,7 @@ class FollowingController < ApplicationController
     render json: { following: resp, pagy: pagy_metadata(pagy) }
   end
 
-  def index_no_pagy
+  def nonpaginated
     render json: user.following.select(:id)
   end
 
