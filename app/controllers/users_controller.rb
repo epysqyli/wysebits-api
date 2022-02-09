@@ -124,59 +124,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # upvote/downvote actions
-  def upvoted_entries
-    render json: { upvoted_entries: user.upvoted_entries.select(:id) }
-  end
-
-  def downvoted_entries
-    render json: { downvoted_entries: user.downvoted_entries.select(:id) }
-  end
-
-  def upvote
-    if user.upvoted_entries.include?(tile_entry)
-      render json: { message: 'Entry already upvoted' }
-    else
-      user.upvote(tile_entry)
-      book = tile_entry.book_tile.book
-      metric_data = book.find_or_create_metric_data
-      metric_data.upvotes_count += 1
-      metric_data.save
-      render json: { message: 'Upvote submitted' }
-    end
-  end
-
-  def remove_upvote
-    user.remove_upvote(tile_entry)
-    book = tile_entry.book_tile.book
-    metric_data = book.find_or_create_metric_data
-    metric_data.upvotes_count -= 1
-    metric_data.save
-    render json: { message: 'Upvote removed' }
-  end
-
-  def downvote
-    if user.downvoted_entries.include?(tile_entry)
-      render json: { message: 'Entry already downvoted' }
-    else
-      user.downvote(tile_entry)
-      book = tile_entry.book_tile.book
-      metric_data = book.find_or_create_metric_data
-      metric_data.downvotes_count += 1
-      metric_data.save
-      render json: { message: 'Downvote submitted' }
-    end
-  end
-
-  def remove_downvote
-    user.remove_downvote(tile_entry)
-    book = tile_entry.book_tile.book
-    metric_data = book.find_or_create_metric_data
-    metric_data.downvotes_count -= 1
-    metric_data.save
-    render json: { message: 'Downvote removed' }
-  end
-
   # user fields availability checks
   def username_available?
     return render json: true if User.username_available? user_params[:username]
