@@ -33,6 +33,27 @@ Rails.application.routes.draw do
       resources :downvoted_entries, only: %i[index create destroy]
     end
 
+    resources :conversations, only: :nil do
+      resources :messages, only: %i[index create]
+    end
+
+    resources :book_tiles, only: :nil do
+      resources :tile_entries
+      resources :temporary_entries
+    end
+
+    resources :books
+    resources :authors, only: %i[show create]
+    resources :categories, only: :index
+
+    resources :tile_entries, only: %i[show] do
+      resources :comments
+    end
+
+    resources :comments, only: :nil do
+      resources :comments
+    end
+
     # password routes
     post '/password/forgot', to: 'passwords#forgot'
     put '/password/reset', to: 'passwords#reset'
@@ -55,14 +76,6 @@ Rails.application.routes.draw do
     get '/users/:id/stats', to: 'stats#user_stats'
     get '/stats/trending', to: 'stats#trending'
 
-    # user upvoting / downvoting entries
-    # get '/users/:id/upvoted_entries', to: 'users#upvoted_entries'
-    # get '/users/:id/downvoted_entries', to: 'users#downvoted_entries'
-    # post '/users/:id/tile_entries/:tile_entry_id/upvote', to: 'users#upvote'
-    # delete '/users/:id/tile_entries/:tile_entry_id/remove_upvote', to: 'users#remove_upvote'
-    # post '/users/:id/tile_entries/:tile_entry_id/downvote', to: 'users#downvote'
-    # delete '/users/:id/tile_entries/:tile_entry_id/remove_downvote', to: 'users#remove_downvote'
-
     # tile_entries
     get '/all_tiles_from_book/:id', to: 'books#tiles'
     get '/tile_entries/guest_feed', to: 'tile_entries#guest_feed'
@@ -72,39 +85,18 @@ Rails.application.routes.draw do
 
     get '/users/:username', to: 'users#show', constraints: { username: /[0-z.]+/ }
 
-    resources :authors, only: %i[show create]
-    resources :categories, only: :index
     get '/categories/:slug/books', to: 'categories#books'
     get '/books/:id/recommendations', to: 'books#recommendations'
 
-    resources :books
     get '/books/:id/tile_entries', to: 'books#tile_entries'
 
     # full text search actions
     post '/search/books', to: 'search_requests#search_books'
     post '/search/authors', to: 'search_requests#search_authors'
 
-    resources :conversations, only: :nil do
-      resources :messages, only: %i[index create]
-    end
-
     get '/users/:user_id/book_tiles_no_pagy', to: 'book_tiles#index_no_pagy'
     get '/users/:user_id/temp_book_tiles', to: 'book_tiles#index_temp_entries'
     get '/users/:user_id/book_tiles/:book_id/is_available', to: 'book_tiles#available?'
-
-    resources :book_tiles, only: :nil do
-      resources :tile_entries
-      resources :temporary_entries
-    end
-
     get '/users/:user_id/tile_entries/all_user_entries', to: 'tile_entries#all_user_entries'
-
-    resources :tile_entries, only: %i[show] do
-      resources :comments
-    end
-
-    resources :comments, only: :nil do
-      resources :comments
-    end
   end
 end
