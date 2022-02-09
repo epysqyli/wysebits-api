@@ -28,6 +28,9 @@ Rails.application.routes.draw do
       end
 
       resources :fav_categories, only: %i[index create destroy]
+
+      resources :upvoted_entries, only: %i[index create destroy]
+      resources :downvoted_entries, only: %i[index create destroy]
     end
 
     # password routes
@@ -53,12 +56,12 @@ Rails.application.routes.draw do
     get '/stats/trending', to: 'stats#trending'
 
     # user upvoting / downvoting entries
-    get '/users/:id/upvoted_entries', to: 'users#upvoted_entries'
-    get '/users/:id/downvoted_entries', to: 'users#downvoted_entries'
-    post '/users/:id/tile_entries/:tile_entry_id/upvote', to: 'users#upvote'
-    delete '/users/:id/tile_entries/:tile_entry_id/remove_upvote', to: 'users#remove_upvote'
-    post '/users/:id/tile_entries/:tile_entry_id/downvote', to: 'users#downvote'
-    delete '/users/:id/tile_entries/:tile_entry_id/remove_downvote', to: 'users#remove_downvote'
+    # get '/users/:id/upvoted_entries', to: 'users#upvoted_entries'
+    # get '/users/:id/downvoted_entries', to: 'users#downvoted_entries'
+    # post '/users/:id/tile_entries/:tile_entry_id/upvote', to: 'users#upvote'
+    # delete '/users/:id/tile_entries/:tile_entry_id/remove_upvote', to: 'users#remove_upvote'
+    # post '/users/:id/tile_entries/:tile_entry_id/downvote', to: 'users#downvote'
+    # delete '/users/:id/tile_entries/:tile_entry_id/remove_downvote', to: 'users#remove_downvote'
 
     # tile_entries
     get '/all_tiles_from_book/:id', to: 'books#tiles'
