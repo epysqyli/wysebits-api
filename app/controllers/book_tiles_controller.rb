@@ -1,8 +1,8 @@
 class BookTilesController < ApplicationController
   include Pagy::Backend
 
-  before_action :user, only: %i[index index_no_pagy index_temp_entries create available?]
-  before_action :book, only: %i[create available?]
+  before_action :user, only: %i[index index_no_pagy index_temp_entries create available]
+  before_action :book, only: %i[create available]
   before_action :book_tile, only: %i[show destroy]
   skip_before_action :authenticate_request, only: %i[index index_no_pagy show]
 
@@ -65,7 +65,7 @@ class BookTilesController < ApplicationController
     end
   end
 
-  def available?
+  def available
     book_tile = BookTile.where(user_id: user.id).where(book_id: book.id)
 
     if book_tile.blank?
