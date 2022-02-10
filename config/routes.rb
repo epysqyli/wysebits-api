@@ -31,7 +31,20 @@ Rails.application.routes.draw do
 
       resources :upvoted_entries, only: %i[index create destroy]
       resources :downvoted_entries, only: %i[index create destroy]
+
+      member do
+        resources :feed, only: :nil do
+          collection do
+            get :user_feed
+            get :categories_feed
+            get :following_feed
+          end
+        end
+      end
     end
+
+    # guest user feed
+    get '/feed/guest_feed', to: 'feed#guest_feed'
 
     resources :conversations, only: :nil do
       resources :messages, only: %i[index create]
@@ -83,12 +96,6 @@ Rails.application.routes.draw do
 
     # tile_entries
     # get '/all_tiles_from_book/:id', to: 'books#tiles'
-
-    # feed
-    get '/tile_entries/guest_feed', to: 'feed#guest_feed'
-    get '/users/:id/user_feed', to: 'feed#user_feed'
-    get '/users/:id/categories_feed', to: 'feed#categories_feed'
-    get '/users/:id/following_feed', to: 'feed#following_feed'
 
     get '/users/:username', to: 'users#show', constraints: { username: /[0-z.]+/ }
 
