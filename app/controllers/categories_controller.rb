@@ -9,7 +9,7 @@ class CategoriesController < ApplicationController
     render json: @categories
   end
 
-  def books
+  def show
     pagy, books = pagy(category.books.order(tiles_count: :desc))
     resp = books.includes(:authors).as_json(include: %i[authors category])
     render json: { books: resp, pagy: pagy_metadata(pagy) }
@@ -22,6 +22,6 @@ class CategoriesController < ApplicationController
   end
 
   def category
-    params[:slug] ? Category.find_by_slug(params[:slug]) : Category.find(params[:id])
+    Category.find_by_slug(params[:slug]) || Category.find(params[:id])
   end
 end
