@@ -42,9 +42,14 @@ Rails.application.routes.draw do
       resources :temporary_entries
     end
 
-    resources :books
+    resources :books do
+      get :tile_entries, on: :member
+      get :recommendations, on: :member
+    end
+
     resources :authors, only: %i[show create]
-    resources :categories, only: :index
+
+    resources :categories, only: %i[index show], param: :slug
 
     resources :tile_entries, only: %i[show] do
       resources :comments
@@ -77,7 +82,7 @@ Rails.application.routes.draw do
     get '/stats/trending', to: 'stats#trending'
 
     # tile_entries
-    get '/all_tiles_from_book/:id', to: 'books#tiles'
+    # get '/all_tiles_from_book/:id', to: 'books#tiles'
 
     # feed
     get '/tile_entries/guest_feed', to: 'feed#guest_feed'
@@ -87,12 +92,7 @@ Rails.application.routes.draw do
 
     get '/users/:username', to: 'users#show', constraints: { username: /[0-z.]+/ }
 
-    get '/categories/:slug/books', to: 'categories#books'
-    get '/books/:id/recommendations', to: 'books#recommendations'
-
-    get '/books/:id/tile_entries', to: 'books#tile_entries'
-
-    # full text search actions
+    # search actions
     post '/search/books', to: 'search_requests#search_books'
     post '/search/authors', to: 'search_requests#search_authors'
 
