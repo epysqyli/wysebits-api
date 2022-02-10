@@ -9,7 +9,9 @@ Rails.application.routes.draw do
 
     resources :users, only: :nil do
       resources :book_tiles
+
       resources :conversations, only: %i[index create]
+      resources :tile_entries, only: :index
 
       resources :following, only: %i[index create destroy] do
         get :nonpaginated, on: :collection
@@ -39,6 +41,12 @@ Rails.application.routes.draw do
             get :categories_feed
             get :following_feed
           end
+        end
+      end
+
+      resources :books, only: :nil do
+        resources :book_tiles, only: :nil do
+          get :available, on: :collection
         end
       end
     end
@@ -95,7 +103,7 @@ Rails.application.routes.draw do
     get '/stats/trending', to: 'stats#trending'
 
     # tile_entries
-    # get '/all_tiles_from_book/:id', to: 'books#tiles'
+    get '/all_tiles_from_book/:id', to: 'books#tiles'
 
     get '/users/:username', to: 'users#show', constraints: { username: /[0-z.]+/ }
 
@@ -105,7 +113,5 @@ Rails.application.routes.draw do
 
     get '/users/:user_id/book_tiles_no_pagy', to: 'book_tiles#index_no_pagy'
     get '/users/:user_id/temp_book_tiles', to: 'book_tiles#index_temp_entries'
-    get '/users/:user_id/book_tiles/:book_id/is_available', to: 'book_tiles#available?'
-    get '/users/:user_id/tile_entries/all_user_entries', to: 'tile_entries#all_user_entries'
   end
 end
