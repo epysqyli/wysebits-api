@@ -8,13 +8,10 @@ Rails.application.routes.draw do
     post '/confirm', to: 'users#confirm_account'
 
     resources :users, only: :nil do
-      resources :books, only: :nil do
-        resources :book_tiles, only: :nil do
-          get :available, on: :collection
-        end
+      resources :book_tiles do
+        get :nonpaginated, on: :collection
+        get :temporary, on: :collection
       end
-
-      resources :book_tiles
 
       resources :conversations, only: %i[index create]
       resources :tile_entries, only: :index
@@ -49,7 +46,16 @@ Rails.application.routes.draw do
           end
         end
       end
+
+      resources :books, only: :nil do
+        resources :book_tiles, only: :nil do
+          get :available, on: :collection
+        end
+      end
     end
+
+    # user route by username
+    get '/users/:username', to: 'users#show', constraints: { username: /[0-z.]+/ }
 
     # guest user feed
     get '/feed/guest_feed', to: 'feed#guest_feed'
@@ -102,16 +108,8 @@ Rails.application.routes.draw do
     get '/users/:id/stats', to: 'stats#user_stats'
     get '/stats/trending', to: 'stats#trending'
 
-    # tile_entries
-    get '/all_tiles_from_book/:id', to: 'books#tiles'
-
-    get '/users/:username', to: 'users#show', constraints: { username: /[0-z.]+/ }
-
     # search actions
     post '/search/books', to: 'search_requests#search_books'
     post '/search/authors', to: 'search_requests#search_authors'
-
-    get '/users/:user_id/book_tiles_no_pagy', to: 'book_tiles#index_no_pagy'
-    get '/users/:user_id/temp_book_tiles', to: 'book_tiles#index_temp_entries'
   end
 end

@@ -14,12 +14,12 @@ class BookTilesController < ApplicationController
     render json: { tiles: resp, pagy: pagy_metadata(pagy) }
   end
 
-  def index_no_pagy
+  def nonpaginated
     user_book_tiles = user.book_tiles.as_json(include: :tile_entries)
     render json: { tiles: user_book_tiles }
   end
 
-  def index_temp_entries
+  def temporary
     temp_book_tiles = BookTile.where(user_id: user.id).joins(:temporary_entries)
                               .includes({ book: %i[authors category] }, :tile_entries)
 
