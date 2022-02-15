@@ -140,6 +140,10 @@ class User < ApplicationRecord
     Conversation.where(sender_id: id).or(Conversation.where(recipient_id: id))
   end
 
+  def send_message(conversation, content)
+    Message.create! user: self, content: content, conversation: conversation
+  end
+
   # methods related to username and password confirmation and update
   def confirmation_token_valid?
     confirmation_sent_at + 30.days > Time.now.utc
