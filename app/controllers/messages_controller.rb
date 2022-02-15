@@ -3,7 +3,7 @@ class MessagesController < ApplicationController
   before_action :conversation
 
   def index
-    messages = conversation.messages.includes(:user).order(created_at: :desc)
+    messages = conversation.messages.includes(:user).order(created_at: :asc)
     render json: { messages: messages.as_json(include: { user: { only: %i[username id] } }) }
   end
 
