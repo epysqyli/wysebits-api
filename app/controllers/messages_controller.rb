@@ -7,7 +7,14 @@ class MessagesController < ApplicationController
     render json: { messages: messages.as_json(include: { user: { only: %i[username id] } }) }
   end
 
-  def create; end
+  def create
+    msg = user.send_message(conversation, message_params[:content])
+    if msg
+      render json: { status: 'ok' }, status: :ok
+    else
+      render json: { status: 'Message not sent' }, status: :forbidden
+    end
+  end
 
   private
 
