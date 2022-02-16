@@ -10,7 +10,7 @@ class MessagesController < ApplicationController
   def create
     msg = user.send_message(conversation, message_params[:content])
     if msg
-      render json: { status: 'ok' }, status: :ok
+      render json: { status: 'ok', message: msg.as_json(include: { user: { only: %i[username id] } }) }, status: :ok
     else
       render json: { status: 'Message not sent' }, status: :forbidden
     end
@@ -19,14 +19,14 @@ class MessagesController < ApplicationController
   private
 
   def user
-    User.find params[:user_id]
+    User.find message_params[:user_id]
   end
 
   def conversation
-    Conversation.find message_params[:conversation_id]
+    Conversation.find params[:conversation_id]
   end
 
   def message_params
-    params.permit(:conversation_id, :content)
+    params.permit(:content, :user_id, :conversation_id, message: %i[content user_id])
   end
 end
