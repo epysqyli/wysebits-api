@@ -13,7 +13,7 @@ Rails.application.routes.draw do
         get :temporary, on: :collection
       end
 
-      resources :conversations, only: %i[index create]
+      resources :conversations, only: %i[index show create]
       resources :tile_entries, only: :index
 
       resources :following, only: %i[index create destroy] do
