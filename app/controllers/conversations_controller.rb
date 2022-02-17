@@ -18,12 +18,12 @@ class ConversationsController < ApplicationController
   end
 
   def create
-    if Conversation.valid?(conversation_params[:sender_id], conversation_params[:recipient_id])
-      Conversation.create! sender_id: conversation_params[:sender_id], recipient_id: conversation_params[:recipient_id]
-      render json: { status: 'ok' }, status: :ok
-    else
-      show
-    end
+    return show unless Conversation.valid?(conversation_params[:sender_id], conversation_params[:recipient_id])
+
+    conversation = Conversation.create! sender_id: conversation_params[:sender_id],
+                                        recipient_id: conversation_params[:recipient_id]
+    conversation.append_partner(User.find(conversation_params[:sender_id]))
+    render json: conversation.as_json(include: :partner), status: :ok
   end
 
   private
