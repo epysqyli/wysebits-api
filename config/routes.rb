@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     post '/confirm', to: 'users#confirm_account'
 
     resources :users, only: :nil do
+      resource :avatar, except: %i[index update]
+
       resources :book_tiles do
         get :nonpaginated, on: :collection
         get :temporary, on: :collection
@@ -99,10 +101,6 @@ Rails.application.routes.draw do
     put '/users/update_username', to: 'users#update_username'
     post '/users/update_email', to: 'users#update_email'
     post '/users/confirm_email_update', to: 'users#confirm_email_update'
-
-    # user avatar actions
-    put '/users/:id/update_avatar', to: 'users#update_avatar'
-    delete '/users/:id/delete_avatar', to: 'users#delete_avatar'
 
     # stats routes
     get '/users/:id/stats', to: 'stats#user_stats'
