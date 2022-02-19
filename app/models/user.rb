@@ -40,7 +40,8 @@ class User < ApplicationRecord
                             format: { with: /^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/, multiline: true }
 
   validates :username, presence: true, length: { minimum: 4, maximum: 12 }
-  validates :password, presence: true, length: { minimum: 8, maximum: 25 }, on: :create
+  validates :password, presence: true,
+                       format: { with: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, multiline: true }, on: :create
 
   def handle_attachment(user_image)
     avatar.attach(user_image)
