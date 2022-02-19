@@ -100,21 +100,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def update_avatar
-    user.handle_attachment(user_params[:avatar])
-    user.update(avatar_url: url_for(user.avatar))
-
-    render json: { avatar_url: user.avatar_url }
-  end
-
-  def delete_avatar
-    user.avatar.purge
-    new_avatar_url = nil
-    user.update(avatar_url: new_avatar_url)
-
-    render json: { avatar_url: user.avatar_url }
-  end
-
   def destroy
     if user == current_user
       user.destroy
