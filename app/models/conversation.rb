@@ -22,7 +22,7 @@ class Conversation < ApplicationRecord
 
   def append_partner(user)
     partner = other_user user
-    self.partner = User.where(id: partner.id).select(:username, :id).first
+    self.partner = User.where(id: partner.id).select(:username, :id, :avatar_url).first
   end
 
   def last_message
