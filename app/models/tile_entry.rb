@@ -11,6 +11,9 @@ class TileEntry < ApplicationRecord
 
   has_and_belongs_to_many :downvoters, class_name: 'User', join_table: 'downvoted_entries_users',
                                        foreign_key: 'tile_entry_id'
+
+  validates :content, presence: true
+
   # model methods
   def add_liking_user(user)
     return if liking_users.include?(user)
