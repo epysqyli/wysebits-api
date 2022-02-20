@@ -6,11 +6,7 @@ namespace :db do
                     'Social Sciences', 'Essay', 'Self-Help', 'Business',
                     'Economics and Finance', 'Health and Wellness', 'Crafts and Hobbies', 'Academic Texts',
                     'Language Books', 'Arts Books', 'Memoirs and autobiographies', 'Biographies',
-<<<<<<< HEAD
-                    'Journalism', 'Guides and How To Manuals' 'CATCHALL']
-=======
                     'Journalism', 'Guides and How To Manuals', 'Various']
->>>>>>> dev
 
       categories.each { |cat| Category.create! name: cat, slug: name.downcase.gsub(/ /, '-') }
     end
