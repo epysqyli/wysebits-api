@@ -15,7 +15,7 @@ class AuthorsController < ApplicationController
     if new_author.save
       render json: new_author
     else
-      render json: 'Error in author creation'
+      render json: new_author.errors.messages
     end
   end
 
