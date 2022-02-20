@@ -4,6 +4,8 @@ class Category < ApplicationRecord
   has_and_belongs_to_many :liking_users, class_name: 'User', join_table: 'categories_users',
                                          foreign_key: 'category_id'
 
+  validates :name, presence: true, uniqueness: true
+
   # model methods
   def recommendations(book)
     return [] if book.category_id == 25
