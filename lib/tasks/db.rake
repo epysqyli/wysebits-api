@@ -12,23 +12,22 @@ namespace :db do
 
   desc 'Import books from openlibrary csv'
   task import_books: :environment do
+    works = Rails.root.join('lib', 'seeds', 'works.csv')
+    various_category = Category.find 25
     SmarterCSV.process(works, chunk_size: 20_000) do |chunk|
       books = Parallel.map(chunk) do |row|
         next if row.nil?
 
         work = JSON.parse(row[:json])
-
         book = Book.new
-
         book.title = work['title']
-        book.category_id = last_category_id
+        book.category_id = various_category
 
         unless work['authors'].nil? || work['authors'][0]['author'].nil? || work['authors'][0]['author']['key'].nil?
           book.ol_author_key = work['authors'][0]['author']['key']&.split('/')&.last
         end
 
         book.ol_key = work['key']&.split('/')&.last unless work['key'].nil?
-
         next if book.nil?
 
         book
@@ -46,9 +45,7 @@ namespace :db do
         next if row.nil?
 
         person = JSON.parse(row[:json])
-
         author = Author.new
-
         author.full_name = person['name']
         author.key = person['key']&.split('/')&.last unless person['key'].nil?
 
@@ -70,8 +67,7 @@ namespace :db do
 
         author_key = book.ol_author_key
         author = Author.find_by_key(author_key)
-
-        book.add_author(author)
+        book.add_or_replace_author(author)
       end
 
       progress += batch.length
