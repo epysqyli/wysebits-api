@@ -16,7 +16,7 @@ gem 'rails', '~> 6.1.4', '>= 6.1.4.1'
 gem 'simple_command', '~> 0.1.0'
 
 group :development, :test do
-  # gem 'activerecord-import'
+  gem 'activerecord-import'
   gem 'better_errors', '~> 2.9', '>= 2.9.1'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'faker', '~> 2.19'
