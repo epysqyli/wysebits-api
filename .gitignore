@@ -25,11 +25,10 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+/config/credentials.yml.enc
 
 # Ignore lib/seeds
 /lib/seeds/
-
-# Ignore config development
 
 # Ignore application configuration
 /config/application.yml
