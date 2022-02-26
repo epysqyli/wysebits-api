@@ -30,3 +30,6 @@
 /lib/seeds/
 
 # Ignore config development
+
+# Ignore application configuration
+# /config/application.yml
