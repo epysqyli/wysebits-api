@@ -1,5 +1,7 @@
 development:
-  cors_origins: http://localhost:3000
+        cors_origins: http://localhost:300 
 
 production:
-  cors_origins: http://wysebits.com
+        cors_origins: http://wysebits.com
+        database_user: elvis
+        database_password: Appoggio95

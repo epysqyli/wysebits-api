@@ -13,5 +13,5 @@ test:
 production:
   <<: *default
   database: wysebits_api_production
-  username: wysebits_api
-  password: <%= ENV['WYSEBITS_API_DATABASE_PASSWORD'] %>
+  username: <%= ENV['database_user'] %> 
+  password: <%= ENV['database_password'] %>
