@@ -1,0 +1,5 @@
+development:
+  cors_origins: http://localhost:3000
+
+production:
+  cors_origins: http://wysebits.com
