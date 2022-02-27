@@ -11,6 +11,7 @@ class AuthenticationController < ApplicationController
           expires: 7.days.from_now,
           path: '/',
           httponly: true,
+          secure: true,
           same_site: 'None'
         }
       )
@@ -39,7 +40,9 @@ class AuthenticationController < ApplicationController
         value: nil,
         expires: Time.now,
         path: '/',
-        httponly: true
+        httponly: true,
+        secure: true,
+        same_site: 'None'
       }
     )
 
