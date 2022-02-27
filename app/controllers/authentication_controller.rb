@@ -10,7 +10,8 @@ class AuthenticationController < ApplicationController
           value: command.result[:token],
           expires: 7.days.from_now,
           path: '/',
-          httponly: true
+          httponly: true,
+          same_site: 'None'
         }
       )
 
