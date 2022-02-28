@@ -7,7 +7,7 @@ namespace :db do
                   'Language Books', 'Arts Books', 'Memoirs and autobiographies', 'Biographies',
                   'Journalism', 'Guides and How To Manuals', 'Various']
 
-    categories.each { |cat| Category.create! name: cat, slug: name.downcase.gsub(/ /, '-') }
+    categories.each { |cat| Category.create! name: cat, slug: cat.downcase.gsub(/ /, '-') }
   end
 
   desc 'Import books from openlibrary csv'
