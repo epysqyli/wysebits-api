@@ -10,9 +10,8 @@ class AuthenticationController < ApplicationController
           value: command.result[:token],
           expires: 7.days.from_now,
           path: '/',
-          httponly: true,
-          secure: true,
-          same_site: 'None'
+          domain: ENV['cookie_domain'],
+          httponly: true
         }
       )
 
@@ -40,9 +39,8 @@ class AuthenticationController < ApplicationController
         value: nil,
         expires: Time.now,
         path: '/',
-        httponly: true,
-        secure: true,
-        same_site: 'None'
+        domain: ENV['cookie_domain'],
+        httponly: true
       }
     )
 
