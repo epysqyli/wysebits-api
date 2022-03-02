@@ -13,8 +13,8 @@ namespace :db do
   desc 'Import books from openlibrary csv'
   task import_books: :environment do
     works = Rails.root.join('lib', 'seeds', 'works.csv')
-    various_category = Category.find 25
-    SmarterCSV.process(works, chunk_size: 20_000) do |chunk|
+    various_category = Category.find_by_slug 'various'
+    SmarterCSV.process(works, chunk_size: 20_000, col_sep: "\t") do |chunk|
       books = Parallel.map(chunk) do |row|
         next if row.nil?
 
@@ -40,7 +40,7 @@ namespace :db do
   desc 'Import authors from openlibrary csv'
   task import_authors: :environment do
     authors = Rails.root.join('lib', 'seeds', 'authors.csv')
-    SmarterCSV.process(authors, chunk_size: 30_000) do |chunk|
+    SmarterCSV.process(authors, chunk_size: 30_000, col_sep: "\t") do |chunk|
       people = Parallel.map(chunk) do |row|
         next if row.nil?
 
