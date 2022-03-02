@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  # scope path: '/api' do
   # auth
   post '/login', to: 'authentication#authenticate'
   get '/logout', to: 'authentication#logout'
@@ -109,5 +108,4 @@ Rails.application.routes.draw do
   # search actions
   post '/search/books', to: 'search_requests#search_books'
   post '/search/authors', to: 'search_requests#search_authors'
-  # end
 end
