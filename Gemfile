@@ -27,7 +27,7 @@ group :development do
   gem 'spring'
 end
 
-gem :development, :production do
+group :development, :production do
   gem 'activerecord-import'
   gem 'parallel'
   gem 'smarter_csv'
