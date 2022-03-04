@@ -17,7 +17,7 @@ namespace :db do
       books = Parallel.map(chunk) do |row|
         next if row.nil?
 
-        work = JSON.parse(row['json'])
+        work = JSON.parse(row[:json])
         book = Book.new
         book.title = work['title']
         book.category = various_category
@@ -29,7 +29,8 @@ namespace :db do
         book.ol_key = work['key']&.split('/')&.last unless work['key'].nil?
         next if book.nil?
 
-        p book
+        searchable = ActiveRecord::Base.connection.execute("SELECT to_tsvector('english', '#{book.title}')")
+        book.searchable = searchable.first['to_tsvector']
         book
       end
 
