@@ -23,7 +23,7 @@ class Book < ApplicationRecord
   has_many :fav_books
   has_many :liking_users, through: :fav_books, source: :user
 
-  has_one :metric_data
+  has_one :metric_data, dependent: :destroy
   has_one_attached :book_cover
 
   # model validations
