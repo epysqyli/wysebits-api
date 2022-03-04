@@ -30,6 +30,7 @@ end
 group :development, :production do
   gem 'activerecord-import'
   gem 'parallel'
+  gem 'pry'
   gem 'smarter_csv'
 end
 
