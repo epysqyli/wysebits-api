@@ -17,7 +17,7 @@ namespace :db do
       books = Parallel.map(chunk) do |row|
         next if row.nil?
 
-        work = JSON.parse(row[:json])
+        work = JSON.parse(row['json'])
         book = Book.new
         book.title = work['title']
         book.category = various_category
@@ -44,7 +44,7 @@ namespace :db do
     CSV.foreach(args[:ol_dump], col_sep: "\t", headers: true, liberal_parsing: true) do |row|
       next if row.nil?
 
-      work = JSON.parse(row[:json])
+      work = JSON.parse(row['json'])
       book = Book.new
       book.title = work['title']
       book.category = various_category
