@@ -10,18 +10,17 @@ namespace :db do
     categories.each { |cat| Category.create! name: cat, slug: cat.downcase.gsub(/ /, '-') }
   end
 
-  desc 'Import books from openlibrary csv'
-  task import_books: :environment do
-    works = Rails.root.join('lib', 'seeds', 'works.csv')
+  desc 'Import books bulk from openlibrary csv'
+  task :import_books_bulk, [:ol_dump] => :environment do |_t, args|
     various_category = Category.find_by_slug 'various'
-    SmarterCSV.process(works, chunk_size: 20_000, col_sep: "\t") do |chunk|
+    SmarterCSV.process(args[:ol_dump], chunk_size: 20_000, col_sep: "\t", headers: true, quote_char: "\x00") do |chunk|
       books = Parallel.map(chunk) do |row|
         next if row.nil?
 
         work = JSON.parse(row[:json])
         book = Book.new
         book.title = work['title']
-        book.category_id = various_category
+        book.category = various_category
 
         unless work['authors'].nil? || work['authors'][0]['author'].nil? || work['authors'][0]['author']['key'].nil?
           book.ol_author_key = work['authors'][0]['author']['key']&.split('/')&.last
@@ -30,10 +29,34 @@ namespace :db do
         book.ol_key = work['key']&.split('/')&.last unless work['key'].nil?
         next if book.nil?
 
+        p book
         book
       end
 
       Book.import books, batch_size: 5_000
+      puts 'Batch imported'
+    end
+  end
+
+  desc 'Import books from openlibrary csv'
+  task :import_books, [:ol_dump] => :environment do |_t, args|
+    various_category = Category.find_by_slug 'various'
+    CSV.foreach(args[:ol_dump], col_sep: "\t", headers: true, liberal_parsing: true) do |row|
+      next if row.nil?
+
+      work = JSON.parse(row[:json])
+      book = Book.new
+      book.title = work['title']
+      book.category = various_category
+
+      unless work['authors'].nil? || work['authors'][0]['author'].nil? || work['authors'][0]['author']['key'].nil?
+        book.ol_author_key = work['authors'][0]['author']['key']&.split('/')&.last
+      end
+
+      book.ol_key = work['key']&.split('/')&.last unless work['key'].nil?
+      next if book.nil?
+
+      book.save
     end
   end
 
