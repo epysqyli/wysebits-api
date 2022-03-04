@@ -10,7 +10,7 @@ namespace :db do
     categories.each { |cat| Category.create! name: cat, slug: cat.downcase.gsub(/ /, '-') }
   end
 
-  desc 'Import books bulk from openlibrary csv'
+  desc 'Import books in bulk from openlibrary csv - not working'
   task :import_books_bulk, [:ol_dump] => :environment do |_t, args|
     various_category = Category.find_by_slug 'various'
     SmarterCSV.process(args[:ol_dump], chunk_size: 20_000, col_sep: "\t", headers: true, quote_char: "\x00") do |chunk|
@@ -61,8 +61,8 @@ namespace :db do
     end
   end
 
-  desc 'Import authors from openlibrary csv'
-  task import_authors: :environment do
+  desc 'Import authors in bulk from openlibrary csv - not working'
+  task :import_authors_bulk, [:ol_dump] => :environment do |_t, _args|
     authors = Rails.root.join('lib', 'seeds', 'authors.csv')
     SmarterCSV.process(authors, chunk_size: 30_000, col_sep: "\t") do |chunk|
       people = Parallel.map(chunk) do |row|
@@ -79,6 +79,22 @@ namespace :db do
       end
 
       Author.import people, batch_size: 7_500
+    end
+  end
+
+  desc 'Import authors from openlibrary csv'
+  task :import_authors_bulk, [:ol_dump] => :environment do |_t, args|
+    CSV.foreach(args[:ol_dump], col_sep: "\t", headers: true, liberal_parsing: true) do |row|
+      next if row.nil?
+
+      person = JSON.parse(row['json'])
+      author = Author.new
+      author.full_name = person['name']
+      author.key = person['key']&.split('/')&.last unless person['key'].nil?
+
+      next if author.nil?
+
+      author.save
     end
   end
 
