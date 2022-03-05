@@ -12,9 +12,7 @@ class UpvotedEntriesController < ApplicationController
     else
       user.upvote(tile_entry)
       book = tile_entry.book_tile.book
-      metric_data = book.find_or_create_metric_data
-      metric_data.upvotes_count += 1
-      metric_data.save
+      book.find_or_create_metric_data.update_book_metrics('upvotes', :increase)
       render json: { message: 'Upvote submitted' }
     end
   end
@@ -22,9 +20,7 @@ class UpvotedEntriesController < ApplicationController
   def destroy
     user.remove_upvote(tile_entry)
     book = tile_entry.book_tile.book
-    metric_data = book.find_or_create_metric_data
-    metric_data.upvotes_count -= 1
-    metric_data.save
+    book.find_or_create_metric_data.update_book_metrics('upvotes', :decrease)
     render json: { message: 'Upvote removed' }
   end
 

@@ -23,9 +23,7 @@ class FavTileEntriesController < ApplicationController
   def create
     user.add_to_fav_tile_entries(tile_entry)
     book = tile_entry.book_tile.book
-    metric_data = book.find_or_create_metric_data
-    metric_data.fav_entries_count += 1
-    metric_data.save
+    book.find_or_create_metric_data.update_book_metrics('fav_entries', :increase)
     if user.fav_tile_entries.include?(tile_entry)
       render json: { message: 'insight added to favorites' }
     else
@@ -36,9 +34,7 @@ class FavTileEntriesController < ApplicationController
   def destroy
     user.remove_from_fav_tile_entries(tile_entry)
     book = tile_entry.book_tile.book
-    metric_data = book.find_or_create_metric_data
-    metric_data.fav_entries_count -= 1
-    metric_data.save
+    book.find_or_create_metric_data.update_book_metrics('fav_entries', :decrease)
     if user.fav_tile_entries.include?(tile_entry)
       render json: { message: 'error' }
     else

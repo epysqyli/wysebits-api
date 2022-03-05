@@ -16,9 +16,7 @@ class FavBooksController < ApplicationController
 
   def create
     user.add_to_fav_books(book)
-    metric_data = book.find_or_create_metric_data
-    metric_data.fav_books_count += 1
-    metric_data.save
+    book.find_or_create_metric_data.update_book_metrics('fav_books', :increase)
     if user.liked_books.include?(book)
       render json: { message: 'book added to favorites', book: book, fav_books: user.fav_books }
     else
@@ -28,9 +26,7 @@ class FavBooksController < ApplicationController
 
   def destroy
     user.remove_from_fav_books(book)
-    metric_data = book.find_or_create_metric_data
-    metric_data.fav_books_count -= 1
-    metric_data.save
+    book.find_or_create_metric_data.update_book_metrics('fav_books', :decrease)
     render json: { message: "#{book.title} removed from favorite books", fav_books: user.fav_books }
   end
 
