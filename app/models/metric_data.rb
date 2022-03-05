@@ -6,6 +6,16 @@ class MetricData < ApplicationRecord
     save
   end
 
+  def score
+    value = 0
+    book_tiles = book.book_tiles.size
+    { fav_books_count: 0.5,
+      fav_entries_count: 0.9,
+      upvotes_count: 0.75,
+      downvotes_count: 0.75 }.each { |f, w| value += self[f] * w * book_tiles }
+    value
+  end
+
   private
 
   def update_fav_books(action)
