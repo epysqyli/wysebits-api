@@ -2,34 +2,101 @@
 <html>
   <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <style>
       * {
         padding: 0;
         margin: 0;
         box-sizing: border-box;
-        font-family: Arial;
+        font-family: 'Roboto';
+        color: white;
       }
       
-        h1 {
+      body {
+        background-color: rgb(90, 117, 138);
+      }
+      
+        #logo {
+          width: 20%;
           margin: auto;
+          display: block;
+          margin-top: 5vh;
+        }
+      
+        h1 {
+          margin: 2rem auto;
           padding-top: 2rem;
           width: 60%;
           text-align: center;
         }
       
         .main-box {
-          width: 50%;
+          width: 80%;
           margin: auto;
           text-align: center;
           margin-top: 5rem;
           font-size: 1.5rem;
+          max-width: 1024px;
+        }
+      
+        #activate-link {
+          display: block;
+          border: 2px solid white;
+          padding: 2vh 0;
+          border-radius: 10px;
+          width: 60%;
+          margin: 5vh auto 10vh;
+          text-transform: uppercase;
+          font-size: 1.25rem;
+        }
+      
+        #activate-link:hover {
+          background-color: rgb(80, 117, 138);
+        }
+      
+        a:link, a:visited, a:hover, a:active {
+          text-decoration: none;
+        }
+      
+        .main-box p {
+          margin: 1rem 0;
+          text-align: left;
+          line-height: 3vh;
+        }
+      
+        .main-box h3 {
+          margin: 5vh auto;
+        }
+      
+        #explainer {
+          border-left: 2px solid white;
+          padding: 0 2vh;
+          margin: 2vh auto;
+          font-size: 1.15rem;
         }
     </style>
   </head>
   <body>
+    <img src="/gimp-logo.png" alt="Wysebits logo" id="logo">
     <h1>Welcome to Wysebits, <%= @user.username %></h1>
     <div class="main-box">
-      <p>Click <a href="http://localhost:3000/registrations/confirm/<%= @user.confirmation_token %>">here</a> to activate your account</p>
+      <a id="activate-link" href="http://localhost:3000/registrations/confirm/<%= @user.confirmation_token %>">
+        <div>Activate your account now</div>
+      </a>
+      <p>
+        Once your account is confirmed, you can start contributing to the community with your own specific insights for the book that you have read or are currently reading.
+      </p>
+      <h3>*Wysebits is not your typical social network*</h3>
+      <div id="explainer">
+        <p>The goal of the platform is that of determining the best insight that each book can provide: users will allow this result by upvoting and downvoting other users' insights for the same book.</p>
+        <p>The vision of Wysebits if centered around one specific principle: users should leave the platform with a feeling of having being enriched by the content they encountered while spending their valuable time there.</p>
+        <p>It seems to me that the default experience for the vast majority of social networks out there is one of emptiness: users come in, scroll through random content for some time, read stuff, look at pictures, and watch videos they do not really care about. Once they close the browser or the app, they are left questioning what they got out of it.</p>
+        <p><u>This experience is exactly what I want to avoid.</u></p>
+        <p>This is why what can be done on Wysebits is purposefully limited. The main things users can do is share their insights for the books they are reading, upvote/downvote other users' insights, and save favorite books and insights. Admittedly not for everybody, at least not for those people looking for mindless distraction.</p>
+        <p>More info can be found on the <a href="http://localhost:3000/about"><u>about page</u></a></p>
+      </div>
     </div>
   </body>
 </html>
