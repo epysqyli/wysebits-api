@@ -2,34 +2,90 @@
 <html>
   <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <style>
       * {
         padding: 0;
         margin: 0;
         box-sizing: border-box;
-        font-family: Arial;
+        font-family: 'Roboto';
+        color: white;
       }
       
-        h1 {
+      body {
+        background-color: rgb(90, 117, 138);
+      }
+      
+        #logo {
+          width: 20%;
           margin: auto;
+          display: block;
+          margin-top: 5vh;
+        }
+      
+        h1 {
+          margin: 2rem auto;
           padding-top: 2rem;
           width: 60%;
           text-align: center;
         }
       
         .main-box {
-          width: 50%;
+          width: 80%;
           margin: auto;
           text-align: center;
-          margin-top: 5rem;
+          margin: 5rem auto;
           font-size: 1.5rem;
+          max-width: 1024px;
+        }
+      
+        #activate-link {
+          display: block;
+          border: 2px solid white;
+          padding: 2vh 0;
+          border-radius: 10px;
+          width: 60%;
+          margin: 5vh auto 10vh;
+          text-transform: uppercase;
+          font-size: 1.25rem;
+        }
+      
+        #activate-link:hover {
+          background-color: rgb(80, 117, 138);
+        }
+      
+        a:link, a:visited, a:hover, a:active {
+          text-decoration: none;
+        }
+      
+        .main-box p {
+          margin: 1rem 0;
+          text-align: left;
+          line-height: 3vh;
+        }
+      
+        .main-box h3 {
+          margin: 5vh auto;
+        }
+      
+        #explainer {
+          border-left: 2px solid white;
+          padding: 0 2vh;
+          margin: 2vh auto;
+          font-size: 1.15rem;
         }
     </style>
   </head>
   <body>
-    <h1>Email address change - Wysebits</h1>
+    <img src="/gimp-logo.png" alt="Wysebits logo" id="logo">
+    <h1>Hi <%= @user.username %></h1>
     <div class="main-box">
-      <p>Click <a href="http://localhost:3000/users/actions/manage-profile/confirm-email-update/<%= @user.confirmation_token %>">here</a> to confirm your new email address</p>
+      <p>You have asked to change your current email address for you account. No problem! Just go ahead and click on the button below. You will be redirected to a page with all the instructions to set a new email address. Just follow them and you'll be ok.</p>
+      <a id="activate-link" href="http://localhost:3000/users/actions/manage-profile/confirm-email-update/<%= @user.confirmation_token %>">
+        <div>Change email address</div>
+      </a>
     </div>
   </body>
 </html>
