@@ -71,7 +71,7 @@ class Book < ApplicationRecord
     metric_data
   end
 
-  def rank_score
+  def score
     find_or_create_metric_data unless metric_data
     metric_data.score
   end
