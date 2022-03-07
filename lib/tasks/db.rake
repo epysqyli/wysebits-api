@@ -4,7 +4,7 @@ namespace :db do
     categories = ['History', 'Philosophy', 'Religion and Spirituality', 'Science', 'Politics',
                   'Social Sciences', 'Essay', 'Self-Help', 'Business',
                   'Economics and Finance', 'Health and Wellness', 'Crafts and Hobbies', 'Academic Texts',
-                  'Language Books', 'Arts Books', 'Memoirs and autobiographies', 'Biographies',
+                  'Language Books', 'Arts Books', 'Memoirs and Biographies',
                   'Journalism', 'Guides and How To Manuals', 'Technology', 'Various']
 
     categories.each { |cat| Category.create! name: cat, slug: cat.downcase.gsub(/ /, '-') }
