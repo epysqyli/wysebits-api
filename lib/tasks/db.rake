@@ -60,9 +60,8 @@ namespace :db do
   end
 
   desc 'Import authors in bulk from openlibrary csv - not working after tsvector migration'
-  task :import_authors_bulk, [:ol_dump] => :environment do |_t, _args|
-    authors = Rails.root.join('lib', 'seeds', 'authors.csv')
-    SmarterCSV.process(authors, chunk_size: 30_000, col_sep: "\t") do |chunk|
+  task :import_authors_bulk, [:ol_dump] => :environment do |_t, args|
+    SmarterCSV.process(args[:ol_dump], chunk_size: 30_000, col_sep: "\t", headers: true, quote_char: "\x00") do |chunk|
       people = Parallel.map(chunk) do |row|
         next if row.nil?
 
@@ -81,7 +80,7 @@ namespace :db do
   end
 
   desc 'Import authors from openlibrary csv'
-  task :import_authors_bulk, [:ol_dump] => :environment do |_t, args|
+  task :import_authors, [:ol_dump] => :environment do |_t, args|
     CSV.foreach(args[:ol_dump], col_sep: "\t", headers: true, liberal_parsing: true) do |row|
       next if row.nil?
 
