@@ -14,6 +14,7 @@ gem 'pg_search', '~> 2.3', '>= 2.3.6'
 gem 'puma', '~> 5.0'
 gem 'rack-cors'
 gem 'rails', '~> 6.1.4', '>= 6.1.4.1'
+gem 'sidekiq', '~> 6.4', '>= 6.4.1'
 gem 'simple_command', '~> 0.1.0'
 
 group :development, :test do

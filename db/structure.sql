@@ -213,7 +213,9 @@ CREATE TABLE public.books (
     ol_key character varying,
     cover_url text,
     searchable tsvector GENERATED ALWAYS AS (to_tsvector('english'::regconfig, (title)::text)) STORED,
-    tiles_count integer DEFAULT 0
+    tiles_count integer DEFAULT 0,
+    previous_tiles_count integer DEFAULT 0,
+    tiles_count_diff integer DEFAULT 0
 );
 
 
@@ -656,7 +658,9 @@ CREATE TABLE public.tile_entries (
     book_tile_id bigint NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    net_votes integer DEFAULT 0
+    net_votes integer DEFAULT 0,
+    previous_upvotes integer DEFAULT 0,
+    upvotes_diff integer DEFAULT 0
 );
 
 
@@ -728,7 +732,10 @@ CREATE TABLE public.users (
     avatar_url text,
     reset_password_token character varying,
     reset_password_sent_at timestamp without time zone,
-    unconfirmed_email character varying
+    unconfirmed_email character varying,
+    tiles_count integer DEFAULT 0,
+    previous_tiles_count integer DEFAULT 0,
+    tiles_count_diff integer DEFAULT 0
 );
 
 
@@ -1299,6 +1306,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220131100027'),
 ('20220201201938'),
 ('20220206101352'),
-('20220206101514');
+('20220206101514'),
+('20220309220349');
 
 
