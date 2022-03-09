@@ -37,6 +37,26 @@ namespace :db do
     end
   end
 
+  desc 'Import authors in bulk from openlibrary csv - not working after tsvector migration'
+  task :import_authors_bulk, [:ol_dump] => :environment do |_t, args|
+    SmarterCSV.process(args[:ol_dump], chunk_size: 30_000, col_sep: "\t", headers: true, quote_char: "\x00") do |chunk|
+      people = Parallel.map(chunk) do |row|
+        next if row.nil?
+
+        person = JSON.parse(row[:json])
+        author = Author.new
+        author.full_name = person['name']
+        author.key = person['key']&.split('/')&.last unless person['key'].nil?
+
+        next if author.nil?
+
+        author
+      end
+
+      Author.import people, batch_size: 7_500
+    end
+  end
+
   desc 'Import books from openlibrary csv'
   task :import_books, [:ol_dump] => :environment do |_t, args|
     various_category = Category.find_by_slug 'various'
@@ -56,26 +76,6 @@ namespace :db do
       next if book.nil?
 
       book.save
-    end
-  end
-
-  desc 'Import authors in bulk from openlibrary csv - not working after tsvector migration'
-  task :import_authors_bulk, [:ol_dump] => :environment do |_t, args|
-    SmarterCSV.process(args[:ol_dump], chunk_size: 30_000, col_sep: "\t", headers: true, quote_char: "\x00") do |chunk|
-      people = Parallel.map(chunk) do |row|
-        next if row.nil?
-
-        person = JSON.parse(row[:json])
-        author = Author.new
-        author.full_name = person['name']
-        author.key = person['key']&.split('/')&.last unless person['key'].nil?
-
-        next if author.nil?
-
-        author
-      end
-
-      Author.import people, batch_size: 7_500
     end
   end
 

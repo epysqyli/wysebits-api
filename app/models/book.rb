@@ -39,7 +39,7 @@ class Book < ApplicationRecord
   def add_or_replace_author(author)
     return if authors.include?(author)
 
-    authors.each { |aut| authors.delete(aut) }
+    # authors.each { |aut| authors.delete(aut) }
     authors << author
   end
 
