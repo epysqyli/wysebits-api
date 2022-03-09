@@ -97,18 +97,13 @@ namespace :db do
 
   desc 'Assign authors to books'
   task assign_authors: :environment do
-    progress = 0
     Book.all.in_batches(of: 30_000) do |batch|
       Parallel.each(batch) do |book|
         next if book.ol_author_key.nil?
 
-        author_key = book.ol_author_key
-        author = Author.find_by_key(author_key)
+        author = Author.find_by_key(book.ol_author_key)
         book.add_or_replace_author(author)
       end
-
-      progress += batch.length
-      puts "#{progress} books processed\n"
     end
   end
 end
