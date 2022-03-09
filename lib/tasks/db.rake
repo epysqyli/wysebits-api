@@ -13,7 +13,9 @@ namespace :db do
   desc 'Import books in bulk from openlibrary csv - not working after tsvector migration'
   task :import_books_bulk, [:ol_dump] => :environment do |_t, args|
     various_category = Category.find_by_slug 'various'
-    SmarterCSV.process(args[:ol_dump], chunk_size: 20_000, col_sep: "\t", headers: true, quote_char: "\x00") do |chunk|
+    headers = %w[type key revision last_modified json]
+    SmarterCSV.process(args[:ol_dump], chunk_size: 20_000, col_sep: "\t", headers: false,
+                                       user_provided_headers: headers, quote_char: "\x00") do |chunk|
       books = Parallel.map(chunk) do |row|
         next if row.nil?
 
@@ -39,7 +41,9 @@ namespace :db do
 
   desc 'Import authors in bulk from openlibrary csv - not working after tsvector migration'
   task :import_authors_bulk, [:ol_dump] => :environment do |_t, args|
-    SmarterCSV.process(args[:ol_dump], chunk_size: 30_000, col_sep: "\t", headers: true, quote_char: "\x00") do |chunk|
+    headers = %w[type key revision last_modified json]
+    SmarterCSV.process(args[:ol_dump], chunk_size: 30_000, col_sep: "\t", headers: false,
+                                       user_provided_headers: headers, quote_char: "\x00") do |chunk|
       people = Parallel.map(chunk) do |row|
         next if row.nil?
 
