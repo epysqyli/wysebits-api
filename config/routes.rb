@@ -108,4 +108,7 @@ Rails.application.routes.draw do
   # search actions
   post '/search/books', to: 'search_requests#search_books'
   post '/search/authors', to: 'search_requests#search_authors'
+
+  # weekly trend
+  get '/weekly_trend', to: 'week_trend#index'
 end
