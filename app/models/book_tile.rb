@@ -1,14 +1,18 @@
 class BookTile < ApplicationRecord
+  after_commit %i[update_tiles_count_on_book update_tiles_count_on_user]
+
   belongs_to :user
   belongs_to :book
   has_many :tile_entries, dependent: :destroy
   has_many :temporary_entries, dependent: :destroy
 
-  after_commit :update_book_tiles_count
+  private
 
-  def update_book_tiles_count
-    book = Book.find book_id
-    book.tiles_count = book.book_tiles.size
-    book.save
+  def update_tiles_count_on_book
+    book.tiles_count += 1
+  end
+
+  def update_tiles_count_on_user
+    user.tiles_count += 1
   end
 end
