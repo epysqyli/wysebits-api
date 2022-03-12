@@ -9,10 +9,10 @@ class BookTile < ApplicationRecord
   private
 
   def update_tiles_count_on_book
-    book.tiles_count += 1
+    book.tiles_count = where(book: book).count
   end
 
   def update_tiles_count_on_user
-    user.tiles_count += 1
+    user.tiles_count = where(user: user).count
   end
 end
