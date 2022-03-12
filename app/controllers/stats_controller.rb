@@ -3,10 +3,7 @@ class StatsController < ApplicationController
   skip_before_action :authenticate_request
 
   def user_stats
-    render json: { entries: user.entries_stats
-                                .as_json(include: { book_tile: { include:
-                                  [{ book: { include: %i[authors category] } },
-                                   { user: { only: %i[username id] } }] } }) }
+    render json: { entries: TileEntryFormat.json_booktile_book_authors_category_user(user.entries_stats) }
   end
 
   def trending; end

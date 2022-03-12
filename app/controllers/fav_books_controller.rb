@@ -6,7 +6,7 @@ class FavBooksController < ApplicationController
 
   def index
     pagy, liked_books = pagy(user.fav_books.order(created_at: :desc).includes(book: %i[authors category]))
-    resp = liked_books.as_json(include: { book: { include: %i[authors category] } })
+    resp = BookFormat.json_book_authors_category(liked_books)
     render json: { books: resp, pagy: pagy_metadata(pagy) }
   end
 

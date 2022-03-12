@@ -8,7 +8,7 @@ class TileEntriesController < ApplicationController
 
   def index
     pagy, user_entries = pagy(user.all_tile_entries.order(created_at: :desc))
-    resp = user_entries.as_json(include: { book_tile: { include: [:book, { user: { only: %i[id username] } }] } })
+    resp = TileEntryFormat.json_booktile_book_user(user_entries)
     render json: { entries: resp, pagy: pagy_metadata(pagy) }
   end
 

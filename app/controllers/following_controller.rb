@@ -6,8 +6,7 @@ class FollowingController < ApplicationController
     pagy, user_following = pagy(user.active_relationships.order(created_at: :desc)
     .includes({ followed: [{ book_tiles: :tile_entries }] }))
 
-    resp = user_following.as_json(include:
-      { followed: { only: %i[username id avatar_url], include: { book_tiles: { include: :tile_entries } } } })
+    resp = FollowFormat(user_following)
     render json: { following: resp, pagy: pagy_metadata(pagy) }
   end
 

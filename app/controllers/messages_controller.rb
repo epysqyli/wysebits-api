@@ -4,13 +4,13 @@ class MessagesController < ApplicationController
 
   def index
     messages = conversation.messages.includes(:user).order(created_at: :asc)
-    render json: { messages: messages.as_json(include: { user: { only: %i[username id] } }) }
+    render json: { messages: MessageFormat.json_user(messages) }
   end
 
   def create
     msg = user.send_message(conversation, message_params[:content])
     if msg
-      render json: { status: 'ok', message: msg.as_json(include: { user: { only: %i[username id] } }) }, status: :ok
+      render json: { status: 'ok', message: MessageFormat.json_user(msg) }, status: :ok
     else
       render json: { status: 'Message not sent' }, status: :forbidden
     end

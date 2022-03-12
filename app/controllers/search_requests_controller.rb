@@ -6,7 +6,7 @@ class SearchRequestsController < ApplicationController
 
   def search_books
     pagy, books = pagy(Book.search(search_params[:keywords]).with_pg_search_highlight)
-    resp = books.includes(:authors, :category).as_json(include: %i[authors category])
+    resp = BookFormat.json_authors_category(books.includes(:authors, :category))
     render json: { results: resp, pagy: pagy_metadata(pagy) }
   end
 

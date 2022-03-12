@@ -7,14 +7,14 @@ class ConversationsController < ApplicationController
   def index
     pagy, conversations = pagy(user.conversations.includes(:messages).order(created_at: :desc))
     conversations.map { |conv| conv.append_partner user }
-    resp = conversations.as_json(include: %i[partner last_message], methods: :messages_count)
+    resp = ConversationFormat.json_partner_lastmsg_count(conversations)
     render json: { conversations: resp, pagy: pagy_metadata(pagy) }
   end
 
   def show
     conversation = Conversation.between(conversation_params[:sender_id], conversation_params[:recipient_id]).first
     conversation.append_partner(User.find(conversation_params[:sender_id]))
-    render json: conversation.as_json(include: :partner)
+    render json: ConversationFormat.json_partner(conversation)
   end
 
   def create
@@ -23,7 +23,7 @@ class ConversationsController < ApplicationController
     conversation = Conversation.create! sender_id: conversation_params[:sender_id],
                                         recipient_id: conversation_params[:recipient_id]
     conversation.append_partner(User.find(conversation_params[:sender_id]))
-    render json: conversation.as_json(include: :partner), status: :ok
+    render json: ConversationFormat.json_partner(conversation), status: :ok
   end
 
   private

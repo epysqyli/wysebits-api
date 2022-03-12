@@ -11,7 +11,7 @@ class CategoriesController < ApplicationController
 
   def show
     pagy, books = pagy(category.books.order(tiles_count: :desc))
-    resp = books.includes(:authors).as_json(include: %i[authors category])
+    resp = BookFormat.json_authors_category(books.includes(:authors, :category))
     render json: { books: resp, pagy: pagy_metadata(pagy) }
   end
 

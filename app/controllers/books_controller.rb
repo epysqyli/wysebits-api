@@ -6,12 +6,12 @@ class BooksController < ApplicationController
 
   def tile_entries
     pagy, entries = pagy(book.all_tile_entries.order(net_votes: :desc).includes(:book_tile))
-    resp = entries.as_json(include: [book_tile: { include: [user: { only: %i[username id] }] }])
+    resp = BookFormat.json_tiles_user(entries)
     render json: { entries: resp, pagy: pagy_metadata(pagy) }
   end
 
   def show
-    render json: book.as_json(include: %i[authors category])
+    render json: BookFormat.json_authors_category(book)
   end
 
   def create
@@ -73,7 +73,7 @@ class BooksController < ApplicationController
 
   def recommendations
     category = Category.find book.category_id
-    recommendations = category.recommendations(book).as_json(include: %i[authors category])
+    recommendations = BookFormat.json_authors_category(category.recommendations(book))
     render json: recommendations
   end
 

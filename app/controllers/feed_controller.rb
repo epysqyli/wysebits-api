@@ -8,8 +8,7 @@ class FeedController < ApplicationController
     pagy, entries = pagy(TileEntry.all.order(updated_at: :desc)
     .includes({ book_tile: [{ book: %i[authors category] }, :user] }))
 
-    resp = entries.as_json(include: { book_tile: { include: [{ book: { include: %i[authors category] } },
-                                                             { user: { only: %i[username id] } }] } })
+    resp = TileEntryFormat.json_booktile_book_authors_category_user(entries)
     render json: { entries: resp, pagy: pagy_metadata(pagy) }
   end
 
@@ -17,8 +16,7 @@ class FeedController < ApplicationController
     pagy, entries = pagy(TileEntry.other_user_entries(user).order(updated_at: :desc)
     .includes({ book_tile: [{ book: %i[authors category] }, :user] }))
 
-    resp = entries.as_json(include: { book_tile: { include: [{ book: { include: %i[authors category] } },
-                                                             { user: { only: %i[username id] } }] } })
+    resp = TileEntryFormat.json_booktile_book_authors_category_user(entries)
     render json: { entries: resp, pagy: pagy_metadata(pagy) }
   end
 
@@ -29,9 +27,7 @@ class FeedController < ApplicationController
 
     pagy, entries = pagy(entries.order(updated_at: :desc))
 
-    entries = entries.as_json(include: { book_tile: { include: [{ book: { include: %i[authors category] } },
-                                                                { user: { only: %i[username id] } }] } })
-
+    entries = TileEntryFormat.json_booktile_book_authors_category_user(entries)
     render json: { entries: entries, pagy: pagy_metadata(pagy) }
   end
 
@@ -42,9 +38,7 @@ class FeedController < ApplicationController
 
     pagy, entries = pagy(entries.order(updated_at: :desc))
 
-    entries = entries.as_json(include: { book_tile: { include: [{ book: { include: %i[authors category] } },
-                                                                { user: { only: %i[username id] } }] } })
-
+    entries = TileEntryFormat.json_booktile_book_authors_category_user(entries)
     render json: { entries: entries, pagy: pagy_metadata(pagy) }
   end
 
