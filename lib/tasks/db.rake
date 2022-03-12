@@ -109,7 +109,7 @@ namespace :db do
         next if book.ol_author_key.nil?
 
         author = Author.find_by_key(book.ol_author_key)
-        book.add_or_replace_author(author)
+        book.add_or_replace_author(author) unless author.nil?
       end
     end
   end
