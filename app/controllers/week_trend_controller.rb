@@ -8,7 +8,7 @@ class WeekTrendController < ApplicationController
   private
 
   def trending_book
-    Book.order(tiles_count_diff: :desc).first.as_json(include: %i[authors category])
+    Book.includes(%i[authors category]).order(tiles_count_diff: :desc).first.as_json(include: %i[authors category])
   end
 
   def trending_user
@@ -16,7 +16,7 @@ class WeekTrendController < ApplicationController
   end
 
   def trending_insight
-    TileEntry.order(upvotes_diff: :desc).first
+    TileEntry.includes(book_tile: %i[user book]).order(upvotes_diff: :desc).first
              .as_json(include: { book_tile: { include: [:book, { user: { only: %i[id username] } }] } })
   end
 end
