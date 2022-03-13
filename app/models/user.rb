@@ -140,6 +140,10 @@ class User < ApplicationRecord
     TileEntry.where(book_tile_id: BookTile.where(user_id: id))
   end
 
+  def all_book_insights(book)
+    TileEntry.where(book_tile: BookTile.where(user: self, book: book))
+  end
+
   def conversations
     Conversation.where(sender_id: id).or(Conversation.where(recipient_id: id))
   end

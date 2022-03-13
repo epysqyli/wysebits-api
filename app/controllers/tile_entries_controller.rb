@@ -1,15 +1,22 @@
 class TileEntriesController < ApplicationController
   include Pagy::Backend
 
+  before_action :book, onky: :book_index
   before_action :book_tile, only: %i[create]
   before_action :tile_entry, only: %i[show update]
   before_action :user, only: %i[user_feed custom_feed index]
-  skip_before_action :authenticate_request, only: %i[index show]
+  skip_before_action :authenticate_request, only: %i[index book_index show]
 
   def index
     pagy, user_entries = pagy(user.all_tile_entries.order(created_at: :desc))
     resp = TileEntryFormat.json_booktile_book_user(user_entries)
     render json: { entries: resp, pagy: pagy_metadata(pagy) }
+  end
+
+  def book_index
+    user_book_entries = user.all_book_insights(book).order(upvotes: :desc)
+    resp = TileEntryFormat.json_booktile_book_user(user_book_entries)
+    render json: resp
   end
 
   def show
@@ -53,6 +60,10 @@ class TileEntriesController < ApplicationController
 
   def book_tile
     BookTile.find(params[:book_tile_id])
+  end
+
+  def book
+    Book.find(params[:id])
   end
 
   def tile_entry_params

@@ -49,6 +49,7 @@ Rails.application.routes.draw do
     end
 
     resources :books, only: :nil do
+      get :book_index, on: :member, to: 'tile_entries#book_index'
       resources :book_tiles, only: :nil do
         get :available, on: :collection
       end
