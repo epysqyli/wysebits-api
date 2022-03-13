@@ -1,5 +1,5 @@
 class BookTile < ApplicationRecord
-  after_commit %i[update_tiles_count_on_book update_tiles_count_on_user]
+  after_commit %i[update_tiles_count_on_book update_tiles_count_on_user], on: :update
 
   belongs_to :user
   belongs_to :book
