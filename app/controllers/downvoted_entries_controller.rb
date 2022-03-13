@@ -20,7 +20,7 @@ class DownvotedEntriesController < ApplicationController
   def destroy
     user.remove_downvote(tile_entry)
     book = tile_entry.book_tile.book
-    book.find_or_create_metric_data.update_book_metrics('dowvnotes', :decrease)
+    book.find_or_create_metric_data.update_book_metrics('downvotes', :decrease)
     render json: { message: 'Downvote removed' }
   end
 
