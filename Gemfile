@@ -33,6 +33,7 @@ group :development, :production do
   gem 'activerecord-import'
   gem 'parallel'
   gem 'pry'
+  gem 'redis'
   gem 'smarter_csv'
 end
 

@@ -1,4 +1,5 @@
 class WeekTrendController < ApplicationController
+  before_action :redis
   skip_before_action :authenticate_request
 
   def index
@@ -7,15 +8,19 @@ class WeekTrendController < ApplicationController
 
   private
 
+  def redis
+    Redis.new
+  end
+
   def trending_book
-    BookFormat.json_authors_category(Book.includes(%i[authors category]).order(tiles_count_diff: :desc).first)
+    JSON.parse(redis.get('trending_book'))
   end
 
   def trending_user
-    User.order(tiles_count_diff: :desc).first.as_json(only: %i[username tiles_count_diff avatar_url])
+    JSON.parse(redis.get('trending_user'))
   end
 
   def trending_insight
-    TileEntryFormat.json_booktile_book_user(TileEntry.includes(book_tile: %i[user book]).order(upvotes_diff: :desc).first)
+    JSON.parse(redis.get('trending_insight'))
   end
 end
