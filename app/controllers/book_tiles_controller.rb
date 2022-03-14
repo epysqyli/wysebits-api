@@ -7,7 +7,7 @@ class BookTilesController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index index_no_pagy show]
 
   def index
-    pagy, user_book_tiles = pagy(BookTile.where(user_id: user.id).joins(:tile_entries)
+    pagy, user_book_tiles = pagy(BookTile.where(user_id: user.id)
       .includes({ book: %i[authors category] }, :tile_entries).order(updated_at: :desc))
 
     resp = BookTileFormat.json_entries_book_authors_category(user_book_tiles)
