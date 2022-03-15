@@ -8,7 +8,7 @@ class AuthenticationController < ApplicationController
       response.set_cookie(
         :jwt, {
           value: command.result[:token],
-          expires: 7.days.from_now,
+          expires: 30.days.from_now,
           path: '/',
           domain: ENV['cookie_domain'],
           httponly: true
