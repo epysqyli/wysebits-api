@@ -21,11 +21,10 @@ class UsersController < ApplicationController
   def show
     if user
       book_tiles = BookTile.where(user_id: user.id).preload(:tile_entries)
-      .includes({ book: %i[authors category] }).joins(:tile_entries).distinct.order(updated_at: :desc)
+                           .includes({ book: %i[authors category] })
+                           .joins(:tile_entries).distinct.order(updated_at: :desc)
 
-      book_tiles_resp = book_tiles.as_json(include: [{ tile_entries:
-        { include: { book_tile: { include: [:book, { user: { only: %i[id username] } }] } } } },
-                                                     { book: { include: %i[authors category] } }])
+      book_tiles_resp = BookTileFormat.json_entries_tiles_books_user_books(book_tiles)
 
       user_followers = user.followers.as_json(only: %i[username id])
       render json: { user: { username: user.username, id: user.id, avatar_url: user.avatar_url },

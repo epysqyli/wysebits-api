@@ -38,7 +38,7 @@ class WeekTrendJob < ApplicationJob
       user.save
     end
 
-    trending_user = User.order(tiles_count_diff: :desc).first.as_json(only: %i[username tiles_count_diff avatar_url])
+    trending_user = UserFormat.username_tiles_diff_avatar(User.order(tiles_count_diff: :desc).first)
     cache('trending_user', trending_user)
   end
 
