@@ -2,6 +2,7 @@ class SearchRequestsController < ApplicationController
   include Pagy::Backend
 
   before_action :search_params
+  before_action :category, only: :search_within_category
   skip_before_action :authenticate_request
 
   def search_books
@@ -15,9 +16,19 @@ class SearchRequestsController < ApplicationController
     render json: { results: authors, pagy: pagy_metadata(pagy) }
   end
 
+  def search_within_category
+    pagy, books = pagy(Book.where(category: category).search(search_params[:keywords]))
+    resp = BookFormat.json_authors_category(books.includes(:authors, :category))
+    render json: { results: resp, pagy: pagy_metadata(pagy) }
+  end
+
   private
 
   def search_params
     params.permit(:keywords, :page_num, search_request: %i[keywords page_num])
+  end
+
+  def category
+    Category.find(params[:category_id])
   end
 end
