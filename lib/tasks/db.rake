@@ -104,13 +104,8 @@ namespace :db do
 
   desc 'Assign authors to books'
   task assign_authors: :environment do
-    Book.all.in_batches(of: 30_000) do |batch|
-      Parallel.each(batch) do |book|
-        next if book.ol_author_key.nil?
-
-        author = Author.find_by_key(book.ol_author_key)
-        book.add_or_replace_author(author) unless author.nil?
-      end
-    end
+    command = 'INSERT INTO authors_books (author_id, book_id) SELECT authors.id, books.id FROM books INNER JOIN '\
+    'authors ON books.ol_author_key = authors.key;'
+    ActiveRecord::Base.connection.execute(command)
   end
 end
