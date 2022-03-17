@@ -29,6 +29,6 @@ class SearchRequestsController < ApplicationController
   end
 
   def category
-    Category.find(params[:category_id])
+    Category.find_by_slug(params[:category_slug])
   end
 end
