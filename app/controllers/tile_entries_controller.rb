@@ -1,7 +1,7 @@
 class TileEntriesController < ApplicationController
   include Pagy::Backend
 
-  before_action :book, onky: :book_index
+  before_action :book, only: :book_index
   before_action :book_tile, only: %i[create]
   before_action :tile_entry, only: %i[show update]
   before_action :user, only: %i[user_feed custom_feed index]
