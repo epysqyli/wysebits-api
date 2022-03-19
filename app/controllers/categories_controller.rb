@@ -12,7 +12,7 @@ class CategoriesController < ApplicationController
   def show
     pagy, books = category.slug == 'various' ? pagy(category.books) : pagy(category.books.order(tiles_count: :desc))
     resp = BookFormat.json_authors_category(books.includes(:authors, :category))
-    render json: { books: resp, pagy: pagy_metadata(pagy) }
+    render json: { results: resp, pagy: pagy_metadata(pagy) }
   end
 
   private
