@@ -3,6 +3,7 @@ class SearchRequestsController < ApplicationController
 
   before_action :search_params
   before_action :category, only: :search_within_category
+  before_action :user, only: :search_within_fav_books
   skip_before_action :authenticate_request
 
   def search_books
@@ -22,6 +23,13 @@ class SearchRequestsController < ApplicationController
     render json: { results: resp, pagy: pagy_metadata(pagy) }
   end
 
+  def search_within_fav_books
+    pagy, search_results = pagy(user.liked_books.search(search_params[:keywords]).includes(book: %i[authors category]))
+    books = FavBook.preload(:book).where(book: [search_results], user: user)
+    resp = BookFormat.json_book_authors_category(books)
+    render json: { results: resp, pagy: pagy_metadata(pagy) }
+  end
+
   private
 
   def search_params
@@ -30,5 +38,9 @@ class SearchRequestsController < ApplicationController
 
   def category
     Category.find_by_slug(params[:category_slug])
+  end
+
+  def user
+    User.find(params[:user_id])
   end
 end
