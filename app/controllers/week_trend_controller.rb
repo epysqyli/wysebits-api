@@ -9,7 +9,7 @@ class WeekTrendController < ApplicationController
   private
 
   def redis
-    Redis.new
+    @redis ||= Redis.new
   end
 
   def trending_book

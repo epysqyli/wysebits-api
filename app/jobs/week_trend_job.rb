@@ -10,7 +10,7 @@ class WeekTrendJob < ApplicationJob
   private
 
   def redis
-    Redis.new
+    @redis ||= Redis.new
   end
 
   def cache(key, value)
