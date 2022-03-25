@@ -3,6 +3,7 @@ class SearchRequestsController < ApplicationController
 
   before_action :search_params
   before_action :category, only: :search_within_category
+  before_action :author, only: :search_within_author
   before_action :user, only: %i[search_within_fav_books search_within_creator_books]
   skip_before_action :authenticate_request
 
@@ -19,6 +20,12 @@ class SearchRequestsController < ApplicationController
 
   def search_within_category
     pagy, books = pagy(Book.where(category: category).search(search_params[:keywords]))
+    resp = BookFormat.json_authors_category(books.includes(:authors, :category))
+    render json: { results: resp, pagy: pagy_metadata(pagy) }
+  end
+
+  def search_within_author
+    pagy, books = pagy(author.books.search(search_params[:keywords]))
     resp = BookFormat.json_authors_category(books.includes(:authors, :category))
     render json: { results: resp, pagy: pagy_metadata(pagy) }
   end
@@ -45,6 +52,10 @@ class SearchRequestsController < ApplicationController
 
   def search_params
     params.permit(:keywords, :page, :user_id, search_request: %i[keywords page])
+  end
+
+  def author
+    Author.find(params[:author_id])
   end
 
   def category
