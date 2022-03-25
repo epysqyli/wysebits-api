@@ -112,7 +112,7 @@ Rails.application.routes.draw do
   post '/search/:category_slug', to: 'search_requests#search_within_category'
   post '/search/:author_id/books', to: 'search_requests#search_within_author'
   post '/search/:user_id/fav_books', to: 'search_requests#search_within_fav_books'
-  post '/search/:user_id/creator_books', to: 'search_requests#search_within_creator_books'
+  post '/search/:user_id/book_tiles', to: 'search_requests#search_within_book_tiles'
 
   # weekly trend
   get '/weekly_trend', to: 'week_trend#index'

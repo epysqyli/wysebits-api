@@ -37,7 +37,7 @@ class SearchRequestsController < ApplicationController
     render json: { results: resp, pagy: pagy_metadata(pagy) }
   end
 
-  def search_within_creator_books
+  def search_within_book_tiles
     user_book_tiles = BookTile.preload(:tile_entries).where(user: user).joins(:tile_entries).distinct
     book_search_set = Book.where(id: user_book_tiles.map(&:book_id)).search(search_params[:keywords])
     book_tiles = BookTile.where(user: user, book: book_search_set.map(&:id)).preload(:tile_entries)
