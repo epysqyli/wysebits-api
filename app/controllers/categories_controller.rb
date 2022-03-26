@@ -5,12 +5,12 @@ class CategoriesController < ApplicationController
   skip_before_action :authenticate_request
 
   def index
-    @categories = Category.select(:name, :slug, :id)
+    @categories = Category.where.not(slug: 'various').select(:name, :slug, :id)
     render json: @categories
   end
 
   def show
-    pagy, books = category.slug == 'various' ? pagy(category.books) : pagy(category.books.order(tiles_count: :desc))
+    pagy, books = pagy(category.books.order(tiles_count: :desc))
     resp = BookFormat.json_authors_category(books.includes(:authors, :category))
     render json: { results: resp, pagy: pagy_metadata(pagy) }
   end
