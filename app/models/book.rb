@@ -27,7 +27,7 @@ class Book < ApplicationRecord
   has_one_attached :book_cover
 
   # model validations
-  validates :title, presence: true, uniqueness: true
+  validates :title, presence: true
 
   # model methods
   def add_subject(subject)

@@ -40,9 +40,7 @@ class BooksController < ApplicationController
   end
 
   def update
-    book.title = book_params[:title]
-    book.category_id = book_params[:category_id]
-    book.save
+    book.update!(title: book_params[:title], category_id: book_params[:category_id])
 
     if book_params[:author_id]
       author = Author.find(book_params[:author_id])
@@ -54,11 +52,9 @@ class BooksController < ApplicationController
       book.handle_attachment(book_params[:book_cover])
       book.cover_url = url_for(book.book_cover)
       book.save
-
-      render json: book.as_json(include: %i[authors category])
-    else
-      render json: { message: 'error' }
     end
+
+    render json: book.as_json(include: %i[authors category])
   end
 
   def destroy
