@@ -1,4 +1,6 @@
 class WeekTrendJob < ApplicationJob
+  include Redisable
+
   queue_as :default
 
   def perform
@@ -8,14 +10,6 @@ class WeekTrendJob < ApplicationJob
   end
 
   private
-
-  def redis
-    @redis ||= Redis.new
-  end
-
-  def cache(key, value)
-    redis.set(key, JSON.dump(value))
-  end
 
   def process_trending_book
     books = BookTile.includes(:book).map(&:book)

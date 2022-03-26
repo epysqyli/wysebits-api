@@ -1,4 +1,6 @@
 class WeekTrendController < ApplicationController
+  include Redisable
+
   before_action :redis
   skip_before_action :authenticate_request
 
@@ -7,10 +9,6 @@ class WeekTrendController < ApplicationController
   end
 
   private
-
-  def redis
-    @redis ||= Redis.new
-  end
 
   def trending_book
     JSON.parse(redis.get('trending_book'))
