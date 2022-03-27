@@ -8,6 +8,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'figaro'
 gem 'json'
 gem 'jwt', '~> 2.2', '>= 2.2.3'
+gem 'mini_magick', '~> 4.11'
 gem 'pagy', '~> 5.4'
 gem 'pg', '~> 1.1'
 gem 'pg_search', '~> 2.3', '>= 2.3.6'

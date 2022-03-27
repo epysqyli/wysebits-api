@@ -50,11 +50,10 @@ class BooksController < ApplicationController
 
     if book_params[:book_cover]
       book.handle_attachment(book_params[:book_cover])
-      book.cover_url = url_for(book.book_cover)
-      book.save
+      book.update(cover_url: url_for(book.book_cover))
     end
 
-    render json: book.as_json(include: %i[authors category])
+    render json: BookFormat.json_authors_category(book)
   end
 
   def destroy

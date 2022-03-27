@@ -1,0 +1,13 @@
+development:
+  :concurrency: 1
+production:
+  :concurrency: 1
+:queues:
+  - critical
+  - mailers
+  - default
+  - action_mailbox_routing
+  - action_mailbox_incineration
+  - active_storage_analysis
+  - active_storage_purge
+  - low
