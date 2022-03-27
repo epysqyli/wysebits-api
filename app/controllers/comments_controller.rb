@@ -5,9 +5,9 @@ class CommentsController < ApplicationController
 
   def index
     if @commentable.instance_of?(TileEntry)
-      render json: { data: @commentable.comments }
+      render json: CommentFormat.username_only(@commentable.comments.order(created_at: :desc))
     elsif @commentable.instance_of?(Comment)
-      render json: { data: @commentable.replies }
+      render json: @commentable.replies
     end
   end
 
@@ -16,17 +16,16 @@ class CommentsController < ApplicationController
   end
 
   def create
-    @comment = Comment.new(comment_params)
-    @current_user.comments << @comment
+    comment = Comment.new(comment_params)
 
     if params[:tile_entry_id]
-      @commentable.comments << @comment
+      @commentable.comments << comment
     elsif params[:comment_id]
-      @commentable.replies << @comment
+      @commentable.replies << comment
     end
 
-    if @comment.save
-      render json: { message: 'Comment posted', comment: @comment }
+    if comment.save
+      render json: comment
     else
       render json: { message: @comment.errors.messages }
     end
@@ -51,6 +50,6 @@ class CommentsController < ApplicationController
   end
 
   def comment_params
-    params.permit(:content)
+    params.permit(:content, :user_id)
   end
 end

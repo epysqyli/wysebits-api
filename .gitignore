@@ -36,3 +36,6 @@ config/secrets.yml
 
 # Ignore Redis dump
 dump.rdb
+
+# Ignore production puma config
+/config/puma
