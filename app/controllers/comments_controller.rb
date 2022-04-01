@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_action :find_commentable, only: :index
+  before_action :find_commentable, only: %i[index create]
   before_action :comment, only: %i[show]
   skip_before_action :authenticate_request, except: :create
 
@@ -16,18 +16,16 @@ class CommentsController < ApplicationController
   end
 
   def create
-    comment = Comment.new(comment_params.merge({ user_id: current_user.id }))
+    new_comment = Comment.new(comment_params.fetch(:comment))
 
     if params[:tile_entry_id]
-      @commentable.comments << comment
+      @commentable.comments << new_comment
+      render json: CommentFormat.username_only(new_comment)
     elsif params[:comment_id]
-      @commentable.replies << comment
-    end
-
-    if comment.save
-      render json: CommentFormat.username_only(comment)
+      @commentable.replies << new_comment
+      render json: CommentFormat.username_only(new_comment)
     else
-      render json: @comment.errors.messages
+      render json: new_comment.errors.messages
     end
   end
 
@@ -50,6 +48,7 @@ class CommentsController < ApplicationController
   end
 
   def comment_params
-    params.permit(:content, :commentable_id, :commentable_type)
+    params.permit(:content, :commentable_id, :commentable_type, :user_id, :tile_entry_id,
+                  comment: %i[commentable_id commentable_type content user_id])
   end
 end

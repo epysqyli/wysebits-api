@@ -84,9 +84,9 @@ Rails.application.routes.draw do
     resources :comments
   end
 
-  resources :comments, only: :nil do
-    resources :comments
-  end
+  # resources :comments, only: :nil do
+  #   resources :comments
+  # end
 
   # password routes
   post '/password/forgot', to: 'passwords#forgot'
