@@ -1,7 +1,7 @@
 class CommentsController < ApplicationController
-  skip_before_action :authenticate_request, only: %i[index show]
-  before_action :find_commentable, only: %i[index create]
+  before_action :find_commentable, only: :index
   before_action :comment, only: %i[show]
+  skip_before_action :authenticate_request, except: :create
 
   def index
     if @commentable.instance_of?(TileEntry)
@@ -25,9 +25,9 @@ class CommentsController < ApplicationController
     end
 
     if comment.save
-      render json: comment
+      render json: CommentFormat.username_only(comment)
     else
-      render json: { message: @comment.errors.messages }
+      render json: @comment.errors.messages
     end
   end
 
@@ -50,6 +50,6 @@ class CommentsController < ApplicationController
   end
 
   def comment_params
-    params.permit(:content, :user_id)
+    params.permit(:content, :commentable_id, :commentable_type)
   end
 end
