@@ -15,7 +15,11 @@ Rails.application.routes.draw do
     end
 
     resources :conversations, only: %i[index show create]
-    resources :tile_entries, only: :index
+    resources :tile_entries, only: :index do
+      collection do
+        get :commented_entries
+      end
+    end
 
     resources :following, only: %i[index create destroy] do
       get :nonpaginated, on: :collection
