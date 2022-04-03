@@ -4,8 +4,8 @@ class TileEntriesController < ApplicationController
   before_action :book, only: :book_index
   before_action :book_tile, only: %i[create]
   before_action :tile_entry, only: %i[show update]
-  before_action :user, only: %i[user_feed custom_feed index]
-  skip_before_action :authenticate_request, only: %i[index book_index show]
+  before_action :user, only: %i[index commented_entries]
+  skip_before_action :authenticate_request, only: %i[index book_index show commented_entries]
 
   def index
     pagy, user_entries = pagy(user.all_tile_entries.order(created_at: :desc))
@@ -47,6 +47,13 @@ class TileEntriesController < ApplicationController
   end
 
   def destroy; end
+
+  def commented_entries
+    entries_ids = Comment.where(user: user, commentable_type: 'TileEntry').distinct.pluck(:commentable_id)
+    pagy, entries = pagy(TileEntry.where(id: entries_ids).order(created_at: :desc))
+    resp = TileEntryFormat.json_booktile_book_user(entries)
+    render json: { entries: resp, pagy: pagy_metadata(pagy) }
+  end
 
   private
 
