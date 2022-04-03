@@ -11,11 +11,10 @@
         margin: 0;
         box-sizing: border-box;
         font-family: 'Roboto';
-        color: white;
       }
       
       body {
-        background-color: rgb(90, 117, 138);
+        padding: 5vh 0 10vh;
       }
       
         #logo {
@@ -43,19 +42,15 @@
       
         #activate-link {
           display: block;
-          border: 2px solid white;
+          border-bottom: 2px solid black;
           padding: 2vh 0;
-          border-radius: 10px;
           width: 60%;
           margin: 5vh auto 10vh;
           text-transform: uppercase;
           font-size: 1.25rem;
+          color: black;
         }
-      
-        #activate-link:hover {
-          background-color: rgb(80, 117, 138);
-        }
-      
+            
         a:link, a:visited, a:hover, a:active {
           text-decoration: none;
         }
@@ -79,7 +74,7 @@
     </style>
   </head>
   <body>
-    <img src="/gimp-logo.png" alt="Wysebits logo" id="logo">
+    <img src="/gimp-logo-black.png" alt="Wysebits logo" id="logo">
     <h1>Hi <%= @user.username %></h1>
     <div class="main-box">
       <p>You have asked to change your current email address for you account. No problem! Just go ahead and click on the button below. You will be redirected to a page with all the instructions to set a new email address. Just follow them and you'll be ok.</p>

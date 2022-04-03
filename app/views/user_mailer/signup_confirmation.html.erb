@@ -42,20 +42,15 @@
       
         #activate-link {
           display: block;
-          border: 2px solid white;
+          border-bottom: 2px solid black;
           padding: 2vh 0;
-          border-radius: 10px;
           width: 60%;
           margin: 5vh auto 10vh;
           text-transform: uppercase;
           font-size: 1.25rem;
+          color: black;
         }
-      
-        #activate-link:hover {
-          background-color: rgb(80, 117, 138);
-          color: white;
-        }
-      
+            
         a:link, a:visited, a:hover, a:active {
           text-decoration: none;
         }
@@ -79,7 +74,7 @@
     </style>
   </head>
   <body>
-    <img src="/gimp-logo.png" alt="Wysebits logo" id="logo">
+    <img src="/gimp-logo-black.png" alt="Wysebits logo" id="logo">
     <h1>Welcome to Wysebits, <%= @user.username %></h1>
     <div class="main-box">
       <a id="activate-link" href="http://localhost:3000/registrations/confirm/<%= @user.confirmation_token %>">
