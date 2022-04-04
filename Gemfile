@@ -17,7 +17,7 @@ gem 'rack-cors'
 gem 'rails', '~> 6.1.4', '>= 6.1.4.1'
 gem 'sidekiq', '~> 6.4', '>= 6.4.1'
 gem 'simple_command', '~> 0.1.0'
-gem 'whenever', '~> 1.0'
+gem 'whenever', '~> 1.0', require: false
 
 group :development, :test do
   gem 'better_errors', '~> 2.9', '>= 2.9.1'
