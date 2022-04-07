@@ -12,7 +12,7 @@ class WeekTrendJob < ApplicationJob
   private
 
   def process_trending_book
-    books = BookTile.includes(:book).map(&:book)
+    books = Book.distinct.where(id: BookTile.pluck(:book_id))
     books.each do |book|
       book.tiles_count_diff = book.tiles_count - book.previous_tiles_count
       book.save
@@ -26,7 +26,7 @@ class WeekTrendJob < ApplicationJob
   end
 
   def process_trending_user
-    users = BookTile.includes(:user).map(&:user)
+    users = User.distinct.where(id: BookTile.pluck(:user_id))
     users.each do |user|
       user.tiles_count_diff = user.tiles_count - user.previous_tiles_count
       user.save
