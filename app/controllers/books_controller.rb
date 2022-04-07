@@ -6,12 +6,12 @@ class BooksController < ApplicationController
 
   def tile_entries
     pagy, entries = pagy(book.all_tile_entries.order(net_votes: :desc).includes(:book_tile))
-    resp = BookFormat.json_tiles_user(entries)
+    resp = BookFormat.tiles_user(entries)
     render json: { entries: resp, pagy: pagy_metadata(pagy) }
   end
 
   def show
-    render json: BookFormat.json_authors_category(book)
+    render json: BookFormat.authors_category(book)
   end
 
   def create
@@ -53,7 +53,7 @@ class BooksController < ApplicationController
       book.update(cover_url: url_for(book.book_cover))
     end
 
-    render json: BookFormat.json_authors_category(book)
+    render json: BookFormat.authors_category(book)
   end
 
   def destroy
@@ -68,7 +68,7 @@ class BooksController < ApplicationController
 
   def recommendations
     category = Category.find book.category_id
-    recommendations = BookFormat.json_authors_category(category.recommendations(book))
+    recommendations = BookFormat.authors_category(category.recommendations(book))
     render json: recommendations
   end
 

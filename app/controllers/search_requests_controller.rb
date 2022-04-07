@@ -9,7 +9,7 @@ class SearchRequestsController < ApplicationController
 
   def search_books
     pagy, books = pagy(Book.search(search_params[:keywords]).with_pg_search_highlight)
-    resp = BookFormat.json_authors_category(books.includes(:authors, :category))
+    resp = BookFormat.authors_category(books.includes(:authors, :category))
     render json: { results: resp, pagy: pagy_metadata(pagy) }
   end
 
@@ -20,20 +20,20 @@ class SearchRequestsController < ApplicationController
 
   def search_within_category
     pagy, books = pagy(Book.where(category: category).search(search_params[:keywords]))
-    resp = BookFormat.json_authors_category(books.includes(:authors, :category))
+    resp = BookFormat.authors_category(books.includes(:authors, :category))
     render json: { results: resp, pagy: pagy_metadata(pagy) }
   end
 
   def search_within_author
     pagy, books = pagy(author.books.search(search_params[:keywords]))
-    resp = BookFormat.json_authors_category(books.includes(:authors, :category))
+    resp = BookFormat.authors_category(books.includes(:authors, :category))
     render json: { results: resp, pagy: pagy_metadata(pagy) }
   end
 
   def search_within_fav_books
     pagy, search_results = pagy(user.liked_books.search(search_params[:keywords]).includes(book: %i[authors category]))
     books = FavBook.preload(:book).where(book: [search_results], user: user)
-    resp = BookFormat.json_book_authors_category(books)
+    resp = BookFormat.book_authors_category(books)
     render json: { results: resp, pagy: pagy_metadata(pagy) }
   end
 
@@ -44,7 +44,7 @@ class SearchRequestsController < ApplicationController
                          .includes({ book: %i[authors category] }).joins(:tile_entries).distinct
 
     pagy, paged_book_tiles = pagy(book_tiles)
-    resp = BookTileFormat.json_entries_book_authors_category(paged_book_tiles)
+    resp = BookTileFormat.entries_book_authors_category(paged_book_tiles)
     render json: { tiles: resp, pagy: pagy_metadata(pagy) }
   end
 

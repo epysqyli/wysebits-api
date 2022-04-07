@@ -9,13 +9,13 @@ class TileEntriesController < ApplicationController
 
   def index
     pagy, user_entries = pagy(user.all_tile_entries.order(created_at: :desc))
-    resp = TileEntryFormat.json_booktile_book_user(user_entries)
+    resp = TileEntryFormat.booktile_book_user(user_entries)
     render json: { entries: resp, pagy: pagy_metadata(pagy) }
   end
 
   def book_index
     user_book_entries = user.all_book_insights(book).order(upvotes: :desc)
-    resp = TileEntryFormat.json_booktile_book_user(user_book_entries)
+    resp = TileEntryFormat.booktile_book_user(user_book_entries)
     render json: resp
   end
 
@@ -51,7 +51,7 @@ class TileEntriesController < ApplicationController
   def commented_entries
     entries_ids = Comment.where(user: user, commentable_type: 'TileEntry').distinct.pluck(:commentable_id)
     pagy, entries = pagy(TileEntry.where(id: entries_ids).order(created_at: :desc))
-    resp = TileEntryFormat.json_booktile_book_user(entries)
+    resp = TileEntryFormat.booktile_book_user(entries)
     render json: { entries: resp, pagy: pagy_metadata(pagy) }
   end
 

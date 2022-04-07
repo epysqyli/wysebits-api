@@ -24,7 +24,7 @@ class UsersController < ApplicationController
                            .includes({ book: %i[authors category] })
                            .joins(:tile_entries).distinct.order(updated_at: :desc)
 
-      book_tiles_resp = BookTileFormat.json_entries_tiles_books_user_books(book_tiles)
+      book_tiles_resp = BookTileFormat.entries_tiles_books_user_books(book_tiles)
 
       user_followers = user.followers.as_json(only: %i[username id])
       render json: { user: { username: user.username, id: user.id, avatar_url: user.avatar_url },

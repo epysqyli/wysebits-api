@@ -6,7 +6,7 @@ class AuthorsController < ApplicationController
 
   def show
     pagy, author_books = pagy(author.books.left_joins(:book_tiles).group(:id).order('COUNT(book_tiles.id) DESC'))
-    resp = AuthorFormat.json_authors_category(author_books.includes(:authors, :category))
+    resp = AuthorFormat.authors_category(author_books.includes(:authors, :category))
     render json: { books: resp, pagy: pagy_metadata(pagy) }
   end
 

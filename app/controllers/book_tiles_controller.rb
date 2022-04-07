@@ -10,12 +10,12 @@ class BookTilesController < ApplicationController
     pagy, user_book_tiles = pagy(BookTile.where(user_id: user.id).preload(:tile_entries)
       .includes({ book: %i[authors category] }).joins(:tile_entries).distinct.order(updated_at: :desc))
 
-    resp = BookTileFormat.json_entries_book_authors_category(user_book_tiles)
+    resp = BookTileFormat.entries_book_authors_category(user_book_tiles)
     render json: { tiles: resp, pagy: pagy_metadata(pagy) }
   end
 
   def nonpaginated
-    user_book_tiles = BookTileFormat.json_entries(user.book_tiles)
+    user_book_tiles = BookTileFormat.entries(user.book_tiles)
     render json: { tiles: user_book_tiles }
   end
 
@@ -24,12 +24,12 @@ class BookTilesController < ApplicationController
                               .includes({ book: %i[authors category] }, :tile_entries)
 
     pagy, temp_book_tiles = pagy(temp_book_tiles.order(created_at: :desc))
-    resp = BookTileFormat.json_entries_book_authors_category(temp_book_tiles)
+    resp = BookTileFormat.entries_book_authors_category(temp_book_tiles)
     render json: { tiles: resp, pagy: pagy_metadata(pagy) }
   end
 
   def show
-    render json: BookTileFormat.json_entries_book_authors_category_temp(book_tile)
+    render json: BookTileFormat.entries_book_authors_category_temp(book_tile)
   end
 
   def create

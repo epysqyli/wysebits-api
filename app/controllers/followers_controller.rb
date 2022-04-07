@@ -6,7 +6,7 @@ class FollowersController < ApplicationController
     pagy, user_followers = pagy(user.passive_relationships.order(created_at: :desc)
     .includes({ follower: [{ book_tiles: :tile_entries }] }))
 
-    resp = FollowFormat.json_follow_booktile_entries_follower(user_followers)
+    resp = FollowFormat.follow_booktile_entries_follower(user_followers)
     render json: { followers: resp, pagy: pagy_metadata(pagy) }
   end
 

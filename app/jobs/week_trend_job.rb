@@ -18,7 +18,7 @@ class WeekTrendJob < ApplicationJob
       book.save
     end
 
-    trending_book = BookFormat.json_authors_category(
+    trending_book = BookFormat.authors_category(
       Book.includes(%i[authors category]).order(tiles_count_diff: :desc).first
     )
 
@@ -42,7 +42,7 @@ class WeekTrendJob < ApplicationJob
       insight.save
     end
 
-    trending_insight = TileEntryFormat.json_booktile_book_user(
+    trending_insight = TileEntryFormat.booktile_book_user(
       TileEntry.includes(book_tile: %i[user book]).order(upvotes_diff: :desc).first
     )
 
