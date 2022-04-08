@@ -20,7 +20,7 @@ class BookTilesController < ApplicationController
   end
 
   def temporary
-    temp_book_tiles = BookTile.where(user_id: user.id).joins(:temporary_entries)
+    temp_book_tiles = BookTile.distinct.where(user_id: user.id).joins(:temporary_entries)
                               .includes({ book: %i[authors category] }, :tile_entries)
 
     pagy, temp_book_tiles = pagy(temp_book_tiles.order(created_at: :desc))
