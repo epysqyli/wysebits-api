@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     resources :book_tiles do
       get :nonpaginated, on: :collection
       get :temporary, on: :collection
+      delete :destroy_temporary, on: :member
     end
 
     resources :conversations, only: %i[index show create]

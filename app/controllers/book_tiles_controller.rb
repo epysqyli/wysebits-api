@@ -60,6 +60,12 @@ class BookTilesController < ApplicationController
     end
   end
 
+  def destroy_temporary
+    book_tile = BookTile.where(user_id: params[:user_id], book_id: params[:id]).first
+    book_tile.temporary_entries.each(:destroy)
+    render json: book_tile.temporary_entries
+  end
+
   def available
     book_tile = BookTile.where(user_id: user.id).where(book_id: book.id).first
 
