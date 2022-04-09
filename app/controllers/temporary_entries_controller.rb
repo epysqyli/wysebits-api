@@ -37,6 +37,6 @@ class TemporaryEntriesController < ApplicationController
   end
 
   def temp_entry_params
-    params.permit(:content)
+    params.permit(:content, :book_tile_id, :temporary_entry)
   end
 end

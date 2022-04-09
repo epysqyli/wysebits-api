@@ -33,23 +33,19 @@ class BookTilesController < ApplicationController
   end
 
   def create
-    existing_book_tile = user.book_tiles.find { |bt| bt.book_id == book_tile_params[:book_id] }
+    existing_book_tile = BookTile.where(user_id: user.id, book_id: book_tile_params[:book_id]).first
 
-    if existing_book_tile
+    if existing_book_tile.present?
       render json: existing_book_tile
     else
-      @book_tile = BookTile.new({ book_id: book_tile_params[:book_id], user_id: params[:user_id] })
+      book_tile = BookTile.new({ book_id: book_tile_params[:book_id], user_id: params[:user_id] })
 
-      if @book_tile.save
-        user.book_tiles << @book_tile
-        book.book_tiles << @book_tile
-
-        # handle metric_data creation if not present
+      if book_tile.save
         book.find_or_create_metric_data
 
-        render json: @book_tile
+        render json: book_tile
       else
-        render json: { message: @book_tile.errors.messages }
+        render json: { message: book_tile.errors.messages }
       end
     end
   end
