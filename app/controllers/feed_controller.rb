@@ -23,7 +23,7 @@ class FeedController < ApplicationController
   def categories_feed
     fav_categories = user.fav_categories.map(&:id)
     entries = TileEntry.where(book_tile_id: BookTile.where(book_id: Book.where(category_id: fav_categories)))
-                       .includes({ book_tile: [{ book: %i[authors category] }, :user] })
+                       .other_user_entries(user).includes({ book_tile: [{ book: %i[authors category] }, :user] })
 
     pagy, entries = pagy(entries.order(updated_at: :desc))
 
