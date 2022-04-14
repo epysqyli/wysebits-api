@@ -10,8 +10,7 @@ class Category < ApplicationRecord
   def recommendations(book)
     return [] if book.category.slug == 'various'
 
-    res = books.includes(:authors, :category,
-                         :metric_data).limit(5).order(updated_at: :desc).sort_by(&:score).reverse
-    res.reject { |b| b.id == book.id }
+    books.includes(:authors, :category, :metric_data).where.not(id: book.id)
+         .order(updated_at: :desc).limit(4).sort_by(&:score).reverse
   end
 end
