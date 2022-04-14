@@ -1,5 +1,8 @@
 class BookTile < ApplicationRecord
-  after_commit %i[update_tiles_count_on_book update_tiles_count_on_user], on: :update
+  after_commit :update_tiles_count_on_book
+  after_commit :update_tiles_count_on_user
+  after_destroy :update_tiles_count_on_book
+  after_destroy :update_tiles_count_on_user
 
   belongs_to :user
   belongs_to :book
@@ -9,10 +12,12 @@ class BookTile < ApplicationRecord
   private
 
   def update_tiles_count_on_book
-    book.tiles_count = where(book: book).count
+    book.tiles_count = BookTile.where(book: book).count
+    book.save
   end
 
   def update_tiles_count_on_user
-    user.tiles_count = where(user: user).count
+    user.tiles_count = BookTile.where(user: user).count
+    user.save
   end
 end
