@@ -1,4 +1,5 @@
 class BooksController < ApplicationController
+  include Redisable
   include Pagy::Backend
 
   before_action :book, except: :create
@@ -68,7 +69,7 @@ class BooksController < ApplicationController
 
   def recommendations
     category = Category.find book.category_id
-    recommendations = BookFormat.authors_category(category.recommendations(book))
+    recommendations = JSON.parse(redis.get("#{category.slug}_recommendations")).reject { |b| b['id'] == book.id }
     render json: recommendations
   end
 

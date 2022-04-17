@@ -1,13 +1,7 @@
 namespace :db do
   desc 'Create default categories'
   task create_categories: :environment do
-    categories = ['History', 'Philosophy', 'Religion and Spirituality', 'Science', 'Politics',
-                  'Social Sciences', 'Essay', 'Self-Help', 'Business',
-                  'Economics and Finance', 'Health and Wellness', 'Crafts and Hobbies', 'Academic Texts',
-                  'Language Books', 'Arts Books', 'Memoirs and Biographies',
-                  'Journalism', 'Guides and How To Manuals', 'Technology', 'Various']
-
-    categories.each { |cat| Category.create! name: cat, slug: cat.downcase.gsub(/ /, '-') }
+    Category::CATEGORIES.each { |cat| Category.create! name: cat, slug: cat.downcase.gsub(/ /, '-') }
   end
 
   desc 'Import books in bulk from openlibrary csv - not working after tsvector migration'
