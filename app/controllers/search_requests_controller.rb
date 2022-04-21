@@ -20,7 +20,8 @@ class SearchRequestsController < ApplicationController
 
   def search_books_authors
     results = Book.search(book_author_search_params[:book_keywords])
-                  .where(id: Author.search(book_author_search_params[:author_keywords]).flat_map(&:book_ids))
+                  .where(id: Author.search(book_author_search_params[:author_keywords])
+                  .flat_map(&:book_ids)).with_pg_search_highlight
     pagy, books = pagy(results)
     resp = BookFormat.authors_category(books.includes(:authors, :category))
     render json: { results: resp, pagy: pagy_metadata(pagy) }
