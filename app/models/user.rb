@@ -32,7 +32,7 @@ class User < ApplicationRecord
   has_many :passive_relationships, class_name: 'Relationship', foreign_key: 'followed_id', dependent: :destroy
   has_many :followers, through: :passive_relationships
 
-  has_many :conversations
+  has_many :conversations, dependent: :destroy
   has_many :messages
 
   # validations
