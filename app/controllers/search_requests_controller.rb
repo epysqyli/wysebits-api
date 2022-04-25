@@ -8,18 +8,18 @@ class SearchRequestsController < ApplicationController
   skip_before_action :authenticate_request
 
   def search_books
-    pagy, books = pagy(Book.search(search_params[:keywords]).limit(200).with_pg_search_highlight)
+    pagy, books = pagy(Book.search(search_params[:keywords]).with_pg_search_highlight)
     resp = BookFormat.authors_category(books.includes(:authors, :category))
     render json: { results: resp, pagy: pagy_metadata(pagy) }
   end
 
   def search_authors
-    pagy, authors = pagy(Author.search(search_params[:keywords]).limit(200))
+    pagy, authors = pagy(Author.search(search_params[:keywords]))
     render json: { results: authors, pagy: pagy_metadata(pagy) }
   end
 
   def search_books_authors
-    results = Book.search(book_author_search_params[:book_keywords]).limit(200)
+    results = Book.search(book_author_search_params[:book_keywords])
                   .where(id: Author.search(book_author_search_params[:author_keywords])
                   .flat_map(&:book_ids)).with_pg_search_highlight
     pagy, books = pagy(results)
