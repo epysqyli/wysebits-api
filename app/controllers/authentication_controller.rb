@@ -8,7 +8,7 @@ class AuthenticationController < ApplicationController
       response.set_cookie(
         :jwt, {
           value: command.result[:token],
-          expires: 30.days.from_now,
+          expires: 7.days.from_now,
           path: '/',
           domain: ENV['cookie_domain'],
           httponly: true
@@ -23,6 +23,16 @@ class AuthenticationController < ApplicationController
 
   def logged_in
     if current_user
+      response.set_cookie(
+        :jwt, {
+          value: request.cookies['jwt'],
+          expires: 7.days.from_now,
+          path: '/',
+          domain: ENV['cookie_domain'],
+          httponly: true
+        }
+      )
+
       render json: { logged_in: true,
                      user: {
                        username: current_user.username,
@@ -38,16 +48,7 @@ class AuthenticationController < ApplicationController
   def logout
     return unless current_user
 
-    response.set_cookie(
-      :jwt, {
-        value: nil,
-        expires: Time.now,
-        path: '/',
-        domain: ENV['cookie_domain'],
-        httponly: true
-      }
-    )
-
+    response.delete_cookie(:jwt)
     render json: { message: 'User logged out', status: 'success' }
   end
 end
