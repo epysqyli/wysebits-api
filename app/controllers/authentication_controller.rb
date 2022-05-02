@@ -42,7 +42,7 @@ class AuthenticationController < ApplicationController
                      } }
     else
       response.delete_cookie(:jwt)
-      render json: { message: 'No user is logged in' }
+      render json: { logged_in: false }
     end
   end
 
