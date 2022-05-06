@@ -15,6 +15,7 @@ class WeekTrendJob < ApplicationJob
     books = Book.distinct.where(id: BookTile.pluck(:book_id))
     books.each do |book|
       book.tiles_count_diff = book.tiles_count - book.previous_tiles_count
+      book.previous_tiles_count = book.tiles_count
       book.save
     end
 
@@ -23,22 +24,35 @@ class WeekTrendJob < ApplicationJob
     )
 
     cache('trending_book', trending_book)
+
+    books.each do |book|
+      book.tiles_count_diff = 0
+      book.save
+    end
   end
 
   def process_trending_user
     users = User.distinct.where(id: BookTile.pluck(:user_id))
     users.each do |user|
       user.tiles_count_diff = user.tiles_count - user.previous_tiles_count
+      user.previous_tiles_count = user.tiles_count
       user.save
     end
 
     trending_user = UserFormat.username_tiles_diff_avatar(User.order(tiles_count_diff: :desc).first)
     cache('trending_user', trending_user)
+
+    # after the result is cached, tiles_count_diff is set to 0, ready for next week
+    users.each do |user|
+      user.tiles_count_diff = 0
+      user.save
+    end
   end
 
   def process_trending_insight
     TileEntry.all.each do |insight|
       insight.upvotes_diff = insight.upvotes - insight.previous_upvotes
+      insight.previous_upvotes = insight.upvotes
       insight.save
     end
 
@@ -47,5 +61,10 @@ class WeekTrendJob < ApplicationJob
     )
 
     cache('trending_insight', trending_insight)
+
+    TileEntry.all.each do |insight|
+      insight.upvotes_diff = 0
+      insight.save
+    end
   end
 end
