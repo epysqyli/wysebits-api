@@ -23,12 +23,9 @@ class AuthorizeApiRequest
   end
 
   def http_auth_cookie
-    if @cookies['jwt'].present?
-      return @cookies['jwt']
-    else
-      errors.add(:token, 'Missing token')
-    end
+    return @cookies['jwt'] if @cookies['jwt'].present?
 
+    errors.add(:token, 'Missing token')
     nil
   end
 end

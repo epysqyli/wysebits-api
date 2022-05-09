@@ -23,16 +23,6 @@ class AuthenticationController < ApplicationController
 
   def logged_in
     if current_user
-      response.set_cookie(
-        :jwt, {
-          value: request.cookies['jwt'],
-          expires: 7.days.from_now,
-          path: '/',
-          domain: ENV['cookie_domain'],
-          httponly: true
-        }
-      )
-
       render json: { logged_in: true,
                      user: {
                        username: current_user.username,
@@ -41,17 +31,7 @@ class AuthenticationController < ApplicationController
                        avatar: current_user.avatar_url
                      } }
     else
-      response.set_cookie(
-        :jwt, {
-          value: nil,
-          expires: Time.now,
-          path: '/',
-          domain: ENV['cookie_domain'],
-          httponly: true
-        }
-      )
-
-      render json: { logged_in: false }
+      logout
     end
   end
 
@@ -68,6 +48,10 @@ class AuthenticationController < ApplicationController
       }
     )
 
-    render json: { message: 'User logged out', status: 'success' }
+    render json: {
+      logged_in: false,
+      message: 'User logged out',
+      status: 'success'
+    }
   end
 end
