@@ -27,6 +27,7 @@ end
 
 group :development do
   gem 'listen', '~> 3.3'
+  gem 'rubocop', require: false
   gem 'spring'
 end
 

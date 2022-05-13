@@ -3,22 +3,18 @@ class AuthenticationController < ApplicationController
 
   def authenticate
     command = AuthenticateUser.call(params[:email_address], params[:password])
+    return render json: { error: command.errors }, status: :unauthorized unless command.success?
 
-    if command.success?
-      response.set_cookie(
-        :jwt, {
-          value: command.result[:token],
-          expires: 7.days.from_now,
-          path: '/',
-          domain: ENV['cookie_domain'],
-          httponly: true
-        }
-      )
-
-      render json: { user: command.result[:user] }
-    else
-      render json: { error: command.errors }, status: :unauthorized
-    end
+    response.set_cookie(
+      :jwt, {
+        value: command.result[:token],
+        expires: 7.days.from_now,
+        path: '/',
+        domain: ENV['cookie_domain'],
+        httponly: true
+      }
+    )
+    render json: { user: command.result[:user] }
   end
 
   def logged_in
