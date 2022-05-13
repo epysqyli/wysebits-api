@@ -9,8 +9,12 @@ class AuthenticateUser
   def call
     return unless user
 
-    { token: JsonWebToken.encode(user_id: user.id),
-      user: { username: user.username, email_address: user.email_address } }
+    {
+      token: JsonWebToken.encode(user_id: user.id),
+      user: {
+        username: user.username, email_address: user.email_address
+      }
+    }
   end
 
   private
