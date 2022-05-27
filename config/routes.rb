@@ -113,6 +113,7 @@ Rails.application.routes.draw do
 
   # search actions
   post '/search/books', to: 'search_requests#search_books'
+  post '/search/books_from_authors', to: 'search_requests#search_books_from_authors'
   post '/search/authors', to: 'search_requests#search_authors'
   post '/search/books_authors', to: 'search_requests#search_books_authors'
   post '/search/:category_slug', to: 'search_requests#search_within_category'

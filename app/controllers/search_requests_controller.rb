@@ -1,7 +1,6 @@
 class SearchRequestsController < ApplicationController
   include Pagy::Backend
 
-  before_action :search_params
   before_action :category, only: :search_within_category
   before_action :author, only: :search_within_author
   before_action :user, only: %i[search_within_fav_books search_within_creator_books]
@@ -13,10 +12,15 @@ class SearchRequestsController < ApplicationController
     render json: { results: resp, pagy: pagy_metadata(pagy) }
   end
 
-  def search_authors
+  def search_books_from_authors
     pagy, books = pagy(Book.where(id: Author.search(search_params[:keywords]).flat_map(&:book_ids)))
     resp = BookFormat.authors_category(books.includes(:authors, :category))
     render json: { results: resp, pagy: pagy_metadata(pagy) }
+  end
+
+  def search_authors
+    authors = Author.search(search_authors_params[:author_full_name])
+    render json: { results: authors }
   end
 
   def search_books_authors
@@ -62,6 +66,10 @@ class SearchRequestsController < ApplicationController
 
   def search_params
     params.permit(:keywords, :page, :user_id, search_request: %i[keywords page])
+  end
+
+  def search_authors_params
+    params.permit(:author_full_name)
   end
 
   def book_author_search_params
