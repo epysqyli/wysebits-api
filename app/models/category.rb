@@ -22,7 +22,7 @@ class Category < ApplicationRecord
                 'Crafts and Hobbies',
                 'Academic Texts',
                 'Language Books',
-                'Arts Books',
+                'Art Music Culture',
                 'Biographies',
                 'Journalism',
                 'Guides and How To Manuals',
