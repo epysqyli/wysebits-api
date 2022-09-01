@@ -9,10 +9,12 @@ class BookTile < ApplicationRecord
   has_many :tile_entries, dependent: :destroy
   has_many :temporary_entries, dependent: :destroy
 
+  NUMBER_OF_TILE_ENTRIES = 3
+
   private
 
   def update_tiles_count_on_book
-    book.tiles_count = BookTile.where(book: book).count
+    book.tiles_count = book.tiles_number
     book.save
   end
 

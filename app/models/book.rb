@@ -74,4 +74,8 @@ class Book < ApplicationRecord
     find_or_create_metric_data unless metric_data
     metric_data.score
   end
+
+  def tiles_number
+    TileEntry.where(book_tile: BookTile.where(book: self)).count / BookTile::NUMBER_OF_TILE_ENTRIES
+  end
 end

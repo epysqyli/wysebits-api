@@ -210,6 +210,10 @@ class User < ApplicationRecord
     mark_as_confirmed!
   end
 
+  def tiles_number
+    TileEntry.where(book_tile: BookTile.where(user: self)).count / BookTile::NUMBER_OF_TILE_ENTRIES
+  end
+
   private
 
   def generate_token

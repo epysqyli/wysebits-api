@@ -19,9 +19,17 @@ class WeekTrendJob < ApplicationJob
       book.save
     end
 
-    trending_book = BookFormat.authors_category(
-      Book.includes(%i[authors category]).order(tiles_count_diff: :desc).first
-    )
+    candidate_trending_book = Book.order(tiles_count_diff: :desc).first
+
+    trending_book = if !candidate_trending_book.tiles_count_diff.zero?
+                      BookFormat.authors_category(
+                        Book.includes(%i[authors category]).order(tiles_count_diff: :desc).first
+                      )
+                    else
+                      BookFormat.authors_category(
+                        Book.includes(%i[authors category]).order(tiles_count: :desc).first
+                      )
+                    end
 
     cache('trending_book', trending_book)
 
@@ -39,10 +47,16 @@ class WeekTrendJob < ApplicationJob
       user.save
     end
 
-    trending_user = UserFormat.username_tiles_diff_avatar(User.order(tiles_count_diff: :desc).first)
+    candidate_trending_user = User.order(tiles_count_diff: :desc).first
+
+    trending_user = if !candidate_trending_user.tiles_count_diff.zero?
+                      UserFormat.username_tiles_diff_avatar(candidate_trending_user)
+                    else
+                      UserFormat.username_tiles_diff_avatar(User.order(tiles_count: :desc).first)
+                    end
+
     cache('trending_user', trending_user)
 
-    # after the result is cached, tiles_count_diff is set to 0, ready for next week
     users.each do |user|
       user.tiles_count_diff = 0
       user.save
@@ -56,9 +70,17 @@ class WeekTrendJob < ApplicationJob
       insight.save
     end
 
-    trending_insight = TileEntryFormat.booktile_book_user(
-      TileEntry.includes(book_tile: %i[user book]).order(upvotes_diff: :desc).first
-    )
+    candidate_insight = TileEntry.order(upvotes_diff: :desc).first
+
+    trending_insight = if !candidate_insight.upvotes_diff.zero?
+                         TileEntryFormat.booktile_book_user(
+                           TileEntry.includes(book_tile: %i[user book]).order(upvotes_diff: :desc).first
+                         )
+                       else
+                         TileEntryFormat.booktile_book_user(
+                           TileEntry.includes(book_tile: %i[user book]).order(net_votes: :desc).first
+                         )
+                       end
 
     cache('trending_insight', trending_insight)
 
