@@ -61,10 +61,8 @@ namespace :db do
   desc 'Import books from openlibrary csv'
   task :import_books, [:ol_dump] => :environment do |_t, args|
     col_sep = args[:ol_dump].include?('recent') ? ',' : "\t"
-    headers = %w[type key revision last_modified json]
     various_category = Category.find_by_slug 'various'
-    CSV.foreach(args[:ol_dump], col_sep: col_sep, headers: false,
-                                user_provided_headers: headers, liberal_parsing: true) do |row|
+    CSV.foreach(args[:ol_dump], col_sep: col_sep, headers: true, liberal_parsing: true) do |row|
       next if row.nil?
 
       work = JSON.parse(row['json'])
@@ -86,9 +84,7 @@ namespace :db do
   desc 'Import authors from openlibrary csv'
   task :import_authors, [:ol_dump] => :environment do |_t, args|
     col_sep = args[:ol_dump].include?('recent') ? ',' : "\t"
-    headers = %w[type key revision last_modified json]
-    CSV.foreach(args[:ol_dump], col_sep: col_sep, headers: false,
-                                user_provided_headers: headers, liberal_parsing: true) do |row|
+    CSV.foreach(args[:ol_dump], col_sep: col_sep, headers: true, liberal_parsing: true) do |row|
       next if row.nil?
 
       person = JSON.parse(row['json'])
