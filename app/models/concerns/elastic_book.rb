@@ -6,6 +6,14 @@ module ElasticBook
     include Elasticsearch::Model
     include Elasticsearch::Model::Callbacks
 
+    after_commit on: %i[create update] do
+      __elasticsearch__.index_document
+    end
+
+    after_commit on: :destroy do
+      __elasticsearch__.delete_document
+    end
+
     def elastic_tile_entries
       all_tile_entries.select(:id, :content, :upvotes, :downvotes, :net_votes, :created_at, :updated_at)
     end
@@ -34,17 +42,9 @@ module ElasticBook
     end
 
     def self.import
-      where.not(category_id: 25).includes(:category, :authors).find_in_batches do |books|
+      includes(:category, :authors).find_in_batches do |books|
         bulk_index(books)
       end
-    end
-
-    after_commit on: %i[create update] do
-      __elasticsearch__.index_document
-    end
-
-    after_commit on: :destroy do
-      __elasticsearch__.delete_document
     end
 
     mapping dynamic: false do
@@ -52,6 +52,10 @@ module ElasticBook
       indexes :category, type: :object do
         indexes :id, type: :long
         indexes :name, type: :keyword
+      end
+      indexes :authors, type: :object do
+        indexes :id, type: :long
+        indexes :full_name, type: :text
       end
     end
 
