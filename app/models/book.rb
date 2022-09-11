@@ -1,19 +1,4 @@
 class Book < ApplicationRecord
-  include PgSearch::Model
-  pg_search_scope :search,
-                  against: :title,
-                  using: { tsearch:
-                    { dictionary: 'english',
-                      tsvector_column: 'searchable',
-                      normalization: 2,
-                      highlight: {
-                        StartSel: '<u>',
-                        StopSel: '</u>',
-                        HighlightAll: true,
-                        MinWords: 1,
-                        MaxWords: 5
-                      } } }
-
   # model associations
   belongs_to :category
   has_many :book_tiles
