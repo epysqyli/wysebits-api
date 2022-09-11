@@ -43,10 +43,6 @@ class Book < ApplicationRecord
     TileEntry.where(book_tile_id: BookTile.where(book_id: id))
   end
 
-  def elastic_tile_entries
-    all_tile_entries.select(:id, :content, :upvotes, :downvotes, :net_votes, :created_at, :updated_at)
-  end
-
   def find_or_create_metric_data
     unless metric_data
       new_metric_data = MetricData.new(

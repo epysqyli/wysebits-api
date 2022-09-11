@@ -6,6 +6,10 @@ module ElasticBook
     include Elasticsearch::Model
     include Elasticsearch::Model::Callbacks
 
+    def elastic_tile_entries
+      all_tile_entries.select(:id, :content, :upvotes, :downvotes, :net_votes, :created_at, :updated_at)
+    end
+
     def as_indexed_json(_options = {})
       as_json(
         only: %i[title ol_key cover_url tiles_count],
@@ -30,12 +34,11 @@ module ElasticBook
     end
 
     def self.import
-      where(category_id: 9).includes(:category, :authors).find_in_batches do |books|
+      where.not(category_id: 25).includes(:category, :authors).find_in_batches do |books|
         bulk_index(books)
       end
     end
 
-    # callbacks to keep in sync with postgres
     after_commit on: %i[create update] do
       __elasticsearch__.index_document
     end
@@ -44,19 +47,23 @@ module ElasticBook
       __elasticsearch__.delete_document
     end
 
-    # index creation settings
     mapping dynamic: false do
-      indexes :title, analyzer: :english
+      indexes :title, type: :text, analyzer: :english
+      indexes :category, type: :object do
+        indexes :id, type: :long
+        indexes :name, type: :keyword
+      end
     end
 
-    def self.search(query, from = 0)
+    # generalize interface towards elastic to allow for more flexible queries
+    def self.search(value, from = 0)
       __elasticsearch__.search(
         {
           query: {
             match:
             {
               title: {
-                query: query,
+                query: value,
                 fuzziness: 'AUTO'
               }
             }
