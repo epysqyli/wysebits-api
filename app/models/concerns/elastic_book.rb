@@ -14,8 +14,18 @@ module ElasticBook
       __elasticsearch__.delete_document
     end
 
-    def elastic_tile_entries
-      all_tile_entries.select(:id, :content, :upvotes, :downvotes, :net_votes, :created_at, :updated_at)
+    settings index: { number_of_shards: 2 } do
+      mapping dynamic: false do
+        indexes :title, type: :text, analyzer: :english
+        indexes :category, type: :object do
+          indexes :id, type: :long
+          indexes :name, type: :keyword
+        end
+        indexes :authors, type: :object do
+          indexes :id, type: :long
+          indexes :full_name, type: :text
+        end
+      end
     end
 
     def as_indexed_json(_options = {})
@@ -42,21 +52,13 @@ module ElasticBook
     end
 
     def self.import
-      includes(:category, :authors).find_in_batches do |books|
+      where.not(category_id: 25).includes(:category, :authors, book_tiles: :tile_entries).find_in_batches do |books|
         bulk_index(books)
       end
     end
 
-    mapping dynamic: false do
-      indexes :title, type: :text, analyzer: :english
-      indexes :category, type: :object do
-        indexes :id, type: :long
-        indexes :name, type: :keyword
-      end
-      indexes :authors, type: :object do
-        indexes :id, type: :long
-        indexes :full_name, type: :text
-      end
+    def elastic_tile_entries
+      all_tile_entries.select(:id, :content, :upvotes, :downvotes, :net_votes, :created_at, :updated_at)
     end
 
     # generalize interface towards elastic to allow for more flexible queries
