@@ -22,7 +22,7 @@ module ElasticBook
     end
 
     def self.map_for_import(books)
-      books.map { |book| { index: { _id: book.id, data: book.as_indexed_json } } }
+      Parallel.map(books, in_threads: 2) { |book| { index: { _id: book.id, data: book.as_indexed_json } } }
     end
 
     def self.bulk_index(books)
