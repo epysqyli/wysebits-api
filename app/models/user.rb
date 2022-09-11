@@ -16,14 +16,20 @@ class User < ApplicationRecord
   has_many :fav_tile_entries
   has_many :liked_entries, through: :fav_tile_entries, source: :tile_entry
 
-  has_and_belongs_to_many :upvoted_entries, class_name: 'TileEntry', join_table: 'upvoted_entries_users',
-                                            foreign_key: 'user_id'
+  has_and_belongs_to_many :upvoted_entries,
+                          class_name: 'TileEntry',
+                          join_table: 'upvoted_entries_users',
+                          foreign_key: 'user_id'
 
-  has_and_belongs_to_many :downvoted_entries, class_name: 'TileEntry', join_table: 'downvoted_entries_users',
-                                              foreign_key: 'user_id'
+  has_and_belongs_to_many :downvoted_entries,
+                          class_name: 'TileEntry',
+                          join_table: 'downvoted_entries_users',
+                          foreign_key: 'user_id'
 
-  has_and_belongs_to_many :fav_categories, class_name: 'Category', join_table: 'categories_users',
-                                           foreign_key: 'user_id'
+  has_and_belongs_to_many :fav_categories,
+                          class_name: 'Category',
+                          join_table: 'categories_users',
+                          foreign_key: 'user_id'
 
   # following and followers
   has_many :active_relationships, class_name: 'Relationship', foreign_key: 'follower_id', dependent: :destroy
