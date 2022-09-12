@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_220_123_141_333) do
+ActiveRecord::Schema.define(version: 20_220_912_205_009) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension 'pg_trgm'
   enable_extension 'plpgsql'
 
   create_table 'active_storage_attachments', force: :cascade do |t|
@@ -48,12 +49,15 @@ ActiveRecord::Schema.define(version: 20_220_123_141_333) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.string 'key'
+    t.tsvector 'searchable', default: -> { "to_tsvector('english'::regconfig, (full_name)::text)" }
+    t.index ['searchable'], name: 'index_authors_on_searchable', using: :gin
   end
 
   create_table 'authors_books', id: false, force: :cascade do |t|
     t.bigint 'author_id'
     t.bigint 'book_id'
-    t.index %w[author_id book_id], name: 'index_authors_books_on_author_id_and_book_id'
+    t.index ['author_id'], name: 'author_id_index'
+    t.index ['book_id'], name: 'book_id_index'
   end
 
   create_table 'book_tiles', force: :cascade do |t|
@@ -72,7 +76,12 @@ ActiveRecord::Schema.define(version: 20_220_123_141_333) do
     t.string 'ol_author_key'
     t.string 'ol_key'
     t.text 'cover_url'
+    t.tsvector 'searchable', default: -> { "to_tsvector('english'::regconfig, (title)::text)" }
+    t.integer 'tiles_count', default: 0
+    t.integer 'previous_tiles_count', default: 0
+    t.integer 'tiles_count_diff', default: 0
     t.index ['category_id'], name: 'index_books_on_category_id'
+    t.index ['searchable'], name: 'index_books_on_searchable', using: :gin
   end
 
   create_table 'categories', force: :cascade do |t|
@@ -98,6 +107,13 @@ ActiveRecord::Schema.define(version: 20_220_123_141_333) do
     t.datetime 'updated_at', precision: 6, null: false
   end
 
+  create_table 'conversations', force: :cascade do |t|
+    t.integer 'sender_id'
+    t.integer 'recipient_id'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+  end
+
   create_table 'downvoted_entries_users', force: :cascade do |t|
     t.bigint 'tile_entry_id'
     t.bigint 'user_id'
@@ -117,6 +133,16 @@ ActiveRecord::Schema.define(version: 20_220_123_141_333) do
     t.bigint 'tile_entry_id'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+  end
+
+  create_table 'messages', force: :cascade do |t|
+    t.text 'content'
+    t.bigint 'conversation_id'
+    t.bigint 'user_id'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['conversation_id'], name: 'index_messages_on_conversation_id'
+    t.index ['user_id'], name: 'index_messages_on_user_id'
   end
 
   create_table 'metric_data', force: :cascade do |t|
@@ -162,6 +188,8 @@ ActiveRecord::Schema.define(version: 20_220_123_141_333) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.integer 'net_votes', default: 0
+    t.integer 'previous_upvotes', default: 0
+    t.integer 'upvotes_diff', default: 0
     t.index ['book_tile_id'], name: 'index_tile_entries_on_book_tile_id'
   end
 
@@ -173,8 +201,6 @@ ActiveRecord::Schema.define(version: 20_220_123_141_333) do
   end
 
   create_table 'users', force: :cascade do |t|
-    t.string 'name'
-    t.string 'surname'
     t.string 'email_address'
     t.string 'password_digest'
     t.datetime 'created_at', precision: 6, null: false
@@ -184,6 +210,12 @@ ActiveRecord::Schema.define(version: 20_220_123_141_333) do
     t.datetime 'confirmation_sent_at'
     t.string 'username'
     t.text 'avatar_url'
+    t.string 'reset_password_token'
+    t.datetime 'reset_password_sent_at'
+    t.string 'unconfirmed_email'
+    t.integer 'tiles_count', default: 0
+    t.integer 'previous_tiles_count', default: 0
+    t.integer 'tiles_count_diff', default: 0
   end
 
   add_foreign_key 'active_storage_attachments', 'active_storage_blobs', column: 'blob_id'
