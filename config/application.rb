@@ -27,7 +27,7 @@ module WysebitsApi
     config.autoload_paths << Rails.root.join('lib')
     config.autoload_paths << Rails.root.join('lib/json_render_formats')
     config.api_only = true
-    config.active_record.schema_format = :sql
+    config.active_record.schema_format = :ruby
     config.active_job.queue_adapter = :sidekiq
   end
 end
