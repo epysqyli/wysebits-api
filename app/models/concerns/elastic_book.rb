@@ -28,7 +28,7 @@ module ElasticBook
       end
     end
 
-    def as_indexed_json(_options = {})
+    def as_indexed_json
       as_json(
         only: %i[title ol_key cover_url tiles_count],
         include: [
@@ -52,7 +52,7 @@ module ElasticBook
     end
 
     def self.import
-      where.not(category_id: 25).includes(:category, :authors, book_tiles: :tile_entries).find_in_batches do |books|
+      includes(:category, :authors, book_tiles: :tile_entries).find_in_batches do |books|
         bulk_index(books)
       end
     end

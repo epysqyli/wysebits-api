@@ -28,7 +28,7 @@ module ElasticAuthor
       end
     end
 
-    def as_indexed_json(_options = {})
+    def as_indexed_json
       as_json(
         only: %i[full_name key],
         include: [
