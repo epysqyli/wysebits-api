@@ -22,7 +22,7 @@ module ElasticAuthor
           indexes :title, type: :text
           indexes :category, type: :object do
             indexes :id, type: :long
-            indexes :name, type: :keyword
+            indexes :slug, type: :keyword
           end
         end
       end
@@ -33,8 +33,8 @@ module ElasticAuthor
         only: %i[full_name key],
         include: [
           { books:
-            { only: %i[id title], include:
-              [{ category: { only: %i[id name] } }] } }
+            { only: %i[id title ol_key cover_url], include:
+              [{ category: { only: %i[id slug] } }] } }
         ]
       )
     end

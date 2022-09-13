@@ -30,7 +30,7 @@ module ElasticBook
 
     def as_indexed_json
       as_json(
-        only: %i[title ol_key cover_url tiles_count],
+        only: %i[id title ol_key cover_url tiles_count],
         include: [
           { category: { only: %i[id slug] } },
           { authors: { only: %i[id full_name key] } }
