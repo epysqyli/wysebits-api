@@ -56,5 +56,20 @@ module ElasticAuthor
         bulk_index(authors)
       end
     end
+
+    def self.search(elastic_query_instance, from = 0)
+      __elasticsearch__.search(
+        {
+          query: elastic_query_instance.query,
+          size: 20,
+          from: from,
+          highlight: {
+            pre_tags: ['<b>'],
+            post_tags: ['</b>'],
+            fields: { title: {} }
+          }
+        }
+      )
+    end
   end
 end

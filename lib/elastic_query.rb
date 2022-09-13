@@ -10,7 +10,6 @@ class ElasticQuery
     }
   end
 
-  # currently supporting only one match and one term field
   def add_match_to_must(field, value, fuzziness = 'AUTO')
     @query[:bool][:must] = match_block(field, value, fuzziness)
   end
