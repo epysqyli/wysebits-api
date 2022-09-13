@@ -26,6 +26,7 @@ module WysebitsApi
     config.load_defaults 6.1
     config.autoload_paths << Rails.root.join('lib')
     config.autoload_paths << Rails.root.join('lib/json_render_formats')
+    config.autoload_paths << Rails.root.join('lib/elastic_query')
     config.api_only = true
     config.active_record.schema_format = :ruby
     config.active_job.queue_adapter = :sidekiq

@@ -19,7 +19,7 @@ module ElasticBook
         indexes :title, type: :text, analyzer: :english
         indexes :category, type: :object do
           indexes :id, type: :long
-          indexes :name, type: :keyword
+          indexes :slug, type: :keyword
         end
         indexes :authors, type: :object do
           indexes :id, type: :long
@@ -61,19 +61,10 @@ module ElasticBook
       all_tile_entries.select(:id, :content, :upvotes, :downvotes, :net_votes, :created_at, :updated_at)
     end
 
-    # generalize interface towards elastic to allow for more flexible queries
-    def self.search(value, from = 0)
+    def self.search(elastic_query_instance, from = 0)
       __elasticsearch__.search(
         {
-          query: {
-            match:
-            {
-              title: {
-                query: value,
-                fuzziness: 'AUTO'
-              }
-            }
-          },
+          query: elastic_query_instance.query,
           size: 20,
           from: from,
           highlight: {
