@@ -66,7 +66,7 @@ module ElasticAuthor
           highlight: {
             pre_tags: ['<b>'],
             post_tags: ['</b>'],
-            fields: { title: {} }
+            fields: { full_name: {} }
           }
         }
       )
