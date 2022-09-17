@@ -122,7 +122,7 @@ Rails.application.routes.draw do
   post '/search/:user_id/book_tiles', to: 'search_requests#search_within_book_tiles'
 
   # elastic search actions
-  get '/elastic_search/books/:title', to: 'elastic_search#search_books'
+  get '/elastic_search/books/:search_term', to: 'elastic_search#search_books'
 
   # weekly trend
   get '/weekly_trend', to: 'week_trend#index'

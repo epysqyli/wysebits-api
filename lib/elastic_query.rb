@@ -11,19 +11,19 @@ class ElasticQuery
   end
 
   def add_match_to_must(field, value, fuzziness = 'AUTO')
-    @query[:bool][:must] = match_block(field, value, fuzziness)
+    @query[:bool][:must] << match_block(field, value, fuzziness)
   end
 
   def add_match_to_filter(field, value, fuzziness = 'AUTO')
-    @query[:bool][:filter] = match_block(field, value, fuzziness)
+    @query[:bool][:filter] << match_block(field, value, fuzziness)
   end
 
   def add_term_block_to_must(field, value)
-    @query[:bool][:must] = term_block(field, value)
+    @query[:bool][:must] << term_block(field, value)
   end
 
   def add_term_block_to_filter(field, value)
-    @query[:bool][:filter] = term_block(field, value)
+    @query[:bool][:filter] << term_block(field, value)
   end
 
   private
