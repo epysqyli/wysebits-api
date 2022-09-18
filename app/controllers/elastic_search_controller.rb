@@ -5,6 +5,6 @@ class ElasticSearchController < ApplicationController
     elastic_query = ElasticQuery.new
     elastic_query.build_query(params[:search_query])
 
-    render json: Book.search(elastic_query)
+    render json: Book.search(elastic_query, params[:page])
   end
 end

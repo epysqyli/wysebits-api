@@ -1,4 +1,6 @@
 class ElasticQuery
+  SIZE = 20
+
   attr_accessor :query
 
   def initialize

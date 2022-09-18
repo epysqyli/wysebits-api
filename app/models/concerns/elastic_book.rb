@@ -65,8 +65,8 @@ module ElasticBook
       __elasticsearch__.search(
         {
           query: elastic_query_instance.query,
-          size: 20,
-          from: from,
+          size: ElasticQuery::SIZE,
+          from: ((from.to_i * ElasticQuery::SIZE) - ElasticQuery::SIZE),
           highlight: {
             pre_tags: ['<b>'],
             post_tags: ['</b>'],
