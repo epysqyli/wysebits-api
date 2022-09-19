@@ -17,6 +17,7 @@ module ElasticBook
     settings index: { number_of_shards: 2 } do
       mapping dynamic: false do
         indexes :title, type: :text, analyzer: :english
+        indexes :tiles_count, type: :long
         indexes :category, type: :object do
           indexes :id, type: :long
           indexes :slug, type: :keyword
