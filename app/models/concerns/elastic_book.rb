@@ -62,12 +62,13 @@ module ElasticBook
       all_tile_entries.select(:id, :content, :upvotes, :downvotes, :net_votes, :created_at, :updated_at)
     end
 
-    def self.search(elastic_query_instance, from = 1)
+    def self.search(elastic_request_instance, from = 1)
       __elasticsearch__.search(
         {
-          query: elastic_query_instance.query,
-          size: ElasticQuery::SIZE,
-          from: ((from.to_i * ElasticQuery::SIZE) - ElasticQuery::SIZE),
+          query: elastic_request_instance.query,
+          sort: elastic_request_instance.sort,
+          size: ElasticRequest::SIZE,
+          from: ((from.to_i * ElasticRequest::SIZE) - ElasticRequest::SIZE),
           highlight: {
             pre_tags: ['<b>'],
             post_tags: ['</b>'],

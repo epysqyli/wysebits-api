@@ -1,7 +1,7 @@
-class ElasticQuery
+class ElasticRequest
   SIZE = 20
 
-  attr_accessor :query
+  attr_accessor :query, :sort
 
   def initialize
     @query = {
@@ -10,6 +10,7 @@ class ElasticQuery
         filter: []
       }
     }
+    @sort = []
   end
 
   def add_match_block_to_must(field, value, fuzziness = 'AUTO')
@@ -27,6 +28,7 @@ class ElasticQuery
   def build_query(search_request)
     build_match_query(search_request)
     build_term_query(search_request)
+    add_sort_params(search_request)
   end
 
   private
@@ -51,7 +53,7 @@ class ElasticQuery
   end
 
   def build_match_query(search_request)
-    match_query = search_request[:match].presence
+    match_query = search_request[:query][:match].presence
 
     must_match_query = match_query[:must].presence if match_query
     must_match_query.first.each_pair { |k, v| add_match_block_to_must(k, v) } if must_match_query.present?
@@ -61,8 +63,12 @@ class ElasticQuery
   end
 
   def build_term_query(search_request)
-    term_query = search_request[:term].presence
+    term_query = search_request[:query][:term].presence
     filter_term_query = term_query[:filter].presence if term_query
     filter_term_query.first.each_pair { |k, v| add_term_block_to_filter(k, v) } if filter_term_query.present?
+  end
+
+  def add_sort_params(search_request)
+    @sort = search_request[:sort] if search_request[:sort].presence
   end
 end
