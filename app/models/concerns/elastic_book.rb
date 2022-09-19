@@ -61,7 +61,7 @@ module ElasticBook
       all_tile_entries.select(:id, :content, :upvotes, :downvotes, :net_votes, :created_at, :updated_at)
     end
 
-    def self.search(elastic_query_instance, from = 0)
+    def self.search(elastic_query_instance, from = 1)
       __elasticsearch__.search(
         {
           query: elastic_query_instance.query,
