@@ -63,7 +63,7 @@ module ElasticBook
     end
 
     def self.search(elastic_request_instance, from = 1)
-      __elasticsearch__.search(
+      resp = __elasticsearch__.search(
         {
           query: elastic_request_instance.query,
           sort: elastic_request_instance.sort,
@@ -76,6 +76,8 @@ module ElasticBook
           }
         }
       )
+
+      { total: resp.results.total, results: resp.results }
     end
   end
 end
