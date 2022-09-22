@@ -77,7 +77,7 @@ module ElasticBook
         }
       )
 
-      { total: resp.results.total, results: resp.results }
+      { total: resp.results.total, per_page: ElasticRequest::SIZE, results: resp.results }
     end
   end
 end
