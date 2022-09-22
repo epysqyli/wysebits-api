@@ -29,7 +29,7 @@ module ElasticBook
       end
     end
 
-    def as_indexed_json
+    def as_indexed_json(_options = {})
       as_json(
         only: %i[id title ol_key cover_url tiles_count],
         include: [
