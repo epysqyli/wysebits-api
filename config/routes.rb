@@ -111,16 +111,6 @@ Rails.application.routes.draw do
   get '/users/:id/stats', to: 'stats#user_stats'
   get '/stats/trending', to: 'stats#trending'
 
-  # search actions
-  post '/search/books', to: 'search_requests#search_books'
-  post '/search/books_from_authors', to: 'search_requests#search_books_from_authors'
-  post '/search/authors', to: 'search_requests#search_authors'
-  post '/search/books_authors', to: 'search_requests#search_books_authors'
-  post '/search/:category_slug', to: 'search_requests#search_within_category'
-  post '/search/:author_id/books', to: 'search_requests#search_within_author'
-  post '/search/:user_id/fav_books', to: 'search_requests#search_within_fav_books'
-  post '/search/:user_id/book_tiles', to: 'search_requests#search_within_book_tiles'
-
   # elastic search actions
   post '/elastic_search/books', to: 'elastic_search#search_books'
 
