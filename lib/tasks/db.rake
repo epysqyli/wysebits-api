@@ -31,9 +31,11 @@ namespace :db do
         book
       end
 
-      Book.import books, batch_size: 10_000
-      puts 'Batch imported'
+      Book.bulk_import books, batch_size: 10_000
+      puts 'Batch imported into postgre DB'
     end
+
+    Book.where(created_at: 1.month.ago..).import
   end
 
   desc 'Import authors in bulk from openlibrary csv'
@@ -54,7 +56,7 @@ namespace :db do
         author
       end
 
-      Author.import people, batch_size: 7_500
+      Author.bulk_import people, batch_size: 7_500
     end
   end
 end
