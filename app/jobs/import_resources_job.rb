@@ -14,7 +14,7 @@ class ImportResourcesJob < ApplicationJob
 
     SmarterCSV.process(ENV['recent_works'],
                        chunk_size: 30_000,
-                       col_sep: "\t",
+                       col_sep: ',',
                        user_provided_headers: headers,
                        quote_char: "\x00",
                        invalid_byte_sequence: '') do |chunk|
@@ -50,7 +50,7 @@ class ImportResourcesJob < ApplicationJob
     headers = %w[type key revision last_modified json]
     SmarterCSV.process(ENV['recent_authors'],
                        chunk_size: 30_000,
-                       col_sep: "\t",
+                       col_sep: ',',
                        headers: false,
                        user_provided_headers: headers,
                        quote_char: "\x00") do |chunk|
