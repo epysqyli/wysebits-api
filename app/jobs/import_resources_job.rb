@@ -2,26 +2,26 @@ class ImportResourcesJob < ApplicationJob
   queue_as :default
 
   def perform
-    import_works
     import_authors
+    import_works
   end
 
   private
 
   def import_works
     various_category = Category.find_by_slug 'various'
-    headers = %w[type key revision last_modified json]
 
     SmarterCSV.process(ENV['recent_works'],
+                       headers_in_file: false,
+                       user_provided_headers: ['json_entry'],
+                       col_sep: "\t",
                        chunk_size: 30_000,
-                       col_sep: ',',
-                       user_provided_headers: headers,
                        quote_char: "\x00",
                        invalid_byte_sequence: '') do |chunk|
       books = Parallel.map(chunk) do |row|
         next if row.nil?
 
-        work = JSON.parse(row[:json])
+        work = JSON.parse(row[:json_entry])
         book = Book.new
         book.title = work['title']
         book.title = book.title.tr("\u0000", '') unless book.title.nil?
@@ -40,24 +40,22 @@ class ImportResourcesJob < ApplicationJob
       end
 
       Book.bulk_import books, batch_size: 10_000
-      puts 'Batch imported into postgre DB'
     end
 
     Book.where(created_at: 1.month.ago..).import
   end
 
   def import_authors
-    headers = %w[type key revision last_modified json]
     SmarterCSV.process(ENV['recent_authors'],
+                       headers_in_file: false,
+                       user_provided_headers: ['json_entry'],
+                       col_sep: "\t",
                        chunk_size: 30_000,
-                       col_sep: ',',
-                       headers: false,
-                       user_provided_headers: headers,
                        quote_char: "\x00") do |chunk|
       people = Parallel.map(chunk) do |row|
         next if row.nil?
 
-        person = JSON.parse(row[:json])
+        person = JSON.parse(row[:json_entry])
         author = Author.new
         author.full_name = person['name']
         author.key = person['key']&.split('/')&.last unless person['key'].nil?
