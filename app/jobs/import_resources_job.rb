@@ -41,8 +41,6 @@ class ImportResourcesJob < ApplicationJob
 
       Book.bulk_import books, batch_size: 10_000
     end
-
-    Book.where(created_at: 1.month.ago..).import
   end
 
   def import_authors
