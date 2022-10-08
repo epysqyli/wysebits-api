@@ -11,7 +11,7 @@ class ImportResourcesJob < ApplicationJob
   def import_works
     various_category = Category.find_by_slug 'various'
 
-    SmarterCSV.process(ENV['recent_works'],
+    SmarterCSV.process('/home/elvis/tasks/openlibrary-diff-go/recent_works.txt',
                        headers_in_file: false,
                        user_provided_headers: ['json_entry'],
                        col_sep: "\t",
@@ -46,7 +46,7 @@ class ImportResourcesJob < ApplicationJob
   end
 
   def import_authors
-    SmarterCSV.process(ENV['recent_authors'],
+    SmarterCSV.process('/home/elvis/tasks/openlibrary-diff-go/recent_works.txt',
                        headers_in_file: false,
                        user_provided_headers: ['json_entry'],
                        col_sep: "\t",
