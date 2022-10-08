@@ -5,15 +5,20 @@ namespace :db do
   end
 
   desc 'Import books in bulk from openlibrary csv'
-  task :import_books, [:ol_dump] => :environment do |_t, args|
+  task :import_books, [:ol_dump] => :environment do |_t, _args|
     various_category = Category.find_by_slug 'various'
-    headers = %w[type key revision last_modified json]
-    SmarterCSV.process(args[:ol_dump], chunk_size: 30_000, col_sep: "\t", user_provided_headers: headers,
-                                       quote_char: "\x00", invalid_byte_sequence: '') do |chunk|
+
+    SmarterCSV.process(args[:ol_dump],
+                       headers_in_file: false,
+                       user_provided_headers: ['json_entry'],
+                       col_sep: "\t",
+                       chunk_size: 30_000,
+                       quote_char: "\x00",
+                       invalid_byte_sequence: '') do |chunk|
       books = Parallel.map(chunk) do |row|
         next if row.nil?
 
-        work = JSON.parse(row[:json])
+        work = JSON.parse(row[:json_entry])
         book = Book.new
         book.title = work['title']
         book.title = book.title.tr("\u0000", '') unless book.title.nil?
@@ -32,21 +37,23 @@ namespace :db do
       end
 
       Book.bulk_import books, batch_size: 10_000
-      puts 'Batch imported into postgre DB'
     end
 
     Book.where(created_at: 1.month.ago..).import
   end
 
   desc 'Import authors in bulk from openlibrary csv'
-  task :import_authors, [:ol_dump] => :environment do |_t, args|
-    headers = %w[type key revision last_modified json]
-    SmarterCSV.process(args[:ol_dump], chunk_size: 30_000, col_sep: "\t", headers: false,
-                                       user_provided_headers: headers, quote_char: "\x00") do |chunk|
+  task :import_authors, [:ol_dump] => :environment do |_t, _args|
+    SmarterCSV.process(args[:ol_dump],
+                       headers_in_file: false,
+                       user_provided_headers: ['json_entry'],
+                       col_sep: "\t",
+                       chunk_size: 30_000,
+                       quote_char: "\x00") do |chunk|
       people = Parallel.map(chunk) do |row|
         next if row.nil?
 
-        person = JSON.parse(row[:json])
+        person = JSON.parse(row[:json_entry])
         author = Author.new
         author.full_name = person['name']
         author.key = person['key']&.split('/')&.last unless person['key'].nil?
