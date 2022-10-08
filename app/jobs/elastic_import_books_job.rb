@@ -3,6 +3,6 @@ class ElasticImportBooksJob < ApplicationJob
   sidekiq_options retry: false
 
   def perform
-    Book.where(created_at: 1.month.ago..).find_each(&:import)
+    Book.where(created_at: 1.month.ago..).in_batches(&:import)
   end
 end
