@@ -226,7 +226,6 @@ class User < ApplicationRecord
     SecureRandom.hex(10)
   end
 
-  # callbacks
   def downcase_email
     self.email_address = email_address.delete(' ').downcase
   end
