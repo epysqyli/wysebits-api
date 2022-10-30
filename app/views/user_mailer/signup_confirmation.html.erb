@@ -1,30 +1,36 @@
 <!DOCTYPE html>
-<html style="padding: 0;margin: 0;box-sizing: border-box;font-family: 'Roboto';">
-  <head style="padding: 0;margin: 0;box-sizing: border-box;font-family: 'Roboto';">
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" style="padding: 0;margin: 0;box-sizing: border-box;font-family: 'Roboto';">
-    <link rel="preconnect" href="https://fonts.googleapis.com" style="padding: 0;margin: 0;box-sizing: border-box;font-family: 'Roboto';">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin style="padding: 0;margin: 0;box-sizing: border-box;font-family: 'Roboto';">
-    
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <style>
+      a:link{text-decoration:none}
+      a:visited{text-decoration:none}
+      a:hover{text-decoration:none}
+      a:active{text-decoration:none}
+    </style>
     
   </head>
-  <body style="padding: 5vh 0 10vh;margin: 0;box-sizing: border-box;font-family: 'Roboto';">
+  <body style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';padding:5vh 0 10vh;">
     <%= image_tag attachments['logo'].url, alt: 'wysebits logo', id: 'logo' %>
-    <h1 style="padding: 0;margin: 2rem auto;box-sizing: border-box;font-family: 'Roboto';padding-top: 2rem;width: 60%;text-align: center;">Welcome to Wysebits, <%= @user.username %></h1>
-    <div class="main-box" style="padding: 0;margin: 5rem auto;box-sizing: border-box;font-family: 'Roboto';width: 80%;text-align: center;font-size: 1.5rem;max-width: 1024px;">
-      <a id="activate-link" href="&lt;%= @base_url %&gt;registrations/confirm/&lt;%= @user.confirmation_token %&gt;" style="padding: 2vh 0;margin: 5vh auto 10vh;box-sizing: border-box;font-family: 'Roboto';text-decoration: none;display: block;border-bottom: 2px solid black;width: 60%;text-transform: uppercase;font-size: 1.25rem;color: black;">
-        <div style="padding: 0;margin: 0;box-sizing: border-box;font-family: 'Roboto';">Activate your account now</div>
+    <h1 style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';margin:2rem auto;padding-top:2rem;width:60%;text-align:center;">Welcome to Wysebits, <%= @user.username %></h1>
+    <div class="main-box" style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';width:80%;margin:auto;text-align:center;margin:5rem auto;font-size:1.5rem;max-width:1024px;">
+      <a id="activate-link" href="<%= @base_url %>registrations/confirm/<%= @user.confirmation_token %>" style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';display:block;border-bottom:2px solid black;padding:2vh 0;width:60%;margin:5vh auto 10vh;text-transform:uppercase;font-size:1.25rem;color:black;">
+        <div style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';">Activate your account now</div>
       </a>
-      <p style="padding: 0;margin: 1rem 0;box-sizing: border-box;font-family: 'Roboto';text-align: left;line-height: 3vh;">
+      <p style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';margin:1rem 0;text-align:left;line-height:3vh;">
         Once your account is confirmed, you can start contributing to the community with your own specific insights for the book that you have read or are currently reading.
       </p>
-      <h3 style="padding: 0;margin: 5vh auto;box-sizing: border-box;font-family: 'Roboto';">*Wysebits is not your typical social network*</h3>
-      <div id="explainer" style="padding: 0 2vh;margin: 2vh auto;box-sizing: border-box;font-family: 'Roboto';border-left: 2px solid white;font-size: 1.15rem;">
-        <p style="padding: 0;margin: 1rem 0;box-sizing: border-box;font-family: 'Roboto';text-align: left;line-height: 3vh;">The goal of the platform is that of determining the best insight that each book can provide: this result is reached thanks to users upvoting and downvoting each others' insights for the any given book.</p>
-        <p style="padding: 0;margin: 1rem 0;box-sizing: border-box;font-family: 'Roboto';text-align: left;line-height: 3vh;">The vision of Wysebits is centered around one specific principle: users should leave the platform with a feeling of having being enriched by the content they encountered while spending their valuable time there.</p>
-        <p style="padding: 0;margin: 1rem 0;box-sizing: border-box;font-family: 'Roboto';text-align: left;line-height: 3vh;">It seems to me that the default experience for the vast majority of social networks out there is one of emptiness: users come in, scroll through random content for some time, read stuff, look at pictures, and watch videos they do not really care about. Once they close the browser or the app, they are left questioning what they got out of it.</p>
-        <p style="padding: 0;margin: 1rem 0;box-sizing: border-box;font-family: 'Roboto';text-align: left;line-height: 3vh;"><u style="padding: 0;margin: 0;box-sizing: border-box;font-family: 'Roboto';">This experience is exactly what I want to avoid.</u></p>
-        <p style="padding: 0;margin: 1rem 0;box-sizing: border-box;font-family: 'Roboto';text-align: left;line-height: 3vh;">This is why what can be done on Wysebits is purposefully limited. The main things users can do are share their insights for the books they are reading, upvote/downvote other users' insights, comment on insights, and save favorite books and insights. Admittedly not for everybody, at least not for those people looking for mindless distraction.</p>
-        <p style="padding: 0;margin: 1rem 0;box-sizing: border-box;font-family: 'Roboto';text-align: left;line-height: 3vh;">More info can be found on the <a href="&lt;%= @base_url %&gt;about" style="padding: 0;margin: 0;box-sizing: border-box;font-family: 'Roboto';text-decoration: none;"><u style="padding: 0;margin: 0;box-sizing: border-box;font-family: 'Roboto';">about page</u></a></p>
+      <h3 style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';margin:5vh auto;">*Wysebits is not your typical social network*</h3>
+      <div id="explainer" style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';border-left:2px solid white;padding:0 2vh;margin:2vh auto;font-size:1.15rem;">
+        <p style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';margin:1rem 0;text-align:left;line-height:3vh;">The goal of the platform is that of determining the best insight that each book can provide: this result is reached thanks to users upvoting and downvoting each others' insights for the any given book.</p>
+        <p style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';margin:1rem 0;text-align:left;line-height:3vh;">The vision of Wysebits is centered around one specific principle: users should leave the platform with a feeling of having being enriched by the content they encountered while spending their valuable time there.</p>
+        <p style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';margin:1rem 0;text-align:left;line-height:3vh;">It seems to me that the default experience for the vast majority of social networks out there is one of emptiness: users come in, scroll through random content for some time, read stuff, look at pictures, and watch videos they do not really care about. Once they close the browser or the app, they are left questioning what they got out of it.</p>
+        <p style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';margin:1rem 0;text-align:left;line-height:3vh;"><u style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';">This experience is exactly what I want to avoid.</u></p>
+        <p style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';margin:1rem 0;text-align:left;line-height:3vh;">This is why what can be done on Wysebits is purposefully limited. The main things users can do are share their insights for the books they are reading, upvote/downvote other users' insights, comment on insights, and save favorite books and insights. Admittedly not for everybody, at least not for those people looking for mindless distraction.</p>
+        <p style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';margin:1rem 0;text-align:left;line-height:3vh;">More info can be found on the <a href="<%= @base_url %>about" style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';"><u style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';">about page</u></a></p>
       </div>
     </div>
   </body>
