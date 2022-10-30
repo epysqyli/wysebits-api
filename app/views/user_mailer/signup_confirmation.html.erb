@@ -17,8 +17,8 @@
     <%= image_tag attachments['logo'].url, alt: 'wysebits logo', id: 'logo' %>
     <h1 style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';margin:2rem auto;padding-top:2rem;width:60%;text-align:center;">Welcome to Wysebits, <%= @user.username %></h1>
     <div class="main-box" style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';width:80%;margin:auto;text-align:center;margin:5rem auto;font-size:1.5rem;max-width:1024px;">
-      <a id="activate-link" href="<%= @base_url %>registrations/confirm/<%= @user.confirmation_token %>" style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';display:block;border-bottom:2px solid black;padding:2vh 0;width:60%;margin:5vh auto 10vh;text-transform:uppercase;font-size:1.25rem;color:black;">
-        <div style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';border:2px solid black; border-radius: 5%">Activate your account now</div>
+      <a id="activate-link" href="<%= @base_url %>registrations/confirm/<%= @user.confirmation_token %>" style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';display:block;border:2px solid black;border-radius:10%;padding:2vh 0;width:60%;margin:5vh auto 10vh;text-transform:uppercase;font-size:1.25rem;color:black;">
+        <div style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';">Activate your account now</div>
       </a>
       <p style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';margin:1rem 0;text-align:left;line-height:3vh;">
         Once your account is confirmed, you can start contributing to the community with your own specific insights for the book that you have read or are currently reading.
