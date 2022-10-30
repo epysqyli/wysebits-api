@@ -1,85 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <style>
-      * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-        font-family: 'Roboto';
-      }
-      
-      body {
-        padding: 5vh 0 10vh;
-      }
-      
-        #logo {
-          width: 40%;
-          margin: auto;
-          display: block;
-          margin-top: 5vh;
-        }
-      
-        h1 {
-          margin: 2rem auto;
-          padding-top: 2rem;
-          width: 60%;
-          text-align: center;
-        }
-      
-        .main-box {
-          width: 80%;
-          margin: auto;
-          text-align: center;
-          margin: 5rem auto;
-          font-size: 1.5rem;
-          max-width: 1024px;
-        }
-      
-        #activate-link {
-          display: block;
-          border-bottom: 2px solid black;
-          padding: 2vh 0;
-          width: 60%;
-          margin: 5vh auto 10vh;
-          text-transform: uppercase;
-          font-size: 1.25rem;
-          color: black;
-        }
-            
-        a:link, a:visited, a:hover, a:active {
-          text-decoration: none;
-        }
-      
-        .main-box p {
-          margin: 1rem 0;
-          text-align: left;
-          line-height: 3vh;
-        }
-      
-        .main-box h3 {
-          margin: 5vh auto;
-        }
-      
-        #explainer {
-          border-left: 2px solid white;
-          padding: 0 2vh;
-          margin: 2vh auto;
-          font-size: 1.15rem;
-        }
+      a:link{text-decoration:none}
+      a:visited{text-decoration:none}
+      a:hover{text-decoration:none}
+      a:active{text-decoration:none}
     </style>
+    
   </head>
-  <body>
+  <body style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';padding:5vh 0 10vh;">
     <%= image_tag attachments['logo'].url, alt: 'wysebits logo', id: 'logo' %>
-    <h1>Hi <%= @user.username %></h1>
-    <div class="main-box">
-      <p>You have asked to change your current email address for you account. No problem! Just go ahead and click on the button below. You will be redirected to a page with all the instructions to set a new email address. Just follow them and you'll be ok.</p>
-      <a id="activate-link" href="<%= @base_url %>users/actions/manage-profile/confirm-email-update/<%= @user.confirmation_token %>">
-        <div>Change email address</div>
+    <h1 style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';margin:2rem auto;padding-top:2rem;width:60%;text-align:center;">Hi <%= @user.username %></h1>
+    <div class="main-box" style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';width:80%;margin:auto;text-align:center;margin:5rem auto;font-size:1.5rem;max-width:1024px;">
+      <p style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';margin:1rem 0;text-align:left;line-height:3vh;">You have asked to change your current email address for you account. No problem! Just go ahead and click on the button below. You will be redirected to a page with all the instructions to set a new email address. Just follow them and you'll be ok.</p>
+      <a id="activate-link" href="<%= @base_url %>users/actions/manage-profile/confirm-email-update/<%= @user.confirmation_token %>" style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';display:block;border:2px solid black;border-radius:50%;padding:2vh 0;width:60%;margin:5vh auto 10vh;text-transform:uppercase;font-size:1.25rem;color:black;">
+        <div style="padding:0;margin:0;box-sizing:border-box;font-family:'Roboto';">Change email address</div>
       </a>
     </div>
   </body>
