@@ -2,6 +2,8 @@
 module ElasticBook
   extend ActiveSupport::Concern
 
+  ELASTIC_CONFIG_FILE = 'config/elastic.yaml'.freeze
+
   included do
     include Elasticsearch::Model
     include Elasticsearch::Model::Callbacks
@@ -29,6 +31,11 @@ module ElasticBook
       end
     end
 
+    def self.current_index_name
+      es_config_yaml = YAML.load_file ELASTIC_CONFIG_FILE
+      es_config_yaml['current_index_name']['books']
+    end
+
     def as_indexed_json(_options = {})
       as_json(
         only: %i[id title ol_key cover_url tiles_count],
@@ -44,17 +51,18 @@ module ElasticBook
       Parallel.map(books, in_threads: 2) { |book| { index: { _id: book.id, data: book.as_indexed_json } } }
     end
 
-    def self.bulk_index(books)
+    def self.bulk_index(books, index_name)
       __elasticsearch__.client.bulk({
-                                      index: __elasticsearch__.index_name,
+                                      index: index_name || __elasticsearch__.index_name,
                                       type: '_doc',
                                       body: map_for_import(books)
                                     })
     end
 
-    def self.import
+    def self.import(options = {})
+      index_name = options[:index_name]
       includes(:category, :authors, book_tiles: :tile_entries).find_in_batches do |books|
-        bulk_index(books)
+        bulk_index(books, index_name)
       end
     end
 
@@ -74,7 +82,8 @@ module ElasticBook
             post_tags: ['</b>'],
             fields: { title: {} }
           }
-        }
+        },
+        index: current_index_name
       )
 
       { total: resp.results.total, per_page: ElasticRequest::SIZE, results: resp.results }
