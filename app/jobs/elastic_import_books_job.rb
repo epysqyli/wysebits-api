@@ -2,7 +2,6 @@ class ElasticImportBooksJob < ApplicationJob
   queue_as :default
   sidekiq_options retry: false
 
-  ELASTIC_CONFIG_FILE = 'config/elastic.yaml'.freeze
   INDEX_NAME_PREFIX = 'books-updated'.freeze
 
   def perform
@@ -16,7 +15,7 @@ class ElasticImportBooksJob < ApplicationJob
   # private
 
   def es_config_yaml
-    YAML.load_file ELASTIC_CONFIG_FILE
+    YAML.load_file ElasticBook::ELASTIC_CONFIG_FILE
   end
 
   def current_index_name
@@ -31,6 +30,6 @@ class ElasticImportBooksJob < ApplicationJob
   def update_elastic_config(new_index_name)
     es_config = es_config_yaml
     es_config['current_index_name']['books'] = new_index_name
-    File.open(ELASTIC_CONFIG_FILE, 'w') { |f| f.write es_config.to_yaml }
+    File.open(ElasticBook::ELASTIC_CONFIG_FILE, 'w') { |f| f.write es_config.to_yaml }
   end
 end

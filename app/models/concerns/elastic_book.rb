@@ -2,7 +2,7 @@
 module ElasticBook
   extend ActiveSupport::Concern
 
-  ELASTIC_CONFIG_FILE = 'config/elastic.yaml'.freeze
+  ELASTIC_CONFIG_FILE = Rails.root.join('config', 'elastic.yaml').freeze
 
   included do
     include Elasticsearch::Model
