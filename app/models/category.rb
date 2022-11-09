@@ -34,6 +34,6 @@ class Category < ApplicationRecord
     return [] if slug == 'various'
 
     books.includes(:authors, :category, :metric_data)
-         .order(updated_at: :desc).limit(5).sort_by(&:score).reverse
+         .order(updated_at: :desc).limit(4).sort_by(&:score).reverse
   end
 end
