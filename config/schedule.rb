@@ -10,10 +10,10 @@ every 7.days do
   runner 'WeekTrendJob.perform_later'
 end
 
-every '0 1 3 * *' do
+every '30 12 6 * *' do
   runner 'ImportResourcesJob.perform_later'
 end
 
-every '0 4 3 * *' do
+every '0 4 8 * *' do
   runner 'ElasticImportBooksJob.perform_later'
 end
