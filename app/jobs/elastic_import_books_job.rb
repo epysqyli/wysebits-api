@@ -1,6 +1,6 @@
 class ElasticImportBooksJob < ApplicationJob
   queue_as :default
-  sidekiq_options retry: false
+  sidekiq_options retry: true
 
   INDEX_NAME_PREFIX = 'books-updated'.freeze
 
@@ -12,7 +12,7 @@ class ElasticImportBooksJob < ApplicationJob
     Book.__elasticsearch__.delete_index! index: current_name
   end
 
-  # private
+  private
 
   def es_config_yaml
     YAML.load_file ElasticBook::ELASTIC_CONFIG_FILE

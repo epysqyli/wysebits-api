@@ -1,6 +1,6 @@
 class ImportResourcesJob < ApplicationJob
   queue_as :default
-  sidekiq_options retry: false
+  sidekiq_options retry: true
 
   def perform
     import_authors
