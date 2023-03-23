@@ -1,5 +1,10 @@
-# README
+# Wysebits
 
-TBD
+Just a toy example for a basic social network based on sharing ideas from books
 
-A personal project
+Built using
+
+- ruby on rails
+- elasticsearch
+- postgres
+
